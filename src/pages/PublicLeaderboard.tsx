@@ -524,19 +524,9 @@ export function PublicLeaderboard() {
                 
                 {/* Description - Now visible on mobile */}
                 <div className="px-1 max-w-sm mx-auto">
-                  <p className={`text-sm text-white/90 text-center leading-relaxed mb-4 ${
-                    showFullDescription ? '' : 'line-clamp-5'
-                  }`}>
+                  <p className="text-sm text-white/90 text-center leading-relaxed mb-4">
                     {contest.description}
                   </p>
-                  {contest.description && contest.description.length > 100 && (
-                    <button
-                      onClick={() => setShowFullDescription(!showFullDescription)}
-                      className="text-xs text-white/70 hover:text-white transition-colors underline"
-                    >
-                      {showFullDescription ? 'Show Less' : 'Show More'}
-                    </button>
-                  )}
                 </div>
                 
               </div>
