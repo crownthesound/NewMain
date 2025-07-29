@@ -445,6 +445,9 @@ export function PublicLeaderboard() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-black/80"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/70"></div>
           
+          {/* Black bottom section for expanded hero area */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-black"></div>
+          
           {/* Header overlay on hero image */}
           <div className="absolute top-0 left-0 right-0 z-10 px-4 sm:px-6 lg:px-8 pt-4 sm:pt-8">
             <div className="flex items-center justify-between">
