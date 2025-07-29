@@ -536,6 +536,7 @@ export function PublicLeaderboard() {
                                 transform: `scale(${scale})`,
                                 opacity,
                               }}
+                              onClick={() => emblaApi && emblaApi.scrollTo(index + 1)}
                             >
                               <div className="text-center">
                                 <div className={`${
@@ -581,6 +582,25 @@ export function PublicLeaderboard() {
                       })}
                     </div>
                   </div>
+                  
+                  {/* Navigation Arrows for Prize Carousel */}
+                  {contest?.prize_titles && contest.prize_titles.length > 1 && (
+                    <>
+                      <button
+                        onClick={() => emblaApi && emblaApi.scrollPrev()}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-10"
+                      >
+                        <ChevronLeft className="h-3 w-3" />
+                      </button>
+
+                      <button
+                        onClick={() => emblaApi && emblaApi.scrollNext()}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-10"
+                      >
+                        <ChevronRight className="h-3 w-3" />
+                      </button>
+                    </>
+                  )}
                 </div>
                 
                 {/* Join Button - Centered */}
