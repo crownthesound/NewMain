@@ -623,7 +623,7 @@ export function PublicLeaderboard() {
                               {prizeText}
                             </div>
                             <div className="text-white/80 text-[8px] leading-tight text-center transition-all duration-300">
-                              {prizeAmount ? \`$${formatNumber(prizeAmount)}` : ''}
+                              {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
                             </div>
                           </div>
                         </div>
