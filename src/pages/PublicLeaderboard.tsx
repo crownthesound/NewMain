@@ -453,8 +453,8 @@ export function PublicLeaderboard() {
               <div className="flex flex-col h-full justify-center px-2">
                 {/* Crown Logo - Smaller and centered */}
                 <div className="flex justify-center mb-3">
-                  <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 border-white shadow-xl">
-                    <Crown className="h-8 w-8 text-white" />
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 border-white shadow-xl">
+                    <Crown className="h-6 w-6 text-white" />
                   </div>
                 </div>
                 
