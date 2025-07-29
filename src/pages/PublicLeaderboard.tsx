@@ -559,17 +559,17 @@ export function PublicLeaderboard() {
       )}
       
       {/* Prizes Section - Below Hero */}
-      <div className="bg-black px-4 sm:px-6 lg:px-8 py-8">
+      <div className="bg-black px-4 sm:px-6 lg:px-8 py-6">
         <div className="max-w-7xl mx-auto">
           {/* Contest Details Heading */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-4">
             <h2 className="text-xl font-bold text-white">
               Contest Details
             </h2>
           </div>
           
           {/* Contest Details Toggle Buttons */}
-          <div className="flex justify-center mb-6 sm:mb-8">
+          <div className="flex justify-center mb-4 sm:mb-6">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
                 onClick={() => setContestDetailsView('prizes')}
@@ -853,15 +853,15 @@ export function PublicLeaderboard() {
       </div>
       
       {/* Main Content Area */}
-      <div className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className="bg-black px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="max-w-7xl mx-auto">
           {/* Leaderboard Heading */}
-          <div className="text-center mb-6 sm:mb-8">
+          <div className="text-center mb-4 sm:mb-6">
             <h2 className="text-xl font-bold text-white">Leaderboard</h2>
           </div>
           
           {/* Leaderboard Toggle Buttons */}
-          <div className="flex justify-center mb-6 sm:mb-8">
+          <div className="flex justify-center mb-4 sm:mb-6">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
                 onClick={() => setLeaderboardView('list')}
@@ -1099,7 +1099,7 @@ export function PublicLeaderboard() {
       </div>
 
       {/* Call to Action Section */}
-      <div className="bg-[#0A0A0A] text-center py-8 sm:py-12 lg:py-16 px-4">
+      <div className="bg-black text-center py-6 sm:py-8 lg:py-12 px-4">
         <h2 className="text-2xl sm:text-4xl lg:text-6xl font-black text-white/20 mb-4 sm:mb-6 lg:mb-8 tracking-wider leading-tight">
           WHAT ARE YOU
         </h2>
@@ -1116,7 +1116,7 @@ export function PublicLeaderboard() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-black px-4 sm:px-6 lg:px-8 py-6 sm:py-8 border-t border-white/10">
+      <footer className="bg-black px-4 sm:px-6 lg:px-8 py-4 sm:py-6 border-t border-white/10">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-2">
