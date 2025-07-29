@@ -543,7 +543,7 @@ export function PublicLeaderboard() {
           {/* Prizes Section Above Button */}
           <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-md">
             <div className="text-center mb-4">
-              <h2 className="text-lg sm:text-xl font-black text-white mb-2 flex items-center justify-center gap-2">
+              <h2 className="text-lg sm:text-xl font-black text-white mb-2 mt-6 flex items-center justify-center gap-2">
                 <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
                 Prizes
               </h2>
