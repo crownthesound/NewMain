@@ -908,9 +908,17 @@ export function PublicLeaderboard() {
                         >
                           {/* Left side - Rank, Avatar, and User Info */}
                           <div className="flex items-center gap-3">
-                            <span className="text-lg font-bold text-black w-6">
-                              {participant.rank}
-                            </span>
+                            <div className="flex items-center gap-1 w-8">
+                              <Crown className={`h-4 w-4 ${
+                                participant.rank === 1 ? 'text-yellow-500' :
+                                participant.rank === 2 ? 'text-gray-400' :
+                                participant.rank === 3 ? 'text-amber-600' :
+                                'text-gray-400'
+                              }`} />
+                              <span className="text-sm font-bold text-black">
+                                {participant.rank}
+                              </span>
+                            </div>
                             <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                               <span className="text-xs font-bold text-gray-600">
                                 {participant.tiktok_username?.charAt(0)?.toUpperCase() || 'U'}
@@ -920,8 +928,13 @@ export function PublicLeaderboard() {
                               <div className="text-sm font-medium text-black">
                                 @{participant.tiktok_username}
                               </div>
-                              <div className="text-xs text-gray-500">
-                                {formatNumber(participant.views)} views
+                              <div className="text-xs text-gray-500 flex items-center gap-2">
+                                <span>{formatNumber(participant.views)} views</span>
+                                {participant.rank <= (contest?.num_winners || 5) && (
+                                  <span className="text-green-600 font-medium">
+                                    • Prize Winner
+                                  </span>
+                                )}
                               </div>
                             </div>
                           </div>
