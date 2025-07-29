@@ -545,7 +545,7 @@ export function PublicLeaderboard() {
           </div>
           
           {/* Sign up button at bottom of hero */}
-          <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center">
+          <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center pt-8">
             <button
               onClick={handleJoinContest}
               className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base relative z-50"
