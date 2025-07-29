@@ -28,6 +28,8 @@ import {
   Zap,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Volume2,
   VolumeX,
   Loader2,
