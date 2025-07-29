@@ -669,6 +669,9 @@ export function PublicLeaderboard() {
               <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
               Prizes
             </h2>
+          </div>
+        </div>
+      </div>
       
       {/* Main Content Area */}
       <div className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
