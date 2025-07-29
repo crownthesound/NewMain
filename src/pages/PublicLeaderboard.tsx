@@ -746,7 +746,40 @@ export function PublicLeaderboard() {
                 })}
                 </div>
               </div>
-            </div>
+              
+              {/* Desktop How to Join Steps */}
+              <div className="hidden lg:block mt-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[
+                    {
+                      step: 1,
+                      icon: Video,
+                      title: 'Record Your Performance',
+                      description: 'Create a video performance that follows the contest guidelines and showcases your talent'
+                    },
+                    {
+                      step: 2,
+                      icon: Upload,
+                      title: 'Post to TikTok',
+                      description: 'Share your video on TikTok using your connected account to enter the competition'
+                    },
+                    {
+                      step: 3,
+                      icon: CheckCircle,
+                      title: 'Submit Your Entry',
+                      description: 'Come back to the contest page and tap "Join Competition" to officially enter'
+                    },
+                    {
+                      step: 4,
+                      icon: Trophy,
+                      title: 'Climb the Leaderboard',
+                      description: 'Share your video and get more views to rise up in the contest rankings'
+                    }
+                  ].map((step, index) => {
+                    const Icon = step.icon;
+                    return (
+                      <div key={index} className="group">
+                        <div className="flex flex-col items-center text-center p-6 bg-white/5 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:bg-white/10">
                         <div className="relative flex-shrink-0 mb-4">
                         <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center transform-gpu group-hover:scale-110 transition-all duration-700">
                           <Icon className="h-8 w-8 text-white" />
