@@ -490,8 +490,32 @@ export function PublicLeaderboard() {
                 {/* Description - Now visible on mobile */}
                 <div className="px-1 max-w-sm mx-auto">
                   <p className={`text-sm text-white/90 text-center leading-relaxed mb-4 ${
-                  {/* Prizes Section Below Title */}
-                  <div className="mb-6 sm:mb-8">
+                    showFullDescription ? '' : 'line-clamp-3'
+                  }`}>
+                    {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
+                  </p>
+                  {contest.description && contest.description.length > 150 && (
+                    <button
+                      onClick={() => setShowFullDescription(!showFullDescription)}
+                      className="mt-2 text-xs text-white/70 hover:text-white transition-colors flex items-center gap-1 mx-auto"
+                    >
+                      {showFullDescription ? (
+                        <>
+                          <span>Show less</span>
+                          <ChevronUp className="h-3 w-3" />
+                        </>
+                      ) : (
+                        <>
+                          <span>Show more</span>
+                          <ChevronDown className="h-3 w-3" />
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+                
+                {/* Prizes Section Below Title */}
+                <div className="mb-6 sm:mb-8">
                     <div className="text-center mb-4">
                       <h2 className="text-lg sm:text-xl font-black text-white mb-2 flex items-center justify-center gap-2">
                         <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
@@ -601,30 +625,6 @@ export function PublicLeaderboard() {
                       )}
                     </div>
                   </div>
-
-                  }`}>
-                    {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
-                  </p>
-                  {contest.description && contest.description.length > 150 && (
-                    <button
-                      onClick={() => setShowFullDescription(!showFullDescription)}
-                      className="mt-2 text-xs text-white/70 hover:text-white transition-colors flex items-center gap-1 mx-auto"
-                    >
-                      {showFullDescription ? (
-                        <>
-                          <span>Show less</span>
-                          <ChevronUp className="h-3 w-3" />
-                        </>
-                      ) : (
-                        <>
-                          <span>Show more</span>
-                          <ChevronDown className="h-3 w-3" />
-                        </>
-                      )}
-                    </button>
-                  )}
-                </div>
-                
               </div>
             </div>
             
