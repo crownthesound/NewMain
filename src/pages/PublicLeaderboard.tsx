@@ -444,77 +444,148 @@ export function PublicLeaderboard() {
           
           {/* Hero Content */}
           <div className="absolute inset-4 sm:inset-8 flex flex-col justify-center items-center text-center">
-            {/* Contest Title and Description */}
-            <div className="mb-2 sm:mb-3">
-              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white mb-1 sm:mb-2 tracking-tight leading-tight">
-                {contest.name.toUpperCase()}
-              </h1>
+            {/* Mobile Layout */}
+            <div className="block sm:hidden w-full h-full">
+              {/* Crown Logo at Top */}
+              <div className="flex justify-center mb-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-4 border-white shadow-2xl">
+                  <Crown className="h-10 w-10 text-white" />
+                </div>
+              </div>
               
-              <p className="text-xs sm:text-sm lg:text-base text-white/90 mb-2 leading-relaxed max-w-xl mx-auto">
-                {contest.description}
-              </p>
-            </div>
-
-            <div className="mb-2 sm:mb-3">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 mx-auto bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 border-white/20 shadow-2xl">
-                <Crown className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 text-white" />
+              {/* Main Content Area */}
+              <div className="flex items-center justify-between h-full">
+                {/* Left Side - Title, Description, Button */}
+                <div className="flex-1 text-left pr-4">
+                  <button className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm mb-4">
+                    Sign up to join
+                  </button>
+                  
+                  <h1 className="text-2xl font-black text-white mb-2 tracking-tight leading-tight">
+                    {contest.name.toUpperCase()}
+                  </h1>
+                  
+                  <p className="text-sm text-white/90 leading-relaxed">
+                    {contest.description}
+                  </p>
+                </div>
+                
+                {/* Right Side - Prize Podium */}
+                <div className="flex-shrink-0">
+                  <div className="bg-black/60 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+                    {/* Third Place */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center border-2 border-white/20">
+                        <span className="text-white font-bold">3</span>
+                      </div>
+                      <div>
+                        <div className="text-white font-bold text-sm">THIRD PLACE</div>
+                        <div className="text-white/80 text-xs">$1.2K</div>
+                      </div>
+                    </div>
+                    
+                    {/* Second Place */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center border-2 border-white/20">
+                        <span className="text-white font-bold">2</span>
+                      </div>
+                      <div>
+                        <div className="text-white font-bold text-sm">SECOND PLACE</div>
+                        <div className="text-white/80 text-xs">$1.6K</div>
+                      </div>
+                    </div>
+                    
+                    {/* First Place */}
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center border-2 border-white/20">
+                        <span className="text-white font-bold">1</span>
+                      </div>
+                      <div>
+                        <div className="text-white font-bold text-sm">FIRST PLACE</div>
+                        <div className="text-white/90 text-xs">EXCLUSIVE SPOT AT THE</div>
+                        <div className="text-white/90 text-xs">DO-LAB IN THE DESERT</div>
+                        <div className="text-white/90 text-xs">IN 2025.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             
-            {/* Prize Podium on Hero Image */}
-            <div className="flex justify-center items-end gap-2 sm:gap-3 lg:gap-4 mb-3 sm:mb-4">
-              {/* Second Place */}
-              <div className="text-center flex-1 max-w-[80px] sm:max-w-[100px]">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center border-2 border-white/20 mb-1 sm:mb-2 mx-auto">
-                  <span className="text-xs sm:text-sm lg:text-base">🥈</span>
-                </div>
-                <div className="bg-black/40 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 border border-white/20">
-                  <div className="text-white font-bold text-[10px] sm:text-xs">SECOND PLACE</div>
-                  <div className="text-white/80 text-[9px] sm:text-xs mt-0.5">
-                    {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.8)}` : '$1.6K'}
-                  </div>
-                </div>
+            {/* Desktop Layout */}
+            <div className="hidden sm:block">
+              {/* Contest Title and Description */}
+              <div className="mb-2 sm:mb-3">
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white mb-1 sm:mb-2 tracking-tight leading-tight">
+                  {contest.name.toUpperCase()}
+                </h1>
+                
+                <p className="text-xs sm:text-sm lg:text-base text-white/90 mb-2 leading-relaxed max-w-xl mx-auto">
+                  {contest.description}
+                </p>
               </div>
 
-              {/* First Place */}
-              <div className="text-center flex-1 max-w-[100px] sm:max-w-[120px]">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center border-2 border-white/20 mb-1 sm:mb-2 mx-auto">
-                  <Crown className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-white" />
-                </div>
-                <div className="bg-black/40 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 lg:p-3 border border-white/20">
-                  <div className="text-white font-bold text-[10px] sm:text-xs lg:text-sm">FIRST PLACE</div>
-                  <div className="text-white/90 text-[9px] sm:text-xs mt-0.5">
-                    EXCLUSIVE SPOT AT THE
-                  </div>
-                  <div className="text-white/90 text-[9px] sm:text-xs">
-                    DO-LAB IN THE DESERT
-                  </div>
-                  <div className="text-white/90 text-[9px] sm:text-xs">
-                    IN 2025.
-                  </div>
+              <div className="mb-2 sm:mb-3">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 mx-auto bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 border-white/20 shadow-2xl">
+                  <Crown className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 text-white" />
                 </div>
               </div>
+              
+              {/* Prize Podium on Hero Image */}
+              <div className="flex justify-center items-end gap-2 sm:gap-3 lg:gap-4 mb-3 sm:mb-4">
+                {/* Second Place */}
+                <div className="text-center flex-1 max-w-[80px] sm:max-w-[100px]">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center border-2 border-white/20 mb-1 sm:mb-2 mx-auto">
+                    <span className="text-xs sm:text-sm lg:text-base">🥈</span>
+                  </div>
+                  <div className="bg-black/40 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 border border-white/20">
+                    <div className="text-white font-bold text-[10px] sm:text-xs">SECOND PLACE</div>
+                    <div className="text-white/80 text-[9px] sm:text-xs mt-0.5">
+                      {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.8)}` : '$1.6K'}
+                    </div>
+                  </div>
+                </div>
 
-              {/* Third Place */}
-              <div className="text-center flex-1 max-w-[80px] sm:max-w-[100px]">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center border-2 border-white/20 mb-1 sm:mb-2 mx-auto">
-                  <span className="text-xs sm:text-sm lg:text-base">🥉</span>
+                {/* First Place */}
+                <div className="text-center flex-1 max-w-[100px] sm:max-w-[120px]">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center border-2 border-white/20 mb-1 sm:mb-2 mx-auto">
+                    <Crown className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-white" />
+                  </div>
+                  <div className="bg-black/40 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 lg:p-3 border border-white/20">
+                    <div className="text-white font-bold text-[10px] sm:text-xs lg:text-sm">FIRST PLACE</div>
+                    <div className="text-white/90 text-[9px] sm:text-xs mt-0.5">
+                      EXCLUSIVE SPOT AT THE
+                    </div>
+                    <div className="text-white/90 text-[9px] sm:text-xs">
+                      DO-LAB IN THE DESERT
+                    </div>
+                    <div className="text-white/90 text-[9px] sm:text-xs">
+                      IN 2025.
+                    </div>
+                  </div>
                 </div>
-                <div className="bg-black/40 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 border border-white/20">
-                  <div className="text-white font-bold text-[10px] sm:text-xs">THIRD PLACE</div>
-                  <div className="text-white/80 text-[9px] sm:text-xs mt-0.5">
-                    {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.6)}` : '$1.2K'}
+
+                {/* Third Place */}
+                <div className="text-center flex-1 max-w-[80px] sm:max-w-[100px]">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center border-2 border-white/20 mb-1 sm:mb-2 mx-auto">
+                    <span className="text-xs sm:text-sm lg:text-base">🥉</span>
+                  </div>
+                  <div className="bg-black/40 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 border border-white/20">
+                    <div className="text-white font-bold text-[10px] sm:text-xs">THIRD PLACE</div>
+                    <div className="text-white/80 text-[9px] sm:text-xs mt-0.5">
+                      {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.6)}` : '$1.2K'}
+                    </div>
                   </div>
                 </div>
               </div>
+              
+              <button
+                onClick={handleJoinContest}
+                className="px-4 py-2 sm:px-6 sm:py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-xs sm:text-sm"
+              >
+                Sign up to join
+              </button>
             </div>
-            
-            <button
-              onClick={handleJoinContest}
-              className="px-4 py-2 sm:px-6 sm:py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-xs sm:text-sm"
-            >
-              Sign up to join
-            </button>
           </div>
         </div>
       )}
