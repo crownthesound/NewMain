@@ -487,72 +487,73 @@ export function PublicLeaderboard() {
                   {contest.name.toUpperCase()}
                 </h1>
                 
-                {/* Prizes Section - Mobile */}
-                <div className="mb-6">
-                  <div className="text-center mb-4">
-                    <h2 className="text-lg font-black text-white mb-2 flex items-center justify-center gap-2">
-                      <Trophy className="h-5 w-5 text-yellow-400" />
-                      Prizes
-                    </h2>
+                {/* Prizes Section - Mobile - Original Style */}
+                <div className="bg-black/30 backdrop-blur-sm rounded-lg p-2 mb-6">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-1">
+                      <Trophy className="h-4 w-4 text-yellow-400" />
+                      <h4 className="text-xs font-medium text-white">
+                        Prizes
+                      </h4>
+                    </div>
+                    <div className="text-xs text-white/60">
+                      {contest?.num_winners || 5} Winners
+                    </div>
                   </div>
-                  
-                  <div className="flex gap-2 justify-center overflow-x-auto pb-2 px-2">
+                  <div className="flex gap-1 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
                     {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                       const rank = index + 1;
-                      
-                      // Get prize data from database
                       const prizeTitle = contest?.prize_titles?.[index];
                       
-                      // Use actual database prize structure
                       let prizeText;
                       let prizeAmount = null;
                       
-                      // Check if we have custom prize titles from database
                       if (prizeTitle && prizeTitle.title) {
                         prizeText = prizeTitle.title;
                       } else {
-                        // Generate default place names
-                        prizeText = `${rank}${rank === 1 ? 'ST' : rank === 2 ? 'ND' : rank === 3 ? 'RD' : 'TH'} PLACE`;
+                        prizeText = `${rank}${rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th'} Place`;
                       }
                       
-                      // Calculate prize amount from database
                       if (contest?.prize_per_winner && contest.prize_per_winner > 0) {
-                        // Use the actual prize_per_winner from database
                         prizeAmount = contest.prize_per_winner;
-                        
-                        // If there are multiple winners, calculate distribution
                         if (contest.num_winners && contest.num_winners > 1) {
-                          // First place gets full amount, others get reduced amounts
                           const reductionFactor = Math.max(0.2, 1 - (index * 0.2));
                           prizeAmount = Math.round(contest.prize_per_winner * reductionFactor);
                         }
                       }
                       
                       return (
-                        <div key={index} className="flex-shrink-0">
-                          <div className="text-center">
-                            <div className={`w-8 h-8 ${
-                              rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
-                              rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
-                              rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
-                              rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
-                              rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
-                              'bg-gradient-to-br from-slate-400 to-slate-600'
-                            } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto`}>
-                              {rank === 1 ? (
-                                <Crown className="h-4 w-4 text-white" />
-                              ) : (
-                                <span className="text-white font-bold text-xs">{rank}</span>
-                              )}
-                            </div>
-                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[60px] border border-white/20">
-                              <div className="text-white font-bold text-[8px]">
-                                {prizeText}
-                              </div>
-                              <div className="text-white/80 text-[7px] leading-tight text-center">
-                                {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
-                              </div>
-                            </div>
+                        <div
+                          key={index}
+                          className="p-1.5 rounded-lg border snap-start flex-shrink-0 min-w-[70px] bg-black/20 border-white/10 transition-all hover:bg-white/5"
+                        >
+                          <div className="flex items-center gap-1 mb-0.5">
+                            {getRankIcon(index + 1)}
+                            <span
+                              className={`text-[10px] font-medium ${
+                                index === 0
+                                  ? "text-yellow-400"
+                                  : index === 1
+                                  ? "text-gray-400"
+                                  : index === 2
+                                  ? "text-amber-600"
+                                  : "text-white/60"
+                              }`}
+                            >
+                              {rank}
+                              {index === 0
+                                ? "st"
+                                : index === 1
+                                ? "nd"
+                                : index === 2
+                                ? "rd"
+                                : "th"}
+                            </span>
+                          </div>
+                          <div className="text-[10px] font-medium leading-tight line-clamp-2 text-white">
+                            {prizeAmount
+                              ? `$${formatNumber(prizeAmount)}`
+                              : prizeText}
                           </div>
                         </div>
                       );
@@ -605,115 +606,77 @@ export function PublicLeaderboard() {
                   {contest.name.toUpperCase()}
                 </h1>
                 
-                {/* Prizes Section - Moved from bottom */}
-                <div className="mb-6 sm:mb-8">
-                  <div className="text-center mb-4">
-                    <h2 className="text-lg sm:text-xl font-black text-white mb-2 flex items-center justify-center gap-2">
-                      <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
-                      Prizes
-                    </h2>
-                  </div>
-                  
-                  <div className="relative max-w-7xl mx-auto w-full">
-                    <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
-                      <div className="flex">
-                        {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
-                          const isSelected = index === currentPrizeIndex;
-                          const scale = 1; // Keep all prizes the same size
-                          const opacity = 1; // Keep all prizes the same opacity
-                          const rank = index + 1;
-                          
-                          // Get prize data from database
-                          const prizeTitle = contest?.prize_titles?.[index];
-                          
-                          // Use actual database prize structure
-                          let prizeText;
-                          let prizeAmount = null;
-                          
-                          // Check if we have custom prize titles from database
-                          if (prizeTitle && prizeTitle.title) {
-                            prizeText = prizeTitle.title;
-                          } else {
-                            // Generate default place names
-                            prizeText = `${rank}${rank === 1 ? 'ST' : rank === 2 ? 'ND' : rank === 3 ? 'RD' : 'TH'} PLACE`;
-                          }
-                          
-                          // Calculate prize amount from database
-                          if (contest?.prize_per_winner && contest.prize_per_winner > 0) {
-                            // Use the actual prize_per_winner from database
-                            prizeAmount = contest.prize_per_winner;
-                            
-                            // If there are multiple winners, calculate distribution
-                            if (contest.num_winners && contest.num_winners > 1) {
-                              // First place gets full amount, others get reduced amounts
-                              const reductionFactor = Math.max(0.2, 1 - (index * 0.2));
-                              prizeAmount = Math.round(contest.prize_per_winner * reductionFactor);
-                            }
-                          }
-                          
-                          return (
-                            <div 
-                              key={index}
-                              className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
-                            >
-                              <div 
-                                className="relative transition-all duration-300 ease-out group will-change-transform"
-                                style={{
-                                  transform: `scale(${scale})`,
-                                  opacity,
-                                  width: '180px',
-                                  maxWidth: '100%'
-                                }}
-                              >
-                                <div className="text-center">
-                                  <div className={`w-10 h-10 ${
-                                    rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
-                                    rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
-                                    rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
-                                    rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
-                                    rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
-                                    'bg-gradient-to-br from-slate-400 to-slate-600'
-                                  } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
-                                    {rank === 1 ? (
-                                      <Crown className="h-5 w-5 text-white transition-all duration-300" />
-                                    ) : (
-                                      <span className="text-white font-bold text-xs transition-all duration-300">{rank}</span>
-                                    )}
-                                  </div>
-                                  <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[70px] border border-white/20 transition-all duration-300">
-                                    <div className="text-white font-bold text-[9px] transition-all duration-300">
-                                      {prizeText}
-                                    </div>
-                                    <div className="text-white/80 text-[8px] leading-tight text-center transition-all duration-300">
-                                      {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
+                {/* Prizes Section - Original Style */}
+                <div className="bg-black/30 backdrop-blur-sm rounded-lg p-2 mb-6 sm:mb-8 max-w-md mx-auto">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-1">
+                      <Trophy className="h-4 w-4 text-yellow-400" />
+                      <h4 className="text-xs font-medium text-white">
+                        Prizes
+                      </h4>
                     </div>
-
-                    {/* Navigation Arrows */}
-                    {(contest?.num_winners || 5) > 1 && (
-                      <>
-                        <button
-                          onClick={scrollPrizePrev}
-                          className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                    <div className="text-xs text-white/60">
+                      {contest?.num_winners || 5} Winners
+                    </div>
+                  </div>
+                  <div className="flex gap-1 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
+                    {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
+                      const rank = index + 1;
+                      const prizeTitle = contest?.prize_titles?.[index];
+                      
+                      let prizeText;
+                      let prizeAmount = null;
+                      
+                      if (prizeTitle && prizeTitle.title) {
+                        prizeText = prizeTitle.title;
+                      } else {
+                        prizeText = `${rank}${rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th'} Place`;
+                      }
+                      
+                      if (contest?.prize_per_winner && contest.prize_per_winner > 0) {
+                        prizeAmount = contest.prize_per_winner;
+                        if (contest.num_winners && contest.num_winners > 1) {
+                          const reductionFactor = Math.max(0.2, 1 - (index * 0.2));
+                          prizeAmount = Math.round(contest.prize_per_winner * reductionFactor);
+                        }
+                      }
+                      
+                      return (
+                        <div
+                          key={index}
+                          className="p-1.5 rounded-lg border snap-start flex-shrink-0 min-w-[70px] bg-black/20 border-white/10 transition-all hover:bg-white/5"
                         >
-                          <ChevronLeft className="h-4 w-4" />
-                        </button>
-
-                        <button
-                          onClick={scrollPrizeNext}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                        >
-                          <ChevronRight className="h-4 w-4" />
-                        </button>
-                      </>
-                    )}
+                          <div className="flex items-center gap-1 mb-0.5">
+                            {getRankIcon(index + 1)}
+                            <span
+                              className={`text-[10px] font-medium ${
+                                index === 0
+                                  ? "text-yellow-400"
+                                  : index === 1
+                                  ? "text-gray-400"
+                                  : index === 2
+                                  ? "text-amber-600"
+                                  : "text-white/60"
+                              }`}
+                            >
+                              {rank}
+                              {index === 0
+                                ? "st"
+                                : index === 1
+                                ? "nd"
+                                : index === 2
+                                ? "rd"
+                                : "th"}
+                            </span>
+                          </div>
+                          <div className="text-[10px] font-medium leading-tight line-clamp-2 text-white">
+                            {prizeAmount
+                              ? `$${formatNumber(prizeAmount)}`
+                              : prizeText}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
                 
