@@ -495,28 +495,6 @@ export function PublicLeaderboard() {
                 {/* Description - Now visible on mobile */}
                 <div className="px-1 max-w-sm mx-auto">
                   <p className={`text-sm text-white/90 text-center leading-relaxed mb-4 ${
-                    showFullDescription ? '' : 'line-clamp-3'
-                  }`}>
-                    {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
-                  </p>
-                  {contest.description && contest.description.length > 150 && (
-                    <button
-                      onClick={() => setShowFullDescription(!showFullDescription)}
-                      className="mt-2 text-xs text-white/70 hover:text-white transition-colors flex items-center gap-1 mx-auto"
-                    >
-                      {showFullDescription ? (
-                        <>
-                          <span>Show less</span>
-                          <ChevronUp className="h-3 w-3" />
-                        </>
-                      ) : (
-                        <>
-                          <span>Show more</span>
-                          <ChevronDown className="h-3 w-3" />
-                        </>
-                      )}
-                    </button>
-                  )}
                 </div>
                 
               </div>
