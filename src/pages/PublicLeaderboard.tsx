@@ -492,8 +492,8 @@ export function PublicLeaderboard() {
                     <div className="flex">
                       {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                         const isSelected = index === currentPrizeIndex;
-                        const scale = isSelected ? 1 : 0.85;
-                        const opacity = isSelected ? 1 : 0.6;
+                        const scale = 1; // Keep all prizes the same size
+                        const opacity = isSelected ? 1 : 0.8; // Only vary opacity slightly
                         const rank = index + 1;
                         
                         // Get prize data from database
