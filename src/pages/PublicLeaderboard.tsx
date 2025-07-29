@@ -545,7 +545,7 @@ export function PublicLeaderboard() {
           </div>
           
           {/* Prizes Section Above Button */}
-          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-md z-20">
+          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-md">
             <div className="text-center mb-4">
               <h2 className="text-lg sm:text-xl font-black text-white mb-2 mt-6 flex items-center justify-center gap-2">
                 <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
@@ -553,7 +553,7 @@ export function PublicLeaderboard() {
               </h2>
             </div>
             
-            <div className="relative max-w-7xl mx-auto w-full bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+            <div className="relative max-w-7xl mx-auto w-full">
               <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
                 <div className="flex">
                   {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
