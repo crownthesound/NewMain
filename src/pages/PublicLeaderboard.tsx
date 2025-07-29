@@ -493,7 +493,7 @@ export function PublicLeaderboard() {
                 
                 {/* Prize Podium - Horizontal compact layout */}
                 <div className="flex justify-center items-end gap-1 mb-4 overflow-x-auto pb-2">
-                  {contest?.prize_titles?.slice(0, 3).map((prize, index) => {
+                  {contest?.prize_titles?.slice(0, Math.min(3, contest?.num_winners || 3)).map((prize, index) => {
                     const isFirst = index === 0;
                     const isSecond = index === 1;
                     const isThird = index === 2;
