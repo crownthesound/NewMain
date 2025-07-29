@@ -495,46 +495,13 @@ export function PublicLeaderboard() {
                 <div className="relative w-full mb-4 max-w-7xl mx-auto">
                   <div className="overflow-hidden w-full" ref={emblaRef}>
                     <div className="flex">
-                      {/* Default Prize Icon as first element */}
-                      <div 
-                        key="default-prize"
-                        className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
-                      >
-                        <div 
-                          className="relative transition-all duration-300 ease-out group will-change-transform"
-                          style={{
-                            transform: `scale(${currentVideoIndex === 0 ? 1 : 0.85})`,
-                            opacity: currentVideoIndex === 0 ? 1 : 0.6,
-                          }}
-                        >
-                          <div className="text-center">
-                            <div className={`${
-                              currentVideoIndex === 0 ? 'w-16 h-16' : 'w-12 h-12'
-                            } bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
-                              <Trophy className={`${currentVideoIndex === 0 ? 'h-8 w-8' : 'h-6 w-6'} text-white transition-all duration-300`} />
-                            </div>
-                            <div className={`bg-black/60 backdrop-blur-sm rounded-lg ${
-                              currentVideoIndex === 0 ? 'p-2.5 min-w-[100px]' : 'p-2 min-w-[80px]'
-                            } border border-white/20 transition-all duration-300`}>
-                              <div className={`text-white font-bold ${
-                                currentVideoIndex === 0 ? 'text-[11px]' : 'text-[10px]'
-                              } transition-all duration-300`}>PRIZES</div>
-                              <div className={`text-white/80 ${
-                                currentVideoIndex === 0 ? 'text-[10px]' : 'text-[9px]'
-                              } transition-all duration-300`}>Available</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
                       {/* All Prize Places */}
                       {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                         const prize = contest?.prize_titles?.[index] || { 
                           rank: index + 1, 
                           title: `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place` 
                         };
-                        const carouselIndex = index + 1; // +1 because index 0 is the default prize icon
-                        const isSelected = carouselIndex === currentVideoIndex;
+                        const isSelected = index === currentVideoIndex;
                         const scale = isSelected ? 1 : 0.85;
                         const opacity = isSelected ? 1 : 0.6;
                         const isFirst = index === 0;
@@ -607,7 +574,7 @@ export function PublicLeaderboard() {
                   </div>
 
                   {/* Navigation Arrows */}
-                  {contest?.prize_titles && contest.prize_titles.length > 1 && (
+                  {(contest?.num_winners || 5) > 1 && (
                     <>
                       <button
                         onClick={scrollPrev}
