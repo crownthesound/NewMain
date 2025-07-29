@@ -898,6 +898,7 @@ export function PublicLeaderboard() {
                     <p className="text-sm sm:text-base text-gray-500">Contest videos will appear here once submitted!</p>
                   </div>
                 )
+          )}
         </div>
       </div>
 
