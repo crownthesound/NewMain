@@ -472,11 +472,11 @@ export function PublicLeaderboard() {
     <div className="min-h-screen bg-[#0A0A0A]">
       {/* Hero Image Section */}
       {contest.cover_image && (
-        <div className="relative h-[28rem] sm:h-[24rem] md:h-[32rem] lg:h-[36rem] xl:h-[40rem] overflow-hidden">
+        <div className="relative h-[24rem] sm:h-[28rem] md:h-[32rem] lg:h-[36rem] xl:h-[40rem] overflow-hidden">
           <img
             src={contest.cover_image}
             alt={contest.name}
-            className="w-full h-[20rem] sm:h-[16rem] md:h-[24rem] lg:h-[28rem] xl:h-[32rem] object-cover"
+            className="w-full h-[20rem] sm:h-[24rem] md:h-[28rem] lg:h-[32rem] xl:h-[36rem] object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-black/80"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/70"></div>
@@ -559,17 +559,17 @@ export function PublicLeaderboard() {
       )}
       
       {/* Prizes Section - Below Hero */}
-      <div className="bg-black px-4 sm:px-6 lg:px-8 py-12">
+      <div className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto">
           {/* Contest Details Heading */}
-          <div className="text-center mb-4">
+          <div className="text-center mb-6 sm:mb-8">
             <h2 className="text-xl font-bold text-white">
               Contest Details
             </h2>
           </div>
           
           {/* Contest Details Toggle Buttons */}
-          <div className="flex justify-center mb-4 sm:mb-6">
+          <div className="flex justify-center mb-6 sm:mb-8">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
                 onClick={() => setContestDetailsView('prizes')}
@@ -853,15 +853,15 @@ export function PublicLeaderboard() {
       </div>
       
       {/* Main Content Area */}
-      <div className="bg-black px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto">
           {/* Leaderboard Heading */}
-          <div className="text-center mb-4 sm:mb-6">
+          <div className="text-center mb-6 sm:mb-8">
             <h2 className="text-xl font-bold text-white">Leaderboard</h2>
           </div>
           
           {/* Leaderboard Toggle Buttons */}
-          <div className="flex justify-center mb-4 sm:mb-6">
+          <div className="flex justify-center mb-6 sm:mb-8">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
                 onClick={() => setLeaderboardView('list')}
@@ -1088,9 +1088,9 @@ export function PublicLeaderboard() {
                 ) : (
                   <div className="text-center py-8 sm:py-12 lg:py-16 min-h-[400px] flex items-center justify-center">
                     <div>
-                    <Music className="h-12 w-12 sm:h-16 sm:w-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">No Videos Yet</h3>
-                    <p className="text-sm sm:text-base text-gray-500">Contest videos will appear here once submitted!</p>
+                      <Music className="h-12 w-12 sm:h-16 sm:w-16 text-white/30 mx-auto mb-4" />
+                      <h3 className="text-lg sm:text-xl font-semibold text-white/60 mb-2">No Videos Yet</h3>
+                      <p className="text-sm sm:text-base text-white/40">Contest videos will appear here once submitted!</p>
                     </div>
                   </div>
                 )
@@ -1099,7 +1099,7 @@ export function PublicLeaderboard() {
       </div>
 
       {/* Call to Action Section */}
-      <div className="bg-black text-center py-6 sm:py-8 lg:py-12 px-4">
+      <div className="bg-black text-center py-12 sm:py-16 lg:py-20 px-4">
         <h2 className="text-2xl sm:text-4xl lg:text-6xl font-black text-white/20 mb-4 sm:mb-6 lg:mb-8 tracking-wider leading-tight">
           WHAT ARE YOU
         </h2>
@@ -1116,7 +1116,7 @@ export function PublicLeaderboard() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-black px-4 sm:px-6 lg:px-8 py-4 sm:py-6 border-t border-white/10">
+      <footer className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-10 border-t border-white/10">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-2">
@@ -1132,7 +1132,7 @@ export function PublicLeaderboard() {
                 Privacy Policy
               </Link>
             </div>
-            <p className="text-white/40 text-xs sm:text-sm text-center">
+            <p className="text-white/40 text-xs text-center">
               © {new Date().getFullYear()} Crown. All rights reserved.
             </p>
           </div>
