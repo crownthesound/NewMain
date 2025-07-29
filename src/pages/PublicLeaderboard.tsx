@@ -447,64 +447,64 @@ export function PublicLeaderboard() {
             {/* Mobile Layout */}
             <div className="block sm:hidden w-full h-full">
               {/* Crown Logo at Top */}
-              <div className="flex justify-center mb-8">
-                <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-4 border-white shadow-2xl">
-                  <Crown className="h-10 w-10 text-white" />
+              <div className="flex justify-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 border-white shadow-xl">
+                  <Crown className="h-6 w-6 text-white" />
                 </div>
               </div>
               
               {/* Main Content Area */}
-              <div className="flex items-center justify-between h-full">
+              <div className="flex items-start justify-between h-full">
                 {/* Left Side - Title, Description, Button */}
-                <div className="flex-1 text-left pr-4">
-                  <button className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm mb-4">
+                <div className="flex-1 text-left pr-3">
+                  <button className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-xs mb-2">
                     Sign up to join
                   </button>
                   
-                  <h1 className="text-2xl font-black text-white mb-2 tracking-tight leading-tight">
+                  <h1 className="text-lg font-black text-white mb-1 tracking-tight leading-tight">
                     {contest.name.toUpperCase()}
                   </h1>
                   
-                  <p className="text-sm text-white/90 leading-relaxed">
+                  <p className="text-xs text-white/90 leading-relaxed">
                     {contest.description}
                   </p>
                 </div>
                 
                 {/* Right Side - Prize Podium */}
                 <div className="flex-shrink-0">
-                  <div className="bg-black/60 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+                  <div className="bg-black/60 backdrop-blur-sm rounded-xl p-2 border border-white/20">
                     {/* Third Place */}
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center border-2 border-white/20">
-                        <span className="text-white font-bold">3</span>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center border border-white/20">
+                        <span className="text-white font-bold text-xs">3</span>
                       </div>
                       <div>
-                        <div className="text-white font-bold text-sm">THIRD PLACE</div>
-                        <div className="text-white/80 text-xs">$1.2K</div>
+                        <div className="text-white font-bold text-xs">THIRD PLACE</div>
+                        <div className="text-white/80 text-[10px]">$1.2K</div>
                       </div>
                     </div>
                     
                     {/* Second Place */}
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center border-2 border-white/20">
-                        <span className="text-white font-bold">2</span>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center border border-white/20">
+                        <span className="text-white font-bold text-xs">2</span>
                       </div>
                       <div>
-                        <div className="text-white font-bold text-sm">SECOND PLACE</div>
-                        <div className="text-white/80 text-xs">$1.6K</div>
+                        <div className="text-white font-bold text-xs">SECOND PLACE</div>
+                        <div className="text-white/80 text-[10px]">$1.6K</div>
                       </div>
                     </div>
                     
                     {/* First Place */}
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center border-2 border-white/20">
-                        <span className="text-white font-bold">1</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center border border-white/20">
+                        <span className="text-white font-bold text-sm">1</span>
                       </div>
                       <div>
-                        <div className="text-white font-bold text-sm">FIRST PLACE</div>
-                        <div className="text-white/90 text-xs">EXCLUSIVE SPOT AT THE</div>
-                        <div className="text-white/90 text-xs">DO-LAB IN THE DESERT</div>
-                        <div className="text-white/90 text-xs">IN 2025.</div>
+                        <div className="text-white font-bold text-xs">FIRST PLACE</div>
+                        <div className="text-white/90 text-[10px]">EXCLUSIVE SPOT AT THE</div>
+                        <div className="text-white/90 text-[10px]">DO-LAB IN THE DESERT</div>
+                        <div className="text-white/90 text-[10px]">IN 2025.</div>
                       </div>
                     </div>
                   </div>
