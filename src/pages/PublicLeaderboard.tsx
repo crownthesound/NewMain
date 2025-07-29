@@ -965,8 +965,8 @@ export function PublicLeaderboard() {
                     <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">No Videos Yet</h3>
                     <p className="text-sm sm:text-base text-gray-500">Contest videos will appear here once submitted!</p>
                   </div>
-                )
-              ) : null}
+                )}
+              </div>
             </div>
           </div>
         </div>
