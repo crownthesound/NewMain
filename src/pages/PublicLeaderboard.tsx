@@ -604,7 +604,7 @@ export function PublicLeaderboard() {
                         }}
                       >
                         <div className="text-center">
-                          <div className={\`w-10 h-10 ${
+                          <div className={`w-10 h-10 ${
                             rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
                             rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
                             rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
