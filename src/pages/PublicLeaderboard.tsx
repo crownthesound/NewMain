@@ -756,7 +756,7 @@ export function PublicLeaderboard() {
 
                         {/* Support Button */}
                         <div className="flex-shrink-0">
-                          <button className="px-3 py-1.5 sm:px-4 sm:py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full text-xs sm:text-sm font-medium transition-colors">
+                          <button className="px-3 py-1.5 sm:px-4 sm:py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs sm:text-sm font-medium transition-colors">
                             Support
                           </button>
                         </div>
