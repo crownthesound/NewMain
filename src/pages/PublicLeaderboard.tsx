@@ -488,7 +488,7 @@ export function PublicLeaderboard() {
                 </h1>
                 
                 {/* Description - Now visible on mobile */}
-                <div className="mb-8 px-1 max-w-sm mx-auto">
+                <div className="px-1 max-w-sm mx-auto">
                   <p className={`text-sm text-white/90 text-center leading-relaxed mb-4 ${
                     showFullDescription ? '' : 'line-clamp-3'
                   }`}>
