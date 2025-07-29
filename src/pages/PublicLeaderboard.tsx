@@ -528,9 +528,11 @@ export function PublicLeaderboard() {
                           <div className={`text-white/80 ${
                             isFirst ? 'text-[8px] leading-tight text-center' : 'text-[8px]'
                           }`}>
-                            {contest?.prize_per_winner ? 
-                              `$${formatNumber(contest.prize_per_winner * (1 - index * 0.2))}` : 
-                              prize.title || `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place`
+                            {isFirst ? 
+                              (contest?.prize_titles?.[0]?.title || 'EXCLUSIVE SPOT AT THE DO-LAB IN THE DESERT IN 2025.') :
+                              contest?.prize_per_winner ? 
+                                `$${formatNumber(contest.prize_per_winner * (1 - index * 0.2))}` : 
+                                prize.title || `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place`
                             }
                           </div>
                         </div>
