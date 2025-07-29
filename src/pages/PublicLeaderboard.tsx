@@ -655,7 +655,7 @@ export function PublicLeaderboard() {
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
             <button
               onClick={handleJoinContest}
-              className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base relative z-50"
+             className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base relative z-50 mt-6"
             >
               Sign up to join
             </button>
