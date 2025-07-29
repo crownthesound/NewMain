@@ -520,6 +520,13 @@ export function PublicLeaderboard() {
             
             {/* Desktop Layout */}
             <div className="hidden sm:block">
+              {/* Crown Logo at Top */}
+              <div className="mb-6 sm:mb-8">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mx-auto bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 sm:border-4 border-white/20 shadow-2xl">
+                  <Crown className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-white" />
+                </div>
+              </div>
+              
               {/* Contest Title and Description */}
               <div className="mb-3 sm:mb-4">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-4 tracking-tight">
@@ -531,12 +538,6 @@ export function PublicLeaderboard() {
                 </p>
               </div>
 
-              <div className="mb-6 sm:mb-8">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mx-auto bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 sm:border-4 border-white/20 shadow-2xl">
-                  <Crown className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-white" />
-                </div>
-              </div>
-              
               {/* Prize Podium on Hero Image */}
               <div className="flex justify-center items-end gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
                 {/* Second Place */}
