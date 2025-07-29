@@ -711,7 +711,12 @@ export function PublicLeaderboard() {
                       >
                         {/* Rank */}
                         <div className="flex-shrink-0 w-8 sm:w-10 text-center">
-                          {getRankIcon(participant.rank)}
+                          <div className="flex flex-col items-center">
+                            {getRankIcon(participant.rank)}
+                            <span className="text-xs font-bold text-white mt-1">
+                              #{participant.rank}
+                            </span>
+                          </div>
                         </div>
 
                         {/* Video Thumbnail */}
