@@ -685,7 +685,7 @@ export function PublicLeaderboard() {
             /* How to Join View */
             <div className="relative max-w-7xl mx-auto w-full">
               <div className="overflow-hidden w-full">
-                <div className="flex gap-6 pb-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+                <div className="flex">
                 {[
                   {
                     step: 1,
@@ -716,9 +716,37 @@ export function PublicLeaderboard() {
                   return (
                     <div
                       key={index}
-                      className="flex-shrink-0 w-80 max-w-[90vw] snap-start bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 group"
+                      className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
                     >
-                      <div className="flex flex-col items-center text-center">
+                      <div 
+                        className="relative transition-all duration-300 ease-out group will-change-transform"
+                        style={{
+                          transform: 'scale(1)',
+                          opacity: 1,
+                          width: '180px',
+                          maxWidth: '100%'
+                        }}
+                      >
+                        <div className="text-center">
+                          <div className={`w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
+                            <Icon className="h-5 w-5 text-white transition-all duration-300" />
+                          </div>
+                          <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[70px] border border-white/20 transition-all duration-300">
+                            <div className="text-white font-bold text-[9px] transition-all duration-300">
+                              {step.title}
+                            </div>
+                            <div className="text-white/80 text-[8px] leading-tight text-center transition-all duration-300">
+                              STEP {step.step}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+                </div>
+              </div>
+            </div>
                         <div className="relative flex-shrink-0 mb-4">
                         <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center transform-gpu group-hover:scale-110 transition-all duration-700">
                           <Icon className="h-8 w-8 text-white" />
