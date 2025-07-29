@@ -148,6 +148,9 @@ export function PublicLeaderboard() {
   const { isConnected: isTikTokConnected } = useTikTokConnection();
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
+  // Ref for the leaderboard section to enable smooth scrolling
+  const leaderboardSectionRef = useRef<HTMLDivElement>(null);
+
   // Embla carousel for video player
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
@@ -370,6 +373,18 @@ export function PublicLeaderboard() {
       ...prev,
       [videoId]: true
     }));
+  };
+
+  const handleLeaderboardViewChange = (view: 'list' | 'videos') => {
+    setLeaderboardView(view);
+    
+    // If switching to video view, scroll to the leaderboard section smoothly
+    if (view === 'videos' && leaderboardSectionRef.current) {
+      leaderboardSectionRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   };
 
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
@@ -851,7 +866,7 @@ export function PublicLeaderboard() {
       </div>
       
       {/* Main Content Area */}
-      <div className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div ref={leaderboardSectionRef} className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto">
           {/* Leaderboard Heading */}
           <div className="text-center mb-6 sm:mb-8">
@@ -862,7 +877,7 @@ export function PublicLeaderboard() {
           <div className="flex justify-center mb-6 sm:mb-8">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
-                onClick={() => setLeaderboardView('list')}
+                onClick={() => handleLeaderboardViewChange('list')}
                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
                   leaderboardView === 'list'
                     ? 'bg-purple-600 text-white'
@@ -872,7 +887,7 @@ export function PublicLeaderboard() {
                 List
               </button>
               <button
-                onClick={() => setLeaderboardView('videos')}
+                onClick={() => handleLeaderboardViewChange('videos')}
                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
                   leaderboardView === 'videos'
                     ? 'bg-purple-600 text-white'
