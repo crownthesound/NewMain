@@ -492,10 +492,9 @@ export function PublicLeaderboard() {
                 </div>
                 
                 {/* Prize Podium - Horizontal compact layout */}
-                <div className="relative w-full mb-4 max-w-7xl mx-auto">
+                <div className="relative max-w-7xl mx-auto w-full mb-4">
                   <div className="overflow-hidden w-full" ref={emblaRef}>
                     <div className="flex">
-                      {/* All Prize Places - Use actual database data */}
                       {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                         const isSelected = index === currentVideoIndex;
                         const scale = isSelected ? 1 : 0.85;
