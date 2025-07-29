@@ -480,10 +480,10 @@ export function PublicLeaderboard() {
             {/* Mobile Layout */}
             <div className="block sm:hidden w-full h-full">
               {/* Compact Mobile Layout */}
-              <div className="flex flex-col h-full justify-start pt-[25%] px-2">
+              <div className="flex flex-col h-full justify-center items-center text-center px-2">
                 
                 {/* Title - Compact */}
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-2 mt-6 text-center tracking-tight leading-tight">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-4 tracking-tight leading-tight">
                   {contest.name.toUpperCase()}
                 </h1>
                 
@@ -514,7 +514,6 @@ export function PublicLeaderboard() {
                   )}
                 </div>
                 
-                {/* Join Button - Centered */}
               </div>
             </div>
             
