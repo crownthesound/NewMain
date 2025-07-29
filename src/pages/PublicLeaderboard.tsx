@@ -853,7 +853,7 @@ export function PublicLeaderboard() {
       </div>
       
       {/* Main Content Area */}
-      <div className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto">
           {/* Leaderboard Heading */}
           <div className="text-center mb-6 sm:mb-8">
