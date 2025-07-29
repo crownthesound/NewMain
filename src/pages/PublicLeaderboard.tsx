@@ -705,7 +705,6 @@ export function PublicLeaderboard() {
             <div className="bg-white rounded-2xl p-6 max-w-md mx-auto">
               {/* Header */}
               <div className="text-center mb-6">
-                <h2 className="text-2xl font-black text-black mb-4">Leaderboard</h2>
                 <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-6 rounded-full font-bold text-lg">
                   GET CROWNED.
                 </div>
