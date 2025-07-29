@@ -682,7 +682,7 @@ export function PublicLeaderboard() {
                     : 'text-white/60 hover:text-white'
                 }`}
               >
-                Leaderboard
+                List
               </button>
               <button
                 onClick={() => setCurrentView('videos')}
