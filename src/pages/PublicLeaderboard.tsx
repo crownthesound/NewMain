@@ -889,7 +889,7 @@ export function PublicLeaderboard() {
           {/* Content Area */}
           {leaderboardView === 'list' ? (
             /* Leaderboard View - Exact Design Match */
-            <div className="max-w-sm mx-auto min-h-[400px]">
+            <div className="max-w-sm mx-auto">
               {/* White Card Container */}
               <div className="bg-white rounded-2xl overflow-hidden">
                 {/* GET CROWNED Header */}
