@@ -499,7 +499,10 @@ export function PublicLeaderboard() {
                     </div>
                     <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 border border-white/20 min-w-[60px]">
                       <div className="text-white font-bold text-[9px]">2ND</div>
-                      <div className="text-white/80 text-[8px]">$1.6K</div>
+                      <div className="text-white/80 text-[8px]">
+                        {contest?.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.8)}` : 
+                         contest?.prize_titles?.[1]?.title || '2nd Place'}
+                      </div>
                     </div>
                   </div>
 
@@ -510,11 +513,9 @@ export function PublicLeaderboard() {
                     </div>
                     <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 border border-white/20 min-w-[80px]">
                       <div className="text-white font-bold text-[10px]">1ST PLACE</div>
-                      <div className="text-white/90 text-[8px] leading-tight">
-                        DO-LAB SPOT
-                      </div>
-                      <div className="text-white/90 text-[8px]">
-                        2025
+                      <div className="text-white/90 text-[8px] leading-tight text-center">
+                        {contest?.prize_per_winner ? `$${formatNumber(contest.prize_per_winner)}` : 
+                         contest?.prize_titles?.[0]?.title || 'Winner'}
                       </div>
                     </div>
                   </div>
@@ -526,7 +527,10 @@ export function PublicLeaderboard() {
                     </div>
                     <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 border border-white/20 min-w-[60px]">
                       <div className="text-white font-bold text-[9px]">3RD</div>
-                      <div className="text-white/80 text-[8px]">$1.2K</div>
+                      <div className="text-white/80 text-[8px]">
+                        {contest?.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.6)}` : 
+                         contest?.prize_titles?.[2]?.title || '3rd Place'}
+                      </div>
                     </div>
                   </div>
                 </div>
