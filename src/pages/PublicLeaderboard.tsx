@@ -479,41 +479,16 @@ export function PublicLeaderboard() {
               {/* Compact Mobile Layout */}
               <div className="flex flex-col h-full justify-center px-2 pt-16">
                 
+                {/* Prize Podium - Horizontal compact layout */}
+                
                 {/* Title - Compact */}
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-2 mt-6 text-center tracking-tight leading-tight">
                   {contest.name.toUpperCase()}
                 </h1>
                 
-                {/* Description - Now visible on mobile */}
-                <div className="mb-4 px-1 max-w-sm mx-auto">
-                  <p className={`text-sm text-white/90 text-center leading-relaxed ${
-                    showFullDescription ? '' : 'line-clamp-3'
-                  }`}>
-                    {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
-                  </p>
-                  {contest.description && contest.description.length > 150 && (
-                    <button
-                      onClick={() => setShowFullDescription(!showFullDescription)}
-                      className="mt-2 text-xs text-white/70 hover:text-white transition-colors flex items-center gap-1 mx-auto"
-                    >
-                      {showFullDescription ? (
-                        <>
-                          <span>Show less</span>
-                          <ChevronUp className="h-3 w-3" />
-                        </>
-                      ) : (
-                        <>
-                          <span>Show more</span>
-                          <ChevronDown className="h-3 w-3" />
-                        </>
-                      )}
-                    </button>
-                  )}
-                </div>
-                
-                {/* Prize Section moved after description */}
+                {/* Prize Podium - Horizontal compact layout - moved below title */}
                 <div className="relative max-w-7xl mx-auto w-full mb-4 mt-4">
-                  {/* Prizes text */}
+                  {/* Compete For text */}
                   <div className="text-center mb-3">
                     <p className="text-sm sm:text-base text-white">Prizes</p>
                   </div>
@@ -619,6 +594,33 @@ export function PublicLeaderboard() {
                   )}
                 </div>
                 
+                {/* Description - Now visible on mobile */}
+                <div className="mb-8 px-1 max-w-sm mx-auto">
+                  <p className={`text-sm text-white/90 text-center leading-relaxed ${
+                    showFullDescription ? '' : 'line-clamp-3'
+                  }`}>
+                    {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
+                  </p>
+                  {contest.description && contest.description.length > 150 && (
+                    <button
+                      onClick={() => setShowFullDescription(!showFullDescription)}
+                      className="mt-2 text-xs text-white/70 hover:text-white transition-colors flex items-center gap-1 mx-auto"
+                    >
+                      {showFullDescription ? (
+                        <>
+                          <span>Show less</span>
+                          <ChevronUp className="h-3 w-3" />
+                        </>
+                      ) : (
+                        <>
+                          <span>Show more</span>
+                          <ChevronDown className="h-3 w-3" />
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+                
                 {/* Join Button - Centered */}
               </div>
             </div>
@@ -641,15 +643,10 @@ export function PublicLeaderboard() {
                 <p className="text-sm sm:text-base lg:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8">
                   {contest.description}
                 </p>
-                
-                {/* Prizes text */}
-                <div className="text-center mb-3">
-                  <p className="text-sm sm:text-base text-white">Prizes</p>
-                </div>
               </div>
 
               {/* Prize Podium on Hero Image */}
-              <div className="flex justify-center items-end gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 mt-4">
+              <div className="flex justify-center items-end gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
                 {/* Second Place */}
                 <div className="text-center">
                   <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center border-2 border-white/20 mb-2 sm:mb-3">
@@ -748,11 +745,6 @@ export function PublicLeaderboard() {
             <p className="text-sm sm:text-base lg:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8">
               {contest.description}
             </p>
-            
-            {/* Prizes text */}
-            <div className="text-center mb-3">
-              <p className="text-sm sm:text-base text-white">Prizes</p>
-            </div>
             
             <button
               onClick={handleJoinContest}
