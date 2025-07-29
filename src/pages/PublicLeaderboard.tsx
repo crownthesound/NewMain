@@ -779,7 +779,24 @@ export function PublicLeaderboard() {
                           <div className="text-xs sm:text-sm text-gray-500">views</div>
                         </div>
                         <button className="px-3 py-1.5 sm:px-4 sm:py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs sm:text-sm font-medium transition-colors">
-                        Support
+                        <button 
+                          onClick={() => handleVideoClick({
+                            id: participant.video_id,
+                            title: participant.video_title || `Video by @${participant.tiktok_username}`,
+                            url: participant.video_url || '',
+                            video_url: participant.video_url,
+                            thumbnail: participant.thumbnail || '',
+                            username: participant.tiktok_username,
+                            views: participant.views,
+                            likes: participant.likes,
+                            comments: participant.comments,
+                            shares: participant.shares,
+                            rank: participant.rank
+                          }, 0)}
+                          className="px-3 py-1.5 sm:px-4 sm:py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs sm:text-sm font-medium transition-colors"
+                        >
+                          Support
+                        </button>
                         </button>
                       </div>
                     </div>
