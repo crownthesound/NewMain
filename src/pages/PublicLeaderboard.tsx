@@ -597,7 +597,7 @@ export function PublicLeaderboard() {
                       <div 
                         className="relative transition-all duration-300 ease-out group will-change-transform"
                         style={{
-                          transform: \`scale(${scale})`,
+                          transform: 'scale(' + scale + ')',
                           opacity,
                           width: '180px',
                           maxWidth: '100%'
