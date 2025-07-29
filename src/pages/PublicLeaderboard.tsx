@@ -837,7 +837,6 @@ export function PublicLeaderboard() {
             </div>
           ) : (
             /* Video Carousel View */
-            currentView === 'videos' ? (
                 featuredVideos.length > 0 ? (
                   <div className="relative w-full">
                     <div className="overflow-hidden w-full" ref={emblaRef}>
