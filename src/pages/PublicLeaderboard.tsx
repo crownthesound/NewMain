@@ -772,7 +772,7 @@ export function PublicLeaderboard() {
                               <div 
                                 className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
                                 style={{
-                                  transform: \`scale(${scale})`,
+                                  transform: `scale(${scale})`,
                                   opacity,
                                 }}
                                 onClick={() => handleVideoClick(video, index)}
