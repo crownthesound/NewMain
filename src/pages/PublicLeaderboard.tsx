@@ -525,7 +525,7 @@ export function PublicLeaderboard() {
                 {/* Description - Now visible on mobile */}
                 <div className="px-1 max-w-sm mx-auto">
                   <p className={`text-sm text-white/90 text-center leading-relaxed mb-4 ${
-                    showFullDescription ? '' : 'line-clamp-2'
+                    showFullDescription ? '' : 'line-clamp-5'
                   }`}>
                     {contest.description}
                   </p>
