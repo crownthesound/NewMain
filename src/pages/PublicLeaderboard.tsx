@@ -711,6 +711,18 @@ export function PublicLeaderboard() {
                     title: 'Climb the Leaderboard',
                     description: 'Share your video and get more views to rise up in the contest rankings'
                   }
+                  {
+                    step: 5,
+                    icon: Users,
+                    title: 'Final Review',
+                    description: 'Crown will review top-ranked videos to verify eligibility and confirm winners'
+                  },
+                  {
+                    step: 6,
+                    icon: Gift,
+                    title: 'Win Prizes',
+                    description: 'Winners receive their prizes after verification is complete'
+                  }
                 ].map((step, index) => {
                   const Icon = step.icon;
                   return (
