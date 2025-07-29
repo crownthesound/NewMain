@@ -540,6 +540,16 @@ export function PublicLeaderboard() {
                 <p className="text-sm sm:text-base lg:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8">
                   {contest.description}
                 </p>
+                
+                {/* Sign up button below description */}
+                <div className="mb-6 sm:mb-8">
+                  <button
+                    onClick={handleJoinContest}
+                    className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base relative z-50"
+                  >
+                    Sign up to join
+                  </button>
+                </div>
               </div>
             </div>
           </div>
