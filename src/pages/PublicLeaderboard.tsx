@@ -930,11 +930,6 @@ export function PublicLeaderboard() {
                               </div>
                               <div className="text-xs text-gray-500 flex items-center gap-2">
                                 <span>{formatNumber(participant.views)} views</span>
-                                {participant.rank <= (contest?.num_winners || 5) && (
-                                  <span className="text-green-600 font-medium">
-                                    • Prize Winner
-                                  </span>
-                                )}
                               </div>
                             </div>
                           </div>
