@@ -1038,6 +1038,15 @@ export function PublicLeaderboard() {
 
       <ViewSubmissionModal
         isOpen={showViewModal}
+        onClose={() => setShowViewModal(false)}
+        video={selectedVideo}
+      />
+
+      <MobileVideoModal
+        isOpen={showMobileModal}
+        onClose={() => setShowMobileModal(false)}
+        video={selectedVideo}
+      />
     </div>
   );
 }
