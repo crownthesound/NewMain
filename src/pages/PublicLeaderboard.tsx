@@ -487,7 +487,7 @@ export function PublicLeaderboard() {
                   {contest.name.toUpperCase()}
                 </h1>
                 
-                {/* Prizes Section - Mobile - Original Style */}
+                {/* Prizes Section - Mobile */}
                 <div className="bg-black/30 backdrop-blur-sm rounded-lg p-2 mb-6">
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-1">
@@ -497,32 +497,13 @@ export function PublicLeaderboard() {
                       </h4>
                     </div>
                     <div className="text-xs text-white/60">
-                      {contest?.num_winners || 5} Winners
+                      {contest.prize_titles?.length || contest.num_winners || 5} Winners
                     </div>
                   </div>
                   <div className="flex gap-1 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
-                    {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
-                      const rank = index + 1;
-                      const prizeTitle = contest?.prize_titles?.[index];
-                      
-                      let prizeText;
-                      let prizeAmount = null;
-                      
-                      if (prizeTitle && prizeTitle.title) {
-                        prizeText = prizeTitle.title;
-                      } else {
-                        prizeText = `${rank}${rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th'} Place`;
-                      }
-                      
-                      if (contest?.prize_per_winner && contest.prize_per_winner > 0) {
-                        prizeAmount = contest.prize_per_winner;
-                        if (contest.num_winners && contest.num_winners > 1) {
-                          const reductionFactor = Math.max(0.2, 1 - (index * 0.2));
-                          prizeAmount = Math.round(contest.prize_per_winner * reductionFactor);
-                        }
-                      }
-                      
-                      return (
+                    {(contest.prize_titles || [])
+                      .slice(0, contest.num_winners || contest.prize_titles?.length)
+                      .map((prize: any, index: number) => (
                         <div
                           key={index}
                           className="p-1.5 rounded-lg border snap-start flex-shrink-0 min-w-[70px] bg-black/20 border-white/10 transition-all hover:bg-white/5"
@@ -540,7 +521,7 @@ export function PublicLeaderboard() {
                                   : "text-white/60"
                               }`}
                             >
-                              {rank}
+                              {index + 1}
                               {index === 0
                                 ? "st"
                                 : index === 1
@@ -551,13 +532,14 @@ export function PublicLeaderboard() {
                             </span>
                           </div>
                           <div className="text-[10px] font-medium leading-tight line-clamp-2 text-white">
-                            {prizeAmount
-                              ? `$${formatNumber(prizeAmount)}`
-                              : prizeText}
+                            {contest.prize_per_winner && contest.prize_per_winner > 0
+                              ? `$${formatNumber(
+                                  contest.prize_per_winner * (1 - index * 0.2)
+                                )}`
+                              : prize.title}
                           </div>
                         </div>
-                      );
-                    })}
+                      ))}
                   </div>
                 </div>
                 
@@ -606,7 +588,7 @@ export function PublicLeaderboard() {
                   {contest.name.toUpperCase()}
                 </h1>
                 
-                {/* Prizes Section - Original Style */}
+                {/* Prizes Section - Desktop */}
                 <div className="bg-black/30 backdrop-blur-sm rounded-lg p-2 mb-6 sm:mb-8 max-w-md mx-auto">
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-1">
@@ -616,32 +598,13 @@ export function PublicLeaderboard() {
                       </h4>
                     </div>
                     <div className="text-xs text-white/60">
-                      {contest?.num_winners || 5} Winners
+                      {contest.prize_titles?.length || contest.num_winners || 5} Winners
                     </div>
                   </div>
                   <div className="flex gap-1 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
-                    {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
-                      const rank = index + 1;
-                      const prizeTitle = contest?.prize_titles?.[index];
-                      
-                      let prizeText;
-                      let prizeAmount = null;
-                      
-                      if (prizeTitle && prizeTitle.title) {
-                        prizeText = prizeTitle.title;
-                      } else {
-                        prizeText = `${rank}${rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th'} Place`;
-                      }
-                      
-                      if (contest?.prize_per_winner && contest.prize_per_winner > 0) {
-                        prizeAmount = contest.prize_per_winner;
-                        if (contest.num_winners && contest.num_winners > 1) {
-                          const reductionFactor = Math.max(0.2, 1 - (index * 0.2));
-                          prizeAmount = Math.round(contest.prize_per_winner * reductionFactor);
-                        }
-                      }
-                      
-                      return (
+                    {(contest.prize_titles || [])
+                      .slice(0, contest.num_winners || contest.prize_titles?.length)
+                      .map((prize: any, index: number) => (
                         <div
                           key={index}
                           className="p-1.5 rounded-lg border snap-start flex-shrink-0 min-w-[70px] bg-black/20 border-white/10 transition-all hover:bg-white/5"
@@ -659,7 +622,7 @@ export function PublicLeaderboard() {
                                   : "text-white/60"
                               }`}
                             >
-                              {rank}
+                              {index + 1}
                               {index === 0
                                 ? "st"
                                 : index === 1
@@ -670,13 +633,14 @@ export function PublicLeaderboard() {
                             </span>
                           </div>
                           <div className="text-[10px] font-medium leading-tight line-clamp-2 text-white">
-                            {prizeAmount
-                              ? `$${formatNumber(prizeAmount)}`
-                              : prizeText}
+                            {contest.prize_per_winner && contest.prize_per_winner > 0
+                              ? `$${formatNumber(
+                                  contest.prize_per_winner * (1 - index * 0.2)
+                                )}`
+                              : prize.title}
                           </div>
                         </div>
-                      );
-                    })}
+                      ))}
                   </div>
                 </div>
                 
