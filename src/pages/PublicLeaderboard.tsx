@@ -461,7 +461,7 @@ export function PublicLeaderboard() {
                 </h1>
                 
                 {/* Description - Now visible on mobile */}
-                <p className="text-sm text-white/90 text-center mb-8 px-1 leading-relaxed max-w-sm mx-auto">
+                <p className="text-sm text-white/90 text-center mb-8 px-1 leading-relaxed max-w-sm mx-auto line-clamp-2">
                   {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
                 </p>
                 
