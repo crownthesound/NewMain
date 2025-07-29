@@ -644,30 +644,30 @@ export function PublicLeaderboard() {
                           style={{
                             transform: `scale(${scale})`,
                             opacity,
-                            width: '220px',
+                            width: '180px',
                             maxWidth: '100%'
                           }}
                         >
                           <div className="text-center">
-                            <div className={`w-16 h-16 ${
+                            <div className={`w-12 h-12 ${
                               rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
                               rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
                               rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
                               rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
                               rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
                               'bg-gradient-to-br from-slate-400 to-slate-600'
-                            } rounded-full flex items-center justify-center border-2 border-white/30 mb-3 mx-auto transition-all duration-300 shadow-lg`}>
+                            } rounded-full flex items-center justify-center border border-white/20 mb-2 mx-auto transition-all duration-300 shadow-md`}>
                               {rank === 1 ? (
-                                <Crown className="h-8 w-8 text-white transition-all duration-300" />
+                                <Crown className="h-6 w-6 text-white transition-all duration-300" />
                               ) : (
-                                <span className="text-white font-bold text-lg transition-all duration-300">{rank}</span>
+                                <span className="text-white font-bold text-sm transition-all duration-300">{rank}</span>
                               )}
                             </div>
-                            <div className="bg-black/80 backdrop-blur-sm rounded-xl p-3 min-w-[120px] border border-white/30 transition-all duration-300 shadow-xl">
-                              <div className="text-white font-bold text-sm transition-all duration-300">
+                            <div className="bg-black/70 backdrop-blur-sm rounded-lg p-2 min-w-[100px] border border-white/20 transition-all duration-300 shadow-lg">
+                              <div className="text-white font-bold text-xs transition-all duration-300">
                                 {prizeText}
                               </div>
-                              <div className="text-white/90 text-xs leading-tight text-center transition-all duration-300 mt-1">
+                              <div className="text-white/90 text-[10px] leading-tight text-center transition-all duration-300 mt-0.5">
                                 {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
                               </div>
                             </div>
