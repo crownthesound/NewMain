@@ -138,6 +138,9 @@ export function PublicLeaderboard() {
   const [coverLoaded, setCoverLoaded] = useState<{[key: string]: boolean}>({});
   const [showFullDescription, setShowFullDescription] = useState(false);
 
+  // Add view state for toggling between leaderboard and video carousel
+  const [currentView, setCurrentView] = useState<'leaderboard' | 'videos'>('leaderboard');
+
   const { isConnected: isTikTokConnected } = useTikTokConnection();
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
@@ -731,24 +734,19 @@ export function PublicLeaderboard() {
               <div className="flex items-center justify-between">
                 <h3 className="text-white font-black text-lg sm:text-xl tracking-wider">GET CROWNED.</h3>
                 <button
-                  onClick={() => {
-                    // Scroll to the trending entries section
-                    const trendingSection = document.querySelector('[data-section="trending-entries"]');
-                    if (trendingSection) {
-                      trendingSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                  }}
+                  onClick={() => setCurrentView(currentView === 'leaderboard' ? 'videos' : 'leaderboard')}
                   className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium flex items-center gap-1"
                 >
                   <Play className="h-3 w-3 sm:h-4 sm:w-4" />
-                  <span className="hidden sm:inline">Videos</span>
+                  <span className="hidden sm:inline">{currentView === 'leaderboard' ? 'Videos' : 'Leaderboard'}</span>
                 </button>
               </div>
             </div>
 
           {/* Leaderboard Table */}
             <div className="p-3 sm:p-4 lg:p-6">
-            {participants.length > 0 ? (
+            {currentView === 'leaderboard' ? (
+              participants.length > 0 ? (
                 <div className="space-y-2 sm:space-y-3">
                 {participants.slice(0, 10).map((participant, index) => (
                   <div
