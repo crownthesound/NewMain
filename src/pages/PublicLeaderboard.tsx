@@ -793,20 +793,20 @@ export function PublicLeaderboard() {
                   return (
                     <div 
                       key={video.id}
-                        className="flex-[0_0_90%] min-w-0 px-2 sm:flex-[0_0_50%] md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
+                        className="flex-[0_0_85%] min-w-0 px-2 sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_22%] flex items-center justify-center"
                       >
                       <div 
                         className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer"
                         style={{
                           transform: `scale(${scale})`,
                           opacity,
-                            width: '240px',
+                            width: '280px',
                           maxWidth: '100%'
                         }}
                         onClick={() => handleVideoClick(video, index)}
                         >
                         <div 
-                            className="relative bg-black rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all"
+                            className="relative bg-black rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all shadow-2xl"
                           style={{ aspectRatio: '9/16' }}
                           >
                           {/* Loading Placeholder */}
