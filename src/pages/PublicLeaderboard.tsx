@@ -486,7 +486,7 @@ export function PublicLeaderboard() {
                 </div>
                 
                 {/* Prize Podium - Horizontal compact layout */}
-                <div className="relative max-w-7xl mx-auto w-full mb-4 mt-8">
+                <div className="relative max-w-7xl mx-auto w-full mb-4 mt-12">
                   <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
                     <div className="flex">
                       {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
