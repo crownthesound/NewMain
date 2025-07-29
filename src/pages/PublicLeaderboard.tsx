@@ -524,14 +524,17 @@ export function PublicLeaderboard() {
                         </div>
                       </div>
                       
-                      {/* Actual Prize Places */}
-                      {contest?.prize_titles?.slice(0, Math.min(5, contest?.num_winners || 3)).map((prize, index) => {
-                        const isSelected = index + 1 === currentVideoIndex;
+                      {/* All Prize Places */}
+                      {contest?.prize_titles?.slice(0, contest?.num_winners || 5).map((prize, index) => {
+                        const carouselIndex = index + 1; // +1 because index 0 is the default prize icon
+                        const isSelected = carouselIndex === currentVideoIndex;
                         const scale = isSelected ? 1.1 : 0.8;
                         const opacity = isSelected ? 1 : 0.6;
                         const isFirst = index === 0;
                         const isSecond = index === 1;
                         const isThird = index === 2;
+                        const isFourth = index === 3;
+                        const isFifth = index === 4;
                         
                         return (
                           <div 
@@ -552,7 +555,9 @@ export function PublicLeaderboard() {
                                   isFirst ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
                                   isSecond ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
                                   isThird ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
-                                  'bg-gradient-to-br from-blue-400 to-blue-600'
+                                  isFourth ? 'bg-gradient-to-br from-green-400 to-green-600' :
+                                  isFifth ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
+                                  'bg-gradient-to-br from-slate-400 to-slate-600'
                                 } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
                                   {isFirst ? (
                                     <Crown className={`${isSelected ? 'h-8 w-8' : 'h-6 w-6'} text-white transition-all duration-300`} />
@@ -569,6 +574,8 @@ export function PublicLeaderboard() {
                                     {isFirst ? '1ST PLACE' :
                                      isSecond ? '2ND PLACE' :
                                      isThird ? '3RD PLACE' :
+                                     isFourth ? '4TH PLACE' :
+                                     isFifth ? '5TH PLACE' :
                                      `${index + 1}TH PLACE`}
                                   </div>
                                   <div className={`text-white/80 ${
@@ -577,7 +584,7 @@ export function PublicLeaderboard() {
                                     {isFirst ? 
                                       (contest?.prize_titles?.[0]?.title || 'EXCLUSIVE SPOT AT THE DO-LAB IN THE DESERT IN 2025.') :
                                       contest?.prize_per_winner ? 
-                                        `$${formatNumber(contest.prize_per_winner * (1 - index * 0.2))}` : 
+                                        `$${formatNumber(contest.prize_per_winner * Math.max(0.2, 1 - index * 0.2))}` : 
                                         prize.title || `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place`
                                     }
                                   </div>
