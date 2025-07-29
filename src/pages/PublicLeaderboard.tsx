@@ -504,12 +504,31 @@ export function PublicLeaderboard() {
                         
                         // Get prize data from database
                         const prizeTitle = contest?.prize_titles?.[index];
-                        const prizeText = prizeTitle?.title || `${rank}${rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th'} Place`;
                         
-                        // Calculate prize amount if monetary
-                        const prizeAmount = contest?.prize_per_winner ? 
-                          contest.prize_per_winner * Math.max(0.2, 1 - index * 0.2) : 
-                          null;
+                        // Use actual database prize structure
+                        let prizeText;
+                        let prizeAmount = null;
+                        
+                        // Check if we have custom prize titles from database
+                        if (prizeTitle && prizeTitle.title) {
+                          prizeText = prizeTitle.title;
+                        } else {
+                          // Generate default place names
+                          prizeText = `${rank}${rank === 1 ? 'ST' : rank === 2 ? 'ND' : rank === 3 ? 'RD' : 'TH'} PLACE`;
+                        }
+                        
+                        // Calculate prize amount from database
+                        if (contest?.prize_per_winner && contest.prize_per_winner > 0) {
+                          // Use the actual prize_per_winner from database
+                          prizeAmount = contest.prize_per_winner;
+                          
+                          // If there are multiple winners, calculate distribution
+                          if (contest.num_winners && contest.num_winners > 1) {
+                            // First place gets full amount, others get reduced amounts
+                            const reductionFactor = Math.max(0.2, 1 - (index * 0.2));
+                            prizeAmount = Math.round(contest.prize_per_winner * reductionFactor);
+                          }
+                        }
                         
                         return (
                           <div 
@@ -548,20 +567,12 @@ export function PublicLeaderboard() {
                                   <div className={`text-white font-bold ${
                                     isSelected ? 'text-[11px]' : 'text-[10px]'
                                   } transition-all duration-300`}>
-                                    {rank === 1 ? '1ST PLACE' :
-                                     rank === 2 ? '2ND PLACE' :
-                                     rank === 3 ? '3RD PLACE' :
-                                     rank === 4 ? '4TH PLACE' :
-                                     rank === 5 ? '5TH PLACE' :
-                                     `${rank}TH PLACE`}
+                                    {prizeText}
                                   </div>
                                   <div className={`text-white/80 ${
                                     isSelected ? 'text-[10px] leading-tight text-center' : 'text-[9px]'
                                   } transition-all duration-300`}>
-                                    {prizeAmount ? 
-                                      `$${formatNumber(prizeAmount)}` : 
-                                      prizeText
-                                    }
+                                    {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
                                   </div>
                                 </div>
                               </div>
