@@ -488,6 +488,11 @@ export function PublicLeaderboard() {
                 
                 {/* Prize Podium - Horizontal compact layout - moved below title */}
                 <div className="relative max-w-7xl mx-auto w-full mb-4 mt-4">
+                  {/* Compete For text */}
+                  <div className="text-center mb-3">
+                    <p className="text-sm sm:text-base text-white/60">Compete For</p>
+                  </div>
+                  
                   <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
                     <div className="flex">
                       {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
