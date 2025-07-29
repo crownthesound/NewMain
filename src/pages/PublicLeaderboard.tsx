@@ -728,7 +728,22 @@ export function PublicLeaderboard() {
           <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl">
           {/* Header */}
             <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-3 sm:p-4 text-center">
-              <h3 className="text-white font-black text-lg sm:text-xl tracking-wider">GET CROWNED.</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-white font-black text-lg sm:text-xl tracking-wider">GET CROWNED.</h3>
+                <button
+                  onClick={() => {
+                    // Scroll to the trending entries section
+                    const trendingSection = document.querySelector('[data-section="trending-entries"]');
+                    if (trendingSection) {
+                      trendingSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                  }}
+                  className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium flex items-center gap-1"
+                >
+                  <Play className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Videos</span>
+                </button>
+              </div>
             </div>
 
           {/* Leaderboard Table */}
@@ -821,7 +836,7 @@ export function PublicLeaderboard() {
       </div>
 
       {/* Trending Entries Section */}
-      <div className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+      <div className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16" data-section="trending-entries">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-4 flex items-center justify-center gap-2 sm:gap-3">
