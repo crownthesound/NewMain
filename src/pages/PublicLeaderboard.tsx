@@ -485,38 +485,6 @@ export function PublicLeaderboard() {
                   </div>
                 </div>
                 
-                {/* Title - Compact */}
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-2 mt-6 text-center tracking-tight leading-tight">
-                  {contest.name.toUpperCase()}
-                </h1>
-                
-                {/* Description - Now visible on mobile */}
-                <div className="mb-8 px-1 max-w-sm mx-auto">
-                  <p className={`text-sm text-white/90 text-center leading-relaxed ${
-                    showFullDescription ? '' : 'line-clamp-3'
-                  }`}>
-                    {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
-                  </p>
-                  {contest.description && contest.description.length > 150 && (
-                    <button
-                      onClick={() => setShowFullDescription(!showFullDescription)}
-                      className="mt-2 text-xs text-white/70 hover:text-white transition-colors flex items-center gap-1 mx-auto"
-                    >
-                      {showFullDescription ? (
-                        <>
-                          <span>Show less</span>
-                          <ChevronUp className="h-3 w-3" />
-                        </>
-                      ) : (
-                        <>
-                          <span>Show more</span>
-                          <ChevronDown className="h-3 w-3" />
-                        </>
-                      )}
-                    </button>
-                  )}
-                </div>
-                
                 {/* Prize Podium - Horizontal compact layout */}
                 <div className="relative max-w-7xl mx-auto w-full mb-4">
                   <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
@@ -625,6 +593,38 @@ export function PublicLeaderboard() {
                         <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
                       </button>
                     </>
+                  )}
+                </div>
+                
+                {/* Title - Compact */}
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-2 mt-6 text-center tracking-tight leading-tight">
+                  {contest.name.toUpperCase()}
+                </h1>
+                
+                {/* Description - Now visible on mobile */}
+                <div className="mb-8 px-1 max-w-sm mx-auto">
+                  <p className={`text-sm text-white/90 text-center leading-relaxed ${
+                    showFullDescription ? '' : 'line-clamp-3'
+                  }`}>
+                    {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
+                  </p>
+                  {contest.description && contest.description.length > 150 && (
+                    <button
+                      onClick={() => setShowFullDescription(!showFullDescription)}
+                      className="mt-2 text-xs text-white/70 hover:text-white transition-colors flex items-center gap-1 mx-auto"
+                    >
+                      {showFullDescription ? (
+                        <>
+                          <span>Show less</span>
+                          <ChevronUp className="h-3 w-3" />
+                        </>
+                      ) : (
+                        <>
+                          <span>Show more</span>
+                          <ChevronDown className="h-3 w-3" />
+                        </>
+                      )}
+                    </button>
                   )}
                 </div>
                 
