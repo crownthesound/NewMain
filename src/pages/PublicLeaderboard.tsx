@@ -132,6 +132,7 @@ export function PublicLeaderboard() {
   const [userSubmission, setUserSubmission] = useState<any>(null);
   const [showTikTokSettings, setShowTikTokSettings] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentPrizeIndex, setCurrentPrizeIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState<{[key: string]: boolean}>({});
   const [coverLoaded, setCoverLoaded] = useState<{[key: string]: boolean}>({});
@@ -142,6 +143,14 @@ export function PublicLeaderboard() {
 
   // Embla carousel for video player
   const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: 'center',
+    skipSnaps: false,
+    dragFree: false
+  });
+
+  // Embla carousel for prizes
+  const [prizeEmblaRef, prizeEmblaApi] = useEmblaCarousel({
     loop: true,
     align: 'center',
     skipSnaps: false,
@@ -175,6 +184,21 @@ export function PublicLeaderboard() {
     };
   }, [emblaApi]);
 
+  useEffect(() => {
+    if (!prizeEmblaApi) return;
+
+    const onSelect = () => {
+      setCurrentPrizeIndex(prizeEmblaApi.selectedScrollSnap());
+    };
+
+    prizeEmblaApi.on('select', onSelect);
+    prizeEmblaApi.on('reInit', onSelect);
+
+    return () => {
+      prizeEmblaApi.off('select', onSelect);
+      prizeEmblaApi.off('reInit', onSelect);
+    };
+  }, [prizeEmblaApi]);
   const fetchContestData = async () => {
     try {
       const { data, error } = await supabase
@@ -319,6 +343,8 @@ export function PublicLeaderboard() {
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
   const scrollNext = () => emblaApi && emblaApi.scrollNext();
 
+  const scrollPrizePrev = () => prizeEmblaApi && prizeEmblaApi.scrollPrev();
+  const scrollPrizeNext = () => prizeEmblaApi && prizeEmblaApi.scrollNext();
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
       return `${(num / 1000000).toFixed(1)}M`;
@@ -493,10 +519,10 @@ export function PublicLeaderboard() {
                 
                 {/* Prize Podium - Horizontal compact layout */}
                 <div className="relative max-w-7xl mx-auto w-full mb-4">
-                  <div className="overflow-hidden w-full" ref={emblaRef}>
+                  <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
                     <div className="flex">
                       {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
-                        const isSelected = index === currentVideoIndex;
+                        const isSelected = index === currentPrizeIndex;
                         const scale = isSelected ? 1 : 0.85;
                         const opacity = isSelected ? 1 : 0.6;
                         const rank = index + 1;
@@ -586,14 +612,14 @@ export function PublicLeaderboard() {
                   {(contest?.num_winners || 5) > 1 && (
                     <>
                       <button
-                        onClick={scrollPrev}
+                        onClick={scrollPrizePrev}
                         className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
                       >
                         <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
                       </button>
 
                       <button
-                        onClick={scrollNext}
+                        onClick={scrollPrizeNext}
                         className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
                       >
                         <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
