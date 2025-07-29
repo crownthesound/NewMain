@@ -608,7 +608,7 @@ export function PublicLeaderboard() {
           {/* Content Area */}
           {contestDetailsView === 'prizes' ? (
             /* Prizes View */
-            <div className="relative max-w-7xl mx-auto w-full">
+            <div className="relative max-w-7xl mx-auto w-full min-h-[120px]">
               <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
                 <div className="flex">
                   {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
@@ -711,7 +711,7 @@ export function PublicLeaderboard() {
             </div>
           ) : (
             /* How to Join View */
-            <div className="relative max-w-7xl mx-auto w-full">
+            <div className="relative max-w-7xl mx-auto w-full min-h-[120px]">
               <div className="overflow-hidden w-full" ref={howToJoinEmblaRef}>
                 <div className="flex">
                   {[
@@ -900,7 +900,7 @@ export function PublicLeaderboard() {
           {/* Content Area */}
           {leaderboardView === 'list' ? (
             /* Leaderboard View - Exact Design Match */
-            <div className="max-w-sm mx-auto">
+            <div className="max-w-sm mx-auto min-h-[400px]">
               {/* White Card Container */}
               <div className="bg-white rounded-2xl overflow-hidden">
                 {/* GET CROWNED Header */}
@@ -963,7 +963,7 @@ export function PublicLeaderboard() {
           ) : (
             /* Video Carousel View */
                 featuredVideos.length > 0 ? (
-                  <div className="relative w-full">
+                  <div className="relative w-full min-h-[400px]">
                     <div className="overflow-hidden w-full" ref={emblaRef}>
                       <div className="flex">
                         {featuredVideos.map((video, index) => {
@@ -1092,10 +1092,12 @@ export function PublicLeaderboard() {
                     )}
                   </div>
                 ) : (
-                  <div className="text-center py-8 sm:py-12 lg:py-16">
+                  <div className="text-center py-8 sm:py-12 lg:py-16 min-h-[400px] flex items-center justify-center">
+                    <div>
                     <Music className="h-12 w-12 sm:h-16 sm:w-16 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">No Videos Yet</h3>
                     <p className="text-sm sm:text-base text-gray-500">Contest videos will appear here once submitted!</p>
+                    </div>
                   </div>
                 )
           )}
