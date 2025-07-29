@@ -40,6 +40,8 @@ import {
   CheckCircle,
   AlertCircle,
   Flame,
+  Video,
+  Upload,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../contexts/AuthContext";
@@ -139,7 +141,7 @@ export function PublicLeaderboard() {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   // Add view state for toggling between leaderboard and video carousel
-  const [currentView, setCurrentView] = useState<'leaderboard' | 'videos'>('leaderboard');
+  const [currentView, setCurrentView] = useState<'prizes' | 'how-to-join'>('prizes');
 
   const { isConnected: isTikTokConnected } = useTikTokConnection();
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
@@ -542,143 +544,197 @@ export function PublicLeaderboard() {
         <div className="max-w-7xl mx-auto">
           {/* Contest Details Heading */}
           <div className="text-center mb-6">
-            <h2 className="text-xl font-bold text-white">Contest Details</h2>
+            <h2 className="text-xl font-bold text-white flex items-center justify-center gap-2">
+              <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
+              Contest Details
+            </h2>
           </div>
           
           {/* Toggle Buttons */}
           <div className="flex justify-center mb-6 sm:mb-8">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
-                onClick={() => setCurrentView('leaderboard')}
+                onClick={() => setCurrentView('prizes')}
                 className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
-                  currentView === 'leaderboard'
+                  currentView === 'prizes'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
                 }`}
               >
-                List
+                Prizes
               </button>
               <button
-                onClick={() => setCurrentView('videos')}
+                onClick={() => setCurrentView('how-to-join')}
                 className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
-                  currentView === 'videos'
+                  currentView === 'how-to-join'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
                 }`}
               >
-                Featured Videos
+                How to Join
               </button>
             </div>
           </div>
           
-          <div className="text-center mb-6">
-            <h2 className="text-xl font-bold text-white flex items-center justify-center gap-2">
-              <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
-              Prizes
-            </h2>
-          </div>
-          
-          <div className="relative max-w-7xl mx-auto w-full">
-            <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
-              <div className="flex">
-                {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
-                  const isSelected = index === currentPrizeIndex;
-                  const scale = 1; // Keep all prizes the same size
-                  const opacity = 1; // Keep all prizes the same opacity
-                  const rank = index + 1;
-                  
-                  // Get prize data from database
-                  const prizeTitle = contest?.prize_titles?.[index];
-                  
-                  // Use actual database prize structure
-                  let prizeText;
-                  let prizeAmount = null;
-                  
-                  // Check if we have custom prize titles from database
-                  if (prizeTitle && prizeTitle.title) {
-                    prizeText = prizeTitle.title;
-                  } else {
-                    // Generate default place names
-                    prizeText = `${rank}${rank === 1 ? 'ST' : rank === 2 ? 'ND' : rank === 3 ? 'RD' : 'TH'} PLACE`;
-                  }
-                  
-                  // Calculate prize amount from database
-                  if (contest?.prize_per_winner && contest.prize_per_winner > 0) {
-                    // Use the actual prize_per_winner from database
-                    prizeAmount = contest.prize_per_winner;
+          {/* Content Area */}
+          {currentView === 'prizes' ? (
+            /* Prizes View */
+            <div className="relative max-w-7xl mx-auto w-full">
+              <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
+                <div className="flex">
+                  {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
+                    const isSelected = index === currentPrizeIndex;
+                    const scale = 1; // Keep all prizes the same size
+                    const opacity = 1; // Keep all prizes the same opacity
+                    const rank = index + 1;
                     
-                    // If there are multiple winners, calculate distribution
-                    if (contest.num_winners && contest.num_winners > 1) {
-                      // First place gets full amount, others get reduced amounts
-                      const reductionFactor = Math.max(0.2, 1 - (index * 0.2));
-                      prizeAmount = Math.round(contest.prize_per_winner * reductionFactor);
+                    // Get prize data from database
+                    const prizeTitle = contest?.prize_titles?.[index];
+                    
+                    // Use actual database prize structure
+                    let prizeText;
+                    let prizeAmount = null;
+                    
+                    // Check if we have custom prize titles from database
+                    if (prizeTitle && prizeTitle.title) {
+                      prizeText = prizeTitle.title;
+                    } else {
+                      // Generate default place names
+                      prizeText = `${rank}${rank === 1 ? 'ST' : rank === 2 ? 'ND' : rank === 3 ? 'RD' : 'TH'} PLACE`;
                     }
-                  }
-                  
-                  return (
-                    <div 
-                      key={index}
-                      className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
-                    >
+                    
+                    // Calculate prize amount from database
+                    if (contest?.prize_per_winner && contest.prize_per_winner > 0) {
+                      // Use the actual prize_per_winner from database
+                      prizeAmount = contest.prize_per_winner;
+                      
+                      // If there are multiple winners, calculate distribution
+                      if (contest.num_winners && contest.num_winners > 1) {
+                        // First place gets full amount, others get reduced amounts
+                        const reductionFactor = Math.max(0.2, 1 - (index * 0.2));
+                        prizeAmount = Math.round(contest.prize_per_winner * reductionFactor);
+                      }
+                    }
+                    
+                    return (
                       <div 
-                        className="relative transition-all duration-300 ease-out group will-change-transform"
-                        style={{
-                          transform: `scale(${scale})`,
-                          opacity,
-                          width: '180px',
-                          maxWidth: '100%'
-                        }}
+                        key={index}
+                        className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
                       >
-                        <div className="text-center">
-                          <div className={`w-10 h-10 ${
-                            rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
-                            rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
-                            rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
-                            rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
-                            rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
-                            'bg-gradient-to-br from-slate-400 to-slate-600'
-                          } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
-                            {rank === 1 ? (
-                              <Crown className="h-5 w-5 text-white transition-all duration-300" />
-                            ) : (
-                              <span className="text-white font-bold text-xs transition-all duration-300">{rank}</span>
-                            )}
-                          </div>
-                          <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[70px] border border-white/20 transition-all duration-300">
-                            <div className="text-white font-bold text-[9px] transition-all duration-300">
-                              {prizeText}
+                        <div 
+                          className="relative transition-all duration-300 ease-out group will-change-transform"
+                          style={{
+                            transform: `scale(${scale})`,
+                            opacity,
+                            width: '180px',
+                            maxWidth: '100%'
+                          }}
+                        >
+                          <div className="text-center">
+                            <div className={`w-10 h-10 ${
+                              rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
+                              rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
+                              rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
+                              rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
+                              rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
+                              'bg-gradient-to-br from-slate-400 to-slate-600'
+                            } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
+                              {rank === 1 ? (
+                                <Crown className="h-5 w-5 text-white transition-all duration-300" />
+                              ) : (
+                                <span className="text-white font-bold text-xs transition-all duration-300">{rank}</span>
+                              )}
                             </div>
-                            <div className="text-white/80 text-[8px] leading-tight text-center transition-all duration-300">
-                              {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
+                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[70px] border border-white/20 transition-all duration-300">
+                              <div className="text-white font-bold text-[9px] transition-all duration-300">
+                                {prizeText}
+                              </div>
+                              <div className="text-white/80 text-[8px] leading-tight text-center transition-all duration-300">
+                                {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
+                              </div>
                             </div>
                           </div>
                         </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Navigation Arrows */}
+              {(contest?.num_winners || 5) > 1 && (
+                <>
+                  <button
+                    onClick={scrollPrizePrev}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+
+                  <button
+                    onClick={scrollPrizeNext}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </>
+              )}
+            </div>
+          ) : (
+            /* How to Join View */
+            <div className="relative bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  {
+                    step: 1,
+                    icon: Video,
+                    title: 'Record Your Performance',
+                    description: 'Create a video performance that follows the contest guidelines and showcases your talent'
+                  },
+                  {
+                    step: 2,
+                    icon: Upload,
+                    title: 'Post to TikTok',
+                    description: 'Share your video on TikTok using your connected account to enter the competition'
+                  },
+                  {
+                    step: 3,
+                    icon: CheckCircle,
+                    title: 'Submit Your Entry',
+                    description: 'Come back to the contest page and tap "Join Competition" to officially enter'
+                  },
+                  {
+                    step: 4,
+                    icon: Trophy,
+                    title: 'Climb the Leaderboard',
+                    description: 'Share your video and get more views to rise up in the contest rankings'
+                  }
+                ].map((step, index) => {
+                  const Icon = step.icon;
+                  return (
+                    <div 
+                      key={index}
+                      className="flex flex-col items-center text-center group"
+                    >
+                      <div className="relative flex-shrink-0 mb-4">
+                        <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center transform-gpu group-hover:scale-110 transition-all duration-700">
+                          <Icon className="h-8 w-8 text-white" />
+                        </div>
+                        <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white">
+                          {step.step}
+                        </div>
+                      </div>
+                      
+                      <div className="flex-1">
+                        <h3 className="text-lg font-medium text-white mb-2">{step.title}</h3>
+                        <p className="text-sm text-white/60 leading-relaxed">{step.description}</p>
                       </div>
                     </div>
                   );
                 })}
               </div>
             </div>
-
-            {/* Navigation Arrows */}
-            {(contest?.num_winners || 5) > 1 && (
-              <>
-                <button
-                  onClick={scrollPrizePrev}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </button>
-
-                <button
-                  onClick={scrollPrizeNext}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </>
-            )}
-          </div>
+          )}
         </div>
       </div>
       
