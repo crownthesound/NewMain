@@ -135,6 +135,7 @@ export function PublicLeaderboard() {
   const [showTikTokSettings, setShowTikTokSettings] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [currentPrizeIndex, setCurrentPrizeIndex] = useState(0);
+  const [currentHowToJoinIndex, setCurrentHowToJoinIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState<{[key: string]: boolean}>({});
   const [coverLoaded, setCoverLoaded] = useState<{[key: string]: boolean}>({});
@@ -157,6 +158,14 @@ export function PublicLeaderboard() {
 
   // Embla carousel for prizes
   const [prizeEmblaRef, prizeEmblaApi] = useEmblaCarousel({
+    loop: true,
+    align: 'center',
+    skipSnaps: false,
+    dragFree: false
+  });
+
+  // Embla carousel for how to join steps
+  const [howToJoinEmblaRef, howToJoinEmblaApi] = useEmblaCarousel({
     loop: true,
     align: 'center',
     skipSnaps: false,
@@ -205,6 +214,22 @@ export function PublicLeaderboard() {
       prizeEmblaApi.off('reInit', onSelect);
     };
   }, [prizeEmblaApi]);
+
+  useEffect(() => {
+    if (!howToJoinEmblaApi) return;
+
+    const onSelect = () => {
+      setCurrentHowToJoinIndex(howToJoinEmblaApi.selectedScrollSnap());
+    };
+
+    howToJoinEmblaApi.on('select', onSelect);
+    howToJoinEmblaApi.on('reInit', onSelect);
+
+    return () => {
+      howToJoinEmblaApi.off('select', onSelect);
+      howToJoinEmblaApi.off('reInit', onSelect);
+    };
+  }, [howToJoinEmblaApi]);
   
   const fetchContestData = async () => {
     try {
@@ -352,6 +377,9 @@ export function PublicLeaderboard() {
 
   const scrollPrizePrev = () => prizeEmblaApi && prizeEmblaApi.scrollPrev();
   const scrollPrizeNext = () => prizeEmblaApi && prizeEmblaApi.scrollNext();
+
+  const scrollHowToJoinPrev = () => howToJoinEmblaApi && howToJoinEmblaApi.scrollPrev();
+  const scrollHowToJoinNext = () => howToJoinEmblaApi && howToJoinEmblaApi.scrollNext();
   
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
@@ -684,80 +712,99 @@ export function PublicLeaderboard() {
           ) : (
             /* How to Join View */
             <div className="relative max-w-7xl mx-auto w-full">
-              <div className="overflow-hidden w-full">
+              <div className="overflow-hidden w-full" ref={howToJoinEmblaRef}>
                 <div className="flex">
-                {[
-                  {
-                    step: 1,
-                    icon: Video,
-                    title: 'Record Your Performance',
-                    description: 'Create a video performance that follows the contest guidelines and showcases your talent'
-                  },
-                  {
-                    step: 2,
-                    icon: Upload,
-                    title: 'Post to TikTok',
-                    description: 'Share your video on TikTok using your connected account to enter the competition'
-                  },
-                  {
-                    step: 3,
-                    icon: CheckCircle,
-                    title: 'Submit Your Entry',
-                    description: 'Come back to the contest page and tap "Join Competition" to officially enter'
-                  },
-                  {
-                    step: 4,
-                    icon: Trophy,
-                    title: 'Climb the Leaderboard',
-                    description: 'Share your video and get more views to rise up in the contest rankings'
-                  },
-                  {
-                    step: 5,
-                    icon: Users,
-                    title: 'Final Review',
-                    description: 'Crown will review top-ranked videos to verify eligibility and confirm winners'
-                  },
-                  {
-                    step: 6,
-                    icon: Gift,
-                    title: 'Win Prizes',
-                    description: 'Winners receive their prizes after verification is complete'
-                  }
-                ].map((step, index) => {
-                  const Icon = step.icon;
-                  return (
-                    <div
-                      key={index}
-                      className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
-                    >
-                      <div 
-                        className="relative transition-all duration-300 ease-out group will-change-transform"
-                        style={{
-                          transform: 'scale(1)',
-                          opacity: 1,
-                          width: '180px',
-                          maxWidth: '100%'
-                        }}
+                  {[
+                    {
+                      step: 1,
+                      icon: Video,
+                      title: 'Record Your Performance',
+                      description: 'Create a video performance that follows the contest guidelines and showcases your talent'
+                    },
+                    {
+                      step: 2,
+                      icon: Upload,
+                      title: 'Post to TikTok',
+                      description: 'Share your video on TikTok using your connected account to enter the competition'
+                    },
+                    {
+                      step: 3,
+                      icon: CheckCircle,
+                      title: 'Submit Your Entry',
+                      description: 'Come back to the contest page and tap "Join Competition" to officially enter'
+                    },
+                    {
+                      step: 4,
+                      icon: Trophy,
+                      title: 'Climb the Leaderboard',
+                      description: 'Share your video and get more views to rise up in the contest rankings'
+                    },
+                    {
+                      step: 5,
+                      icon: Users,
+                      title: 'Final Review',
+                      description: 'Crown will review top-ranked videos to verify eligibility and confirm winners'
+                    },
+                    {
+                      step: 6,
+                      icon: Gift,
+                      title: 'Win Prizes',
+                      description: 'Winners receive their prizes after verification is complete'
+                    }
+                  ].map((step, index) => {
+                    const isSelected = index === currentHowToJoinIndex;
+                    const scale = 1; // Keep all steps the same size
+                    const opacity = 1; // Keep all steps the same opacity
+                    const Icon = step.icon;
+                    
+                    return (
+                      <div
+                        key={index}
+                        className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
                       >
-                        <div className="text-center">
-                          <div className={`w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
-                            <Icon className="h-5 w-5 text-white transition-all duration-300" />
-                          </div>
-                          <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[70px] border border-white/20 transition-all duration-300">
-                            <div className="text-white font-bold text-[9px] transition-all duration-300">
-                              {step.title}
+                        <div 
+                          className="relative transition-all duration-300 ease-out group will-change-transform"
+                          style={{
+                            transform: `scale(${scale})`,
+                            opacity,
+                            width: '180px',
+                            maxWidth: '100%'
+                          }}
+                        >
+                          <div className="text-center">
+                            <div className={`w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
+                              <Icon className="h-5 w-5 text-white transition-all duration-300" />
                             </div>
-                            <div className="text-white/80 text-[8px] leading-tight text-center transition-all duration-300">
-                              STEP {step.step}
+                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[70px] border border-white/20 transition-all duration-300">
+                              <div className="text-white font-bold text-[9px] transition-all duration-300">
+                                {step.title}
+                              </div>
+                              <div className="text-white/80 text-[8px] leading-tight text-center transition-all duration-300">
+                                STEP {step.step}
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
                 </div>
               </div>
+              
+              {/* Navigation Arrows */}
+              <button
+                onClick={scrollHowToJoinPrev}
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+
+              <button
+                onClick={scrollHowToJoinNext}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
               
               {/* Desktop How to Join Steps */}
               <div className="hidden lg:block mt-12">
