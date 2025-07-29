@@ -37,9 +37,15 @@ export function VideoCarousel() {
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
-  const fetchVideos = async () => {
+  const fetchVideos = async (retryCount = 0) => {
     try {
       setError(null);
+      
+      // Add a small delay for retries
+      if (retryCount > 0) {
+        await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+      }
+      
       const { data, error: supabaseError } = await supabase
         .from('video_links')
         .select('*')
@@ -71,8 +77,18 @@ export function VideoCarousel() {
       setCoverLoaded(initialLoadState);
       setVideoLoaded(initialLoadState);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to load videos';
       console.error('Error fetching videos:', error);
+      
+      // Retry up to 3 times for network errors
+      if (retryCount < 3 && (error instanceof TypeError || error.message?.includes('fetch'))) {
+        console.log(`Retrying fetch videos (attempt ${retryCount + 1}/3)...`);
+        return fetchVideos(retryCount + 1);
+      }
+      
+      // Show user-friendly error message
+      const errorMessage = error instanceof TypeError 
+        ? 'Unable to connect to server. Please check your internet connection.'
+        : error instanceof Error ? error.message : 'Failed to load videos';
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {

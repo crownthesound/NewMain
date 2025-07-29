@@ -249,8 +249,13 @@ function App() {
   }, [location.search, session]);
 
   useEffect(() => {
-    const fetchActiveContests = async () => {
+    const fetchActiveContests = async (retryCount = 0) => {
       try {
+        // Add a small delay for retries
+        if (retryCount > 0) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+        }
+
         const { data, error } = await supabase
           .from("contests")
           .select("*")
@@ -279,7 +284,18 @@ function App() {
         setActiveContests(activeContests);
       } catch (error) {
         console.error("Error fetching active contests:", error);
-        toast.error("Failed to load contests");
+        
+        // Retry up to 3 times for network errors
+        if (retryCount < 3 && (error instanceof TypeError || error.message?.includes('fetch'))) {
+          console.log(`Retrying fetch active contests (attempt ${retryCount + 1}/3)...`);
+          return fetchActiveContests(retryCount + 1);
+        }
+        
+        // Show user-friendly error message
+        const errorMessage = error instanceof TypeError 
+          ? "Unable to connect to server. Please check your internet connection."
+          : "Failed to load contests";
+        toast.error(errorMessage);
       } finally {
         setLoading(false);
       }
