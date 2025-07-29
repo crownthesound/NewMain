@@ -626,7 +626,7 @@ export function PublicLeaderboard() {
                 <div className="flex justify-center">
                   <button
                     onClick={handleJoinContest}
-                    className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm relative z-10 -mb-12"
+                    className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm relative z-50 -mb-12"
                   >
                     Sign up to join
                   </button>
