@@ -655,11 +655,7 @@ export function PublicLeaderboard() {
               )}
             </div>
           </div>
-
-        <div className="text-center mb-4">
-          <h2 className="text-xl font-bold text-white">Leaderboard</h2>
-        </div>
-        
+          
           {/* Sign up button at bottom of hero */}
           <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
             <button
@@ -675,6 +671,11 @@ export function PublicLeaderboard() {
       {/* Main Content Area */}
       <div className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto">
+          {/* Leaderboard Heading */}
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-xl font-bold text-white">Leaderboard</h2>
+          </div>
+          
           {/* Toggle Buttons */}
           <div className="flex justify-center mb-6 sm:mb-8">
             <div className="bg-white/5 rounded-full p-1 flex">
