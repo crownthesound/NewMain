@@ -529,6 +529,14 @@ export function PublicLeaderboard() {
                   }`}>
                     {contest.description}
                   </p>
+                  {contest.description && contest.description.length > 100 && (
+                    <button
+                      onClick={() => setShowFullDescription(!showFullDescription)}
+                      className="text-xs text-white/70 hover:text-white transition-colors underline"
+                    >
+                      {showFullDescription ? 'Show Less' : 'Show More'}
+                    </button>
+                  )}
                 </div>
                 
               </div>
