@@ -853,12 +853,10 @@ export function PublicLeaderboard() {
       </div>
       
       {/* Main Content Area */}
-      <div className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className="bg-black px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 pb-8 sm:pb-12">
         <div className="max-w-7xl mx-auto">
-          {/* Leaderboard Heading */}
-          <div className="text-center mb-6 sm:mb-8">
-            <h2 className="text-xl font-bold text-white">Leaderboard</h2>
-          </div>
+          {/* Leaderboard Heading - Moved to top */}
+          <h2 className="text-xl font-bold text-white text-center mb-6 sm:mb-8">Leaderboard</h2>
           
           {/* Leaderboard Toggle Buttons */}
           <div className="flex justify-center mb-6 sm:mb-8">
