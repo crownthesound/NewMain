@@ -792,7 +792,7 @@ export function PublicLeaderboard() {
                                   <img
                                     src={video.thumbnail}
                                     alt={video.title}
-                                    className={\`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
                                       isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
                                     }`}
                                     loading={isSelected ? 'eager' : 'lazy'}
