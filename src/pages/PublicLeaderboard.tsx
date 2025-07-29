@@ -497,10 +497,6 @@ export function PublicLeaderboard() {
                     <div className="flex">
                       {/* All Prize Places */}
                       {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
-                        const prize = contest?.prize_titles?.[index] || { 
-                          rank: index + 1, 
-                          title: `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place` 
-                        };
                         const isSelected = index === currentVideoIndex;
                         const scale = isSelected ? 1 : 0.85;
                         const opacity = isSelected ? 1 : 0.6;
@@ -558,10 +554,10 @@ export function PublicLeaderboard() {
                                     isSelected ? 'text-[10px] leading-tight text-center' : 'text-[9px]'
                                   } transition-all duration-300`}>
                                     {isFirst ? 
-                                      (contest?.prize_titles?.[0]?.title || 'EXCLUSIVE SPOT AT THE DO-LAB IN THE DESERT IN 2025.') :
+                                      'EXCLUSIVE SPOT AT THE DO-LAB IN THE DESERT IN 2025.' :
                                       contest?.prize_per_winner ? 
                                         `$${formatNumber(contest.prize_per_winner * Math.max(0.2, 1 - index * 0.2))}` : 
-                                        prize.title || `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place`
+                                        `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place`
                                     }
                                   </div>
                                 </div>
