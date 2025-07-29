@@ -493,10 +493,10 @@ export function PublicLeaderboard() {
                 
                 {/* Prize Podium - Horizontal compact layout */}
                 <div className="relative w-full mb-4">
-                  <div className="overflow-hidden w-full" ref={emblaRef}>
+                  <div className="w-full" ref={emblaRef}>
                     <div className="flex">
                       {/* Default Prize Icon as first element */}
-                      <div className="flex-[0_0_100%] min-w-0 px-2 sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_22%] flex items-center justify-center">
+                      <div className="flex-[0_0_33.333%] min-w-0 px-2 flex items-center justify-center">
                         <div 
                           className="relative transition-all duration-300 ease-out group will-change-transform"
                           style={{
@@ -539,7 +539,7 @@ export function PublicLeaderboard() {
                         return (
                           <div 
                             key={index}
-                            className="flex-[0_0_100%] min-w-0 px-2 sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_22%] flex items-center justify-center"
+                            className="flex-[0_0_33.333%] min-w-0 px-2 flex items-center justify-center"
                           >
                             <div 
                               className="relative transition-all duration-300 ease-out group will-change-transform"
