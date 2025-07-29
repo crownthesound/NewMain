@@ -623,14 +623,6 @@ export function PublicLeaderboard() {
                 </div>
                 
                 {/* Join Button - Centered */}
-                <div className="flex justify-center">
-                  <button
-                    onClick={handleJoinContest}
-                    className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm relative z-50 -mb-12"
-                  >
-                    Sign up to join
-                  </button>
-                </div>
               </div>
             </div>
             
@@ -767,6 +759,16 @@ export function PublicLeaderboard() {
 
       {/* Leaderboard Section */}
       <div className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        {/* Sign up button attached to top of this section */}
+        <div className="flex justify-center -mt-6 mb-6">
+          <button
+            onClick={handleJoinContest}
+            className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm relative z-50"
+          >
+            Sign up to join
+          </button>
+        </div>
+        
         <div className="max-w-4xl mx-auto">
           {/* Crown Logo - moved from hero section */}
           <div className="flex justify-center mb-6">
