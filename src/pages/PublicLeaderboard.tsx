@@ -710,7 +710,7 @@ export function PublicLeaderboard() {
                     icon: Trophy,
                     title: 'Climb the Leaderboard',
                     description: 'Share your video and get more views to rise up in the contest rankings'
-                  }
+                  },
                   {
                     step: 5,
                     icon: Users,
