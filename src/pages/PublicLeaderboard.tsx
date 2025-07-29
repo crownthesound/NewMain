@@ -477,7 +477,7 @@ export function PublicLeaderboard() {
             {/* Mobile Layout */}
             <div className="block sm:hidden w-full h-full">
               {/* Compact Mobile Layout */}
-              <div className="flex flex-col h-full justify-center px-2">
+              <div className="flex flex-col h-full justify-center px-2 pt-16">
                 
                 {/* Prize Podium - Horizontal compact layout */}
                 <div className="relative max-w-7xl mx-auto w-full mb-4 mt-12">
