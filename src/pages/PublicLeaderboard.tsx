@@ -706,21 +706,6 @@ export function PublicLeaderboard() {
               {/* Leaderboard Title */}
               <h2 className="text-white text-2xl font-bold text-center mb-6">Leaderboard</h2>
               
-              {/* Toggle Buttons */}
-              <div className="flex justify-center mb-6">
-                <div className="bg-pink-500 rounded-full p-1 flex items-center">
-                  <button className="bg-pink-500 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
-                    <div className="w-4 h-4 bg-white rounded flex items-center justify-center">
-                      <div className="w-2 h-2 bg-pink-500 rounded"></div>
-                    </div>
-                    <span>LIST</span>
-                  </button>
-                  <button className="text-white px-4 py-2 rounded-full text-sm font-medium opacity-60">
-                    <div className="w-4 h-4 border border-white rounded mr-2 inline-block"></div>
-                  </button>
-                </div>
-              </div>
-              
               {/* White Card Container */}
               <div className="bg-white rounded-2xl overflow-hidden">
                 {/* GET CROWNED Header */}
