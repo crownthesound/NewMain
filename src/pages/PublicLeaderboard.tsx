@@ -711,11 +711,11 @@ export function PublicLeaderboard() {
                       >
                         {/* Rank */}
                         <div className="flex-shrink-0 w-8 sm:w-10 text-center">
-                          <div className="flex flex-col items-center">
-                            {getRankIcon(participant.rank)}
-                            <span className="text-xs font-bold text-white mt-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-white">
                               #{participant.rank}
                             </span>
+                            {getRankIcon(participant.rank)}
                           </div>
                         </div>
 
