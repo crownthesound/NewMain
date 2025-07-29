@@ -424,7 +424,7 @@ export function PublicLeaderboard() {
           <p className="text-white/60 mb-6">This contest may have ended or been removed.</p>
           <Link
             to="/"
-            className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base relative z-50"
+            className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base relative z-50 flex items-center gap-2"
           >
             <Home className="h-4 w-4" />
             <span>Return Home</span>
@@ -965,8 +965,8 @@ export function PublicLeaderboard() {
                     <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">No Videos Yet</h3>
                     <p className="text-sm sm:text-base text-gray-500">Contest videos will appear here once submitted!</p>
                   </div>
-                )}
-              </div>
+                )
+              )}
             </div>
           </div>
         </div>
