@@ -559,7 +559,7 @@ export function PublicLeaderboard() {
       )}
       
       {/* Prizes Section - Below Hero */}
-      <div className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-8">
+      <div className="bg-black px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-7xl mx-auto">
           {/* Contest Details Heading */}
           <div className="text-center mb-6">
