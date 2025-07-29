@@ -480,7 +480,14 @@ export function PublicLeaderboard() {
               <div className="flex flex-col h-full justify-center px-2 pt-16">
                 
                 {/* Prize Podium - Horizontal compact layout */}
-                <div className="relative max-w-7xl mx-auto w-full mb-4 mt-12">
+                
+                {/* Title - Compact */}
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-2 mt-6 text-center tracking-tight leading-tight">
+                  {contest.name.toUpperCase()}
+                </h1>
+                
+                {/* Prize Podium - Horizontal compact layout - moved below title */}
+                <div className="relative max-w-7xl mx-auto w-full mb-4 mt-4">
                   <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
                     <div className="flex">
                       {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
@@ -589,11 +596,6 @@ export function PublicLeaderboard() {
                     </>
                   )}
                 </div>
-                
-                {/* Title - Compact */}
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-2 mt-6 text-center tracking-tight leading-tight">
-                  {contest.name.toUpperCase()}
-                </h1>
                 
                 {/* Description - Now visible on mobile */}
                 <div className="mb-8 px-1 max-w-sm mx-auto">
