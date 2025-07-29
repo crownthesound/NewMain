@@ -444,7 +444,7 @@ export function PublicLeaderboard() {
           
           {/* Hero Content */}
           <div className="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 right-4 sm:right-8 text-center sm:text-left">
-            <div className="mb-4 sm:mb-6">
+            <div className="mb-6 sm:mb-8">
               <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mx-auto sm:mx-0 bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 sm:border-4 border-white/20 shadow-2xl">
                 <Crown className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-white" />
               </div>
@@ -457,6 +457,54 @@ export function PublicLeaderboard() {
             <p className="text-sm sm:text-base lg:text-lg text-white/90 mb-4 sm:mb-6 leading-relaxed max-w-2xl">
               {contest.description}
             </p>
+
+            {/* Prize Podium on Hero Image */}
+            <div className="flex justify-center items-end gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
+              {/* Second Place */}
+              <div className="text-center flex-1 max-w-[100px] sm:max-w-[120px]">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center border-2 border-white/20 mb-2 sm:mb-3 mx-auto">
+                  <span className="text-sm sm:text-base lg:text-lg">🥈</span>
+                </div>
+                <div className="bg-black/40 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/20">
+                  <div className="text-white font-bold text-xs sm:text-sm">SECOND PLACE</div>
+                  <div className="text-white/80 text-xs mt-1">
+                    {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.8)}` : '$1.6K'}
+                  </div>
+                </div>
+              </div>
+
+              {/* First Place */}
+              <div className="text-center flex-1 max-w-[120px] sm:max-w-[140px]">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-18 lg:h-18 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center border-2 sm:border-4 border-white/20 mb-2 sm:mb-3 mx-auto">
+                  <Crown className="h-6 w-6 sm:h-8 sm:w-8 lg:h-9 lg:w-9 text-white" />
+                </div>
+                <div className="bg-black/40 backdrop-blur-sm rounded-lg p-2 sm:p-3 lg:p-4 border border-white/20">
+                  <div className="text-white font-bold text-xs sm:text-sm lg:text-base">FIRST PLACE</div>
+                  <div className="text-white/90 text-xs sm:text-sm mt-1">
+                    EXCLUSIVE SPOT AT THE
+                  </div>
+                  <div className="text-white/90 text-xs sm:text-sm">
+                    DO-LAB IN THE DESERT
+                  </div>
+                  <div className="text-white/90 text-xs sm:text-sm">
+                    IN 2025.
+                  </div>
+                </div>
+              </div>
+
+              {/* Third Place */}
+              <div className="text-center flex-1 max-w-[100px] sm:max-w-[120px]">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center border-2 border-white/20 mb-2 sm:mb-3 mx-auto">
+                  <span className="text-sm sm:text-base lg:text-lg">🥉</span>
+                </div>
+                <div className="bg-black/40 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/20">
+                  <div className="text-white font-bold text-xs sm:text-sm">THIRD PLACE</div>
+                  <div className="text-white/80 text-xs mt-1">
+                    {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.6)}` : '$1.2K'}
+                  </div>
+                </div>
+              </div>
+            </div>
             
             <button
               onClick={handleJoinContest}
@@ -519,58 +567,6 @@ export function PublicLeaderboard() {
           </div>
         </div>
       )}
-
-      {/* Prize Podium */}
-      <div className="bg-gradient-to-b from-gray-900 to-gray-800 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex justify-center items-end gap-4 sm:gap-6 lg:gap-8">
-          {/* Second Place */}
-            <div className="text-center flex-1 max-w-[120px]">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center border-2 sm:border-4 border-white/20 mb-2 sm:mb-4 mx-auto">
-                <span className="text-lg sm:text-xl lg:text-2xl">🥈</span>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 lg:p-4 border border-white/20">
-                <div className="text-white font-bold text-xs sm:text-sm lg:text-base">SECOND PLACE</div>
-                <div className="text-white/60 text-xs sm:text-sm mt-1">
-                  {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.8)}` : 'Runner-up'}
-                </div>
-              </div>
-            </div>
-
-            {/* First Place */}
-            <div className="text-center flex-1 max-w-[140px]">
-              <div className="w-16 h-16 sm:w-18 sm:h-18 lg:w-20 lg:h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center border-2 sm:border-4 border-white/20 mb-2 sm:mb-4 mx-auto">
-                <Crown className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 text-white" />
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4 lg:p-6 border border-white/20">
-                <div className="text-white font-bold text-sm sm:text-base lg:text-lg">FIRST PLACE</div>
-                <div className="text-white/80 text-xs sm:text-sm mt-1">
-                  EXCLUSIVE SPOT AT THE
-                </div>
-                <div className="text-white/80 text-xs sm:text-sm">
-                  DO-LAB IN THE DESERT
-                </div>
-                <div className="text-white/80 text-xs sm:text-sm">
-                  IN 2025.
-                </div>
-              </div>
-            </div>
-
-            {/* Third Place */}
-            <div className="text-center flex-1 max-w-[120px]">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center border-2 sm:border-4 border-white/20 mb-2 sm:mb-4 mx-auto">
-                <span className="text-lg sm:text-xl lg:text-2xl">🥉</span>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 lg:p-4 border border-white/20">
-                <div className="text-white font-bold text-xs sm:text-sm lg:text-base">THIRD PLACE</div>
-                <div className="text-white/60 text-xs sm:text-sm mt-1">
-                  {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.6)}` : 'Third Place'}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Leaderboard Section */}
       <div className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
