@@ -503,7 +503,6 @@ export function PublicLeaderboard() {
                             transform: `scale(${currentVideoIndex === 0 ? 1 : 0.85})`,
                             opacity: currentVideoIndex === 0 ? 1 : 0.6,
                           }}
-                          onClick={() => emblaApi && emblaApi.scrollTo(0)}
                         >
                           <div className="text-center">
                             <div className={`${
@@ -545,7 +544,6 @@ export function PublicLeaderboard() {
                                 transform: `scale(${scale})`,
                                 opacity,
                               }}
-                              onClick={() => emblaApi && emblaApi.scrollTo(index + 1)}
                             >
                               <div className="text-center">
                                 <div className={`${
@@ -591,25 +589,6 @@ export function PublicLeaderboard() {
                       })}
                     </div>
                   </div>
-                  
-                  {/* Navigation Arrows for Prize Carousel */}
-                  {contest?.prize_titles && contest.prize_titles.length > 1 && (
-                    <>
-                      <button
-                        onClick={() => emblaApi && emblaApi.scrollPrev()}
-                        className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                      >
-                        <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
-                      </button>
-
-                      <button
-                        onClick={() => emblaApi && emblaApi.scrollNext()}
-                        className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                      >
-                        <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
-                      </button>
-                    </>
-                  )}
                 </div>
                 
                 {/* Join Button - Centered */}
