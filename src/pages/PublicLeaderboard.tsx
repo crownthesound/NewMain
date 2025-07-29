@@ -972,23 +972,6 @@ export function PublicLeaderboard() {
         </div>
       </div>
 
-      {/* Trending Entries Section */}
-      <div className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16" data-section="trending-entries">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-4 flex items-center justify-center gap-2 sm:gap-3">
-              <Flame className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
-              Trending Entries
-              <Flame className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
-            </h2>
-          </div>
-
-          {featuredVideos.length > 0 ? (
-            <div className="relative w-full">
-              <div className="overflow-hidden w-full" ref={emblaRef}>
-                <div className="flex">
-                  {featuredVideos.map((video, index) => {
-                    const isSelected = index === currentVideoIndex;
                     const scale = isSelected ? 1 : 0.85;
                     const opacity = isSelected ? 1 : 0.6;
 
