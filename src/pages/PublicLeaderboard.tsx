@@ -656,6 +656,10 @@ export function PublicLeaderboard() {
             </div>
           </div>
 
+        <div className="text-center mb-4">
+          <h2 className="text-xl font-bold text-white">Leaderboard</h2>
+        </div>
+        
           {/* Sign up button at bottom of hero */}
           <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
             <button
