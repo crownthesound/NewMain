@@ -492,53 +492,95 @@ export function PublicLeaderboard() {
                 </div>
                 
                 {/* Prize Podium - Horizontal compact layout */}
-                <div className="flex justify-center items-end gap-1 mb-4 overflow-x-auto pb-2">
-                  {contest?.prize_titles?.slice(0, Math.min(3, contest?.num_winners || 3)).map((prize, index) => {
-                    const isFirst = index === 0;
-                    const isSecond = index === 1;
-                    const isThird = index === 2;
-                    
-                    return (
-                      <div key={index} className="text-center flex-shrink-0">
-                        <div className={`${
-                          isFirst ? 'w-12 h-12' : 'w-8 h-8'
-                        } ${
-                          isFirst ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
-                          isSecond ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
-                          isThird ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
-                          'bg-gradient-to-br from-blue-400 to-blue-600'
-                        } rounded-full flex items-center justify-center border border-white/20 mb-1`}>
-                          {isFirst ? (
-                            <Crown className="h-6 w-6 text-white" />
-                          ) : (
-                            <span className="text-white font-bold text-xs">{index + 1}</span>
-                          )}
-                        </div>
-                        <div className={`bg-black/60 backdrop-blur-sm rounded-lg ${
-                          isFirst ? 'p-2 min-w-[80px]' : 'p-1.5 min-w-[60px]'
-                        } border border-white/20`}>
-                          <div className={`text-white font-bold ${
-                            isFirst ? 'text-[10px]' : 'text-[9px]'
-                          }`}>
-                            {isFirst ? '1ST PLACE' :
-                             isSecond ? '2ND' :
-                             isThird ? '3RD' :
-                             `${index + 1}${index + 1 === 4 ? 'TH' : index + 1 === 5 ? 'TH' : 'TH'}`}
-                          </div>
-                          <div className={`text-white/80 ${
-                            isFirst ? 'text-[8px] leading-tight text-center' : 'text-[8px]'
-                          }`}>
-                            {isFirst ? 
-                              (contest?.prize_titles?.[0]?.title || 'EXCLUSIVE SPOT AT THE DO-LAB IN THE DESERT IN 2025.') :
-                              contest?.prize_per_winner ? 
-                                `$${formatNumber(contest.prize_per_winner * (1 - index * 0.2))}` : 
-                                prize.title || `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place`
-                            }
+                <div className="relative w-full mb-4">
+                  <div className="overflow-hidden w-full" ref={emblaRef}>
+                    <div className="flex">
+                      {/* Default Prize Icon as first element */}
+                      <div className="flex-[0_0_33.333%] min-w-0 px-1 flex items-center justify-center">
+                        <div 
+                          className="relative transition-all duration-300 ease-out group will-change-transform"
+                          style={{
+                            transform: `scale(${currentVideoIndex === -1 ? 1 : 0.7})`,
+                            opacity: currentVideoIndex === -1 ? 1 : 0.5,
+                          }}
+                        >
+                          <div className="text-center">
+                            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto">
+                              <Trophy className="h-5 w-5 text-white" />
+                            </div>
+                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[70px] border border-white/20">
+                              <div className="text-white font-bold text-[9px]">PRIZES</div>
+                              <div className="text-white/80 text-[8px]">Available</div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
+                      
+                      {/* Actual Prize Places */}
+                      {contest?.prize_titles?.slice(0, Math.min(5, contest?.num_winners || 3)).map((prize, index) => {
+                        const isSelected = index === currentVideoIndex;
+                        const scale = isSelected ? 1.2 : 0.7;
+                        const opacity = isSelected ? 1 : 0.5;
+                        const isFirst = index === 0;
+                        const isSecond = index === 1;
+                        const isThird = index === 2;
+                        
+                        return (
+                          <div 
+                            key={index}
+                            className="flex-[0_0_33.333%] min-w-0 px-1 flex items-center justify-center"
+                          >
+                            <div 
+                              className="relative transition-all duration-300 ease-out group will-change-transform"
+                              style={{
+                                transform: `scale(${scale})`,
+                                opacity,
+                              }}
+                            >
+                              <div className="text-center">
+                                <div className={`${
+                                  isSelected ? 'w-14 h-14' : 'w-10 h-10'
+                                } ${
+                                  isFirst ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
+                                  isSecond ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
+                                  isThird ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
+                                  'bg-gradient-to-br from-blue-400 to-blue-600'
+                                } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
+                                  {isFirst ? (
+                                    <Crown className={`${isSelected ? 'h-7 w-7' : 'h-5 w-5'} text-white transition-all duration-300`} />
+                                  ) : (
+                                    <span className={`text-white font-bold ${isSelected ? 'text-sm' : 'text-xs'} transition-all duration-300`}>{index + 1}</span>
+                                  )}
+                                </div>
+                                <div className={`bg-black/60 backdrop-blur-sm rounded-lg ${
+                                  isSelected ? 'p-2 min-w-[90px]' : 'p-1.5 min-w-[70px]'
+                                } border border-white/20 transition-all duration-300`}>
+                                  <div className={`text-white font-bold ${
+                                    isSelected ? 'text-[10px]' : 'text-[9px]'
+                                  } transition-all duration-300`}>
+                                    {isFirst ? '1ST PLACE' :
+                                     isSecond ? '2ND PLACE' :
+                                     isThird ? '3RD PLACE' :
+                                     `${index + 1}TH PLACE`}
+                                  </div>
+                                  <div className={`text-white/80 ${
+                                    isSelected ? 'text-[9px] leading-tight text-center' : 'text-[8px]'
+                                  } transition-all duration-300`}>
+                                    {isFirst ? 
+                                      (contest?.prize_titles?.[0]?.title || 'EXCLUSIVE SPOT AT THE DO-LAB IN THE DESERT IN 2025.') :
+                                      contest?.prize_per_winner ? 
+                                        `$${formatNumber(contest.prize_per_winner * (1 - index * 0.2))}` : 
+                                        prize.title || `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place`
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
                 
                 {/* Join Button - Centered */}
