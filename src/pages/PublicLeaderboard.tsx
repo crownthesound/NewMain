@@ -492,48 +492,51 @@ export function PublicLeaderboard() {
                 </div>
                 
                 {/* Prize Podium - Horizontal compact layout */}
-                <div className="flex justify-center items-end gap-2 mb-4">
-                  {/* Second Place */}
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center border border-white/20 mb-1">
-                      <span className="text-white font-bold text-xs">2</span>
-                    </div>
-                    <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 border border-white/20 min-w-[60px]">
-                      <div className="text-white font-bold text-[9px]">2ND</div>
-                      <div className="text-white/80 text-[8px]">
-                        {contest?.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.8)}` : 
-                         contest?.prize_titles?.[1]?.title || '2nd Place'}
+                <div className="flex justify-center items-end gap-1 mb-4 overflow-x-auto pb-2">
+                  {contest?.prize_titles?.slice(0, contest?.num_winners || 5).map((prize, index) => {
+                    const isFirst = index === 0;
+                    const isSecond = index === 1;
+                    const isThird = index === 2;
+                    
+                    return (
+                      <div key={index} className="text-center flex-shrink-0">
+                        <div className={`${
+                          isFirst ? 'w-12 h-12' : 'w-8 h-8'
+                        } ${
+                          isFirst ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
+                          isSecond ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
+                          isThird ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
+                          'bg-gradient-to-br from-blue-400 to-blue-600'
+                        } rounded-full flex items-center justify-center border border-white/20 mb-1`}>
+                          {isFirst ? (
+                            <Crown className="h-6 w-6 text-white" />
+                          ) : (
+                            <span className="text-white font-bold text-xs">{index + 1}</span>
+                          )}
+                        </div>
+                        <div className={`bg-black/60 backdrop-blur-sm rounded-lg ${
+                          isFirst ? 'p-2 min-w-[80px]' : 'p-1.5 min-w-[60px]'
+                        } border border-white/20`}>
+                          <div className={`text-white font-bold ${
+                            isFirst ? 'text-[10px]' : 'text-[9px]'
+                          }`}>
+                            {isFirst ? '1ST PLACE' :
+                             isSecond ? '2ND' :
+                             isThird ? '3RD' :
+                             `${index + 1}${index + 1 === 4 ? 'TH' : index + 1 === 5 ? 'TH' : 'TH'}`}
+                          </div>
+                          <div className={`text-white/80 ${
+                            isFirst ? 'text-[8px] leading-tight text-center' : 'text-[8px]'
+                          }`}>
+                            {contest?.prize_per_winner ? 
+                              `$${formatNumber(contest.prize_per_winner * (1 - index * 0.2))}` : 
+                              prize.title || `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place`
+                            }
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-
-                  {/* First Place - Larger */}
-                  <div className="text-center">
-                    <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center border border-white/20 mb-1">
-                      <Crown className="h-6 w-6 text-white" />
-                    </div>
-                    <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 border border-white/20 min-w-[80px]">
-                      <div className="text-white font-bold text-[10px]">1ST PLACE</div>
-                      <div className="text-white/90 text-[8px] leading-tight text-center">
-                        {contest?.prize_per_winner ? `$${formatNumber(contest.prize_per_winner)}` : 
-                         contest?.prize_titles?.[0]?.title || 'Winner'}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Third Place */}
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center border border-white/20 mb-1">
-                      <span className="text-white font-bold text-xs">3</span>
-                    </div>
-                    <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 border border-white/20 min-w-[60px]">
-                      <div className="text-white font-bold text-[9px]">3RD</div>
-                      <div className="text-white/80 text-[8px]">
-                        {contest?.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.6)}` : 
-                         contest?.prize_titles?.[2]?.title || '3rd Place'}
-                      </div>
-                    </div>
-                  </div>
+                    );
+                  })}
                 </div>
                 
                 {/* Join Button - Centered */}
