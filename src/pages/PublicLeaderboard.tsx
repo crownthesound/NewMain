@@ -460,12 +460,7 @@ export function PublicLeaderboard() {
                   {contest.name.toUpperCase()}
                 </h1>
                 
-                {/* Description - Truncated for mobile */}
-                <p className="text-sm text-white/90 text-center mb-4 line-clamp-2 px-4">
-                  {contest.description}
-                </p>
-                
-                {/* Description - Truncated for mobile */}
+                {/* Description - Added back */}
                 <p className="text-sm text-white/90 text-center mb-4 line-clamp-2 px-4">
                   {contest.description}
                 </p>
