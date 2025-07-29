@@ -597,12 +597,12 @@ export function PublicLeaderboard() {
           {/* Content Area */}
           {contestDetailsView === 'prizes' ? (
             /* Prizes View */
-            <div className="relative max-w-7xl mx-auto w-full min-h-[120px]">
+            <div className="relative max-w-7xl mx-auto w-full min-h-[80px]">
               <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
                 <div className="flex">
                   {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                     const isSelected = index === currentPrizeIndex;
-                    const scale = isSelected ? 1.1 : 1; // Make selected prize slightly bigger
+                    const scale = isSelected ? 1.05 : 1; // Make selected prize slightly bigger
                     const opacity = isSelected ? 1 : 0.8; // Highlight selected prize
                     const rank = index + 1;
                     
@@ -637,37 +637,37 @@ export function PublicLeaderboard() {
                     return (
                       <div 
                         key={index}
-                        className="flex-[0_0_100%] min-w-0 px-3 md:flex-[0_0_50%] lg:flex-[0_0_33.333%] flex items-center justify-center"
+                        className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_50%] lg:flex-[0_0_33.333%] flex items-center justify-center"
                       >
                         <div 
                           className="relative transition-all duration-300 ease-out group will-change-transform"
                           style={{
                             transform: `scale(${scale})`,
                             opacity,
-                            width: '160px',
+                            width: '140px',
                             maxWidth: '100%'
                           }}
                         >
                           <div className="text-center">
-                            <div className={`w-10 h-10 ${
+                            <div className={`w-8 h-8 ${
                               rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
                               rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
                               rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
                               rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
                               rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
                               'bg-gradient-to-br from-slate-400 to-slate-600'
-                            } rounded-full flex items-center justify-center border border-white/20 mb-1.5 mx-auto transition-all duration-300 shadow-md`}>
+                            } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300 shadow-md`}>
                               {rank === 1 ? (
-                                <Crown className="h-5 w-5 text-white transition-all duration-300" />
+                                <Crown className="h-4 w-4 text-white transition-all duration-300" />
                               ) : (
-                                <span className="text-white font-bold text-xs transition-all duration-300">{rank}</span>
+                                <span className="text-white font-bold text-[10px] transition-all duration-300">{rank}</span>
                               )}
                             </div>
-                            <div className="bg-black/70 backdrop-blur-sm rounded-lg p-1.5 min-w-[90px] border border-white/20 transition-all duration-300 shadow-md">
-                              <div className="text-white font-bold text-[10px] transition-all duration-300">
+                            <div className="bg-black/70 backdrop-blur-sm rounded-lg p-1 min-w-[80px] border border-white/20 transition-all duration-300 shadow-md">
+                              <div className="text-white font-bold text-[9px] transition-all duration-300">
                                 {prizeText}
                               </div>
-                              <div className="text-white/90 text-[9px] leading-tight text-center transition-all duration-300 mt-0.5">
+                              <div className="text-white/90 text-[8px] leading-tight text-center transition-all duration-300 mt-0.5">
                                 {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
                               </div>
                             </div>
@@ -684,16 +684,16 @@ export function PublicLeaderboard() {
                 <>
                   <button
                     onClick={scrollPrizePrev}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                    className="absolute left-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
                   >
-                    <ChevronLeft className="h-4 w-4" />
+                    <ChevronLeft className="h-3 w-3" />
                   </button>
 
                   <button
                     onClick={scrollPrizeNext}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
                   >
-                    <ChevronRight className="h-4 w-4" />
+                    <ChevronRight className="h-3 w-3" />
                   </button>
                 </>
               )}
