@@ -419,7 +419,7 @@ export function PublicLeaderboard() {
           <p className="text-white/60 mb-6">This contest may have ended or been removed.</p>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+            className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base relative z-50"
           >
             <Home className="h-4 w-4" />
             <span>Return Home</span>
