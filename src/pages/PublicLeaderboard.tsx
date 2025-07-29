@@ -487,8 +487,36 @@ export function PublicLeaderboard() {
                 </h1>
                 
                 {/* Prize Podium - Horizontal compact layout - moved below title */}
-                <div className="relative max-w-7xl mx-auto w-full mb-4 mt-4">
-                  {/* Compete For text */}
+                {/* Description - Now visible on mobile */}
+                <div className="mb-8 px-1 max-w-sm mx-auto">
+                  <p className={`text-sm text-white/90 text-center leading-relaxed ${
+                    showFullDescription ? '' : 'line-clamp-3'
+                  }`}>
+                    {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
+                  </p>
+                  {contest.description && contest.description.length > 150 && (
+                    <button
+                      onClick={() => setShowFullDescription(!showFullDescription)}
+                      className="mt-2 text-xs text-white/70 hover:text-white transition-colors flex items-center gap-1 mx-auto"
+                    >
+                      {showFullDescription ? (
+                        <>
+                          <span>Show less</span>
+                          <ChevronUp className="h-3 w-3" />
+                        </>
+                      ) : (
+                        <>
+                          <span>Show more</span>
+                          <ChevronDown className="h-3 w-3" />
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+                
+                {/* Prize Podium - Horizontal compact layout - moved above join button */}
+                <div className="relative max-w-7xl mx-auto w-full mb-4">
+                  {/* Prizes text */}
                   <div className="text-center mb-3">
                     <p className="text-sm sm:text-base text-white">Prizes</p>
                   </div>
@@ -594,34 +622,14 @@ export function PublicLeaderboard() {
                   )}
                 </div>
                 
-                {/* Description - Now visible on mobile */}
-                <div className="mb-8 px-1 max-w-sm mx-auto">
-                  <p className={`text-sm text-white/90 text-center leading-relaxed ${
-                    showFullDescription ? '' : 'line-clamp-3'
-                  }`}>
-                    {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
-                  </p>
-                  {contest.description && contest.description.length > 150 && (
-                    <button
-                      onClick={() => setShowFullDescription(!showFullDescription)}
-                      className="mt-2 text-xs text-white/70 hover:text-white transition-colors flex items-center gap-1 mx-auto"
-                    >
-                      {showFullDescription ? (
-                        <>
-                          <span>Show less</span>
-                          <ChevronUp className="h-3 w-3" />
-                        </>
-                      ) : (
-                        <>
-                          <span>Show more</span>
-                          <ChevronDown className="h-3 w-3" />
-                        </>
-                      )}
-                    </button>
-                  )}
+                <div className="text-center">
+                  <button
+                    onClick={handleJoinContest}
+                    className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm relative z-50"
+                  >
+                    Sign up to join
+                  </button>
                 </div>
-                
-                {/* Join Button - Centered */}
               </div>
             </div>
             
@@ -645,53 +653,110 @@ export function PublicLeaderboard() {
                 </p>
               </div>
 
-              {/* Prize Podium on Hero Image */}
-              <div className="flex justify-center items-end gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
-                {/* Second Place */}
-                <div className="text-center">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center border-2 border-white/20 mb-2 sm:mb-3">
-                    <span className="text-sm sm:text-base lg:text-lg">🥈</span>
-                  </div>
-                  <div className="bg-black/40 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/20">
-                    <div className="text-white font-bold text-xs sm:text-sm">SECOND PLACE</div>
-                    <div className="text-white/80 text-xs sm:text-sm mt-1">
-                      {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.8)}` : '$1.6K'}
-                    </div>
+                {/* Prizes text */}
+                <div className="text-center mb-3">
+                  <p className="text-sm sm:text-base text-white">Prizes</p>
+                </div>
+                
+                <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
+                  <div className="flex">
+                    {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
+                      const isSelected = index === currentPrizeIndex;
+                      const scale = 1; // Keep all prizes the same size
+                      const opacity = 1; // Keep all prizes the same opacity
+                      const rank = index + 1;
+                      
+                      // Get prize data from database
+                      const prizeTitle = contest?.prize_titles?.[index];
+                      
+                      // Use actual database prize structure
+                      let prizeText;
+                      let prizeAmount = null;
+                      
+                      // Check if we have custom prize titles from database
+                      if (prizeTitle && prizeTitle.title) {
+                        prizeText = prizeTitle.title;
+                      } else {
+                        // Generate default place names
+                        prizeText = `${rank}${rank === 1 ? 'ST' : rank === 2 ? 'ND' : rank === 3 ? 'RD' : 'TH'} PLACE`;
+                      }
+                      
+                      // Calculate prize amount from database
+                      if (contest?.prize_per_winner && contest.prize_per_winner > 0) {
+                        // Use the actual prize_per_winner from database
+                        prizeAmount = contest.prize_per_winner;
+                        
+                        // If there are multiple winners, calculate distribution
+                        if (contest.num_winners && contest.num_winners > 1) {
+                          // First place gets full amount, others get reduced amounts
+                          const reductionFactor = Math.max(0.2, 1 - (index * 0.2));
+                          prizeAmount = Math.round(contest.prize_per_winner * reductionFactor);
+                        }
+                      }
+                      
+                      return (
+                        <div 
+                          key={index}
+                          className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
+                        >
+                          <div 
+                            className="relative transition-all duration-300 ease-out group will-change-transform"
+                            style={{
+                              transform: `scale(${scale})`,
+                              opacity,
+                              width: '240px',
+                              maxWidth: '100%'
+                            }}
+                          >
+                            <div className="text-center">
+                              <div className={`w-14 h-14 ${
+                                rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
+                                rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
+                                rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
+                                rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
+                                rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
+                                'bg-gradient-to-br from-slate-400 to-slate-600'
+                              } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
+                                {rank === 1 ? (
+                                  <Crown className="h-7 w-7 text-white transition-all duration-300" />
+                                ) : (
+                                  <span className="text-white font-bold text-sm transition-all duration-300">{rank}</span>
+                                )}
+                              </div>
+                              <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 min-w-[90px] border border-white/20 transition-all duration-300">
+                                <div className="text-white font-bold text-[10px] transition-all duration-300">
+                                  {prizeText}
+                                </div>
+                                <div className="text-white/80 text-[9px] leading-tight text-center transition-all duration-300">
+                                  {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
-                {/* First Place */}
-                <div className="text-center">
-                  <div className="w-16 h-16 sm:w-18 sm:h-18 lg:w-20 lg:h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center border-2 border-white/20 mb-2 sm:mb-3">
-                    <Crown className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 text-white" />
-                  </div>
-                  <div className="bg-black/40 backdrop-blur-sm rounded-lg p-2 sm:p-3 lg:p-4 border border-white/20">
-                    <div className="text-white font-bold text-xs sm:text-sm lg:text-base">FIRST PLACE</div>
-                    <div className="text-white/90 text-xs sm:text-sm mt-1">
-                      EXCLUSIVE SPOT AT THE
-                    </div>
-                    <div className="text-white/90 text-xs sm:text-sm">
-                      DO-LAB IN THE DESERT
-                    </div>
-                    <div className="text-white/90 text-xs sm:text-sm">
-                      IN 2025.
-                    </div>
-                  </div>
-                </div>
-
-                {/* Third Place */}
-                <div className="text-center">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center border-2 border-white/20 mb-2 sm:mb-3">
-                    <span className="text-sm sm:text-base lg:text-lg">🥉</span>
-                  </div>
-                  <div className="bg-black/40 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/20">
-                    <div className="text-white font-bold text-xs sm:text-sm">THIRD PLACE</div>
-                    <div className="text-white/80 text-xs sm:text-sm mt-1">
-                      {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.6)}` : '$1.2K'}
-                    </div>
-                  </div>
-                </div>
+                {/* Navigation Arrows */}
+                {(contest?.num_winners || 5) > 1 && (
+                  <>
+                    <button
+                      onClick={scrollPrizePrev}
+                      className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                    >
+                      <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </button>
               </div>
+                    <button
+                      onClick={scrollPrizeNext}
+                      className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                    >
+                      <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </button>
+                  </>
+                )}
               
               <button
                 onClick={handleJoinContest}
