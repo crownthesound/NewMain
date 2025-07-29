@@ -698,9 +698,7 @@ export function PublicLeaderboard() {
           </div>
 
           {/* Content Area */}
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
-            <div className="p-3 sm:p-4 lg:p-6">
-              {currentView === 'leaderboard' ? (
+          {currentView === 'leaderboard' ? (
             /* Leaderboard View - Exact Design Match */
             <div className="max-w-sm mx-auto">
               {/* White Card Container */}
@@ -762,7 +760,7 @@ export function PublicLeaderboard() {
                 </div>
               </div>
             </div>
-              ) : (
+          ) : (
                 /* Video Carousel View */
                 featuredVideos.length > 0 ? (
                   <div className="relative w-full">
@@ -900,9 +898,6 @@ export function PublicLeaderboard() {
                     <p className="text-sm sm:text-base text-gray-500">Contest videos will appear here once submitted!</p>
                   </div>
                 )
-              )}
-            </div>
-          </div>
         </div>
       </div>
 
