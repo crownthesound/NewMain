@@ -909,12 +909,9 @@ export function PublicLeaderboard() {
                           {/* Left side - Rank, Avatar, and User Info */}
                           <div className="flex items-center gap-3">
                             <div className="flex items-center gap-1 w-8">
-                              <Crown className={`h-4 w-4 ${
-                                participant.rank === 1 ? 'text-yellow-500' :
-                                participant.rank === 2 ? 'text-gray-400' :
-                                participant.rank === 3 ? 'text-amber-600' :
-                                'text-gray-400'
-                              }`} />
+                              {participant.rank === 1 && (
+                                <Crown className="h-4 w-4 text-yellow-500" />
+                              )}
                               <span className="text-sm font-bold text-black">
                                 {participant.rank}
                               </span>
