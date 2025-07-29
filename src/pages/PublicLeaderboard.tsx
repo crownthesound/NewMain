@@ -493,7 +493,7 @@ export function PublicLeaderboard() {
                       {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                         const isSelected = index === currentPrizeIndex;
                         const scale = 1; // Keep all prizes the same size
-                        const opacity = isSelected ? 1 : 0.8; // Only vary opacity slightly
+                        const opacity = 1; // Keep all prizes the same opacity
                         const rank = index + 1;
                         
                         // Get prize data from database
@@ -534,14 +534,12 @@ export function PublicLeaderboard() {
                               style={{
                                 transform: `scale(${scale})`,
                                 opacity,
-                                width: '280px',
+                                width: '240px',
                                 maxWidth: '100%'
                               }}
                             >
                               <div className="text-center">
-                                <div className={`${
-                                  isSelected ? 'w-16 h-16' : 'w-12 h-12'
-                                } ${
+                                <div className={`w-14 h-14 ${
                                   rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
                                   rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
                                   rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
@@ -550,22 +548,16 @@ export function PublicLeaderboard() {
                                   'bg-gradient-to-br from-slate-400 to-slate-600'
                                 } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
                                   {rank === 1 ? (
-                                    <Crown className={`${isSelected ? 'h-8 w-8' : 'h-6 w-6'} text-white transition-all duration-300`} />
+                                    <Crown className="h-7 w-7 text-white transition-all duration-300" />
                                   ) : (
-                                    <span className={`text-white font-bold ${isSelected ? 'text-base' : 'text-sm'} transition-all duration-300`}>{rank}</span>
+                                    <span className="text-white font-bold text-sm transition-all duration-300">{rank}</span>
                                   )}
                                 </div>
-                                <div className={`bg-black/60 backdrop-blur-sm rounded-lg ${
-                                  isSelected ? 'p-2.5 min-w-[100px]' : 'p-2 min-w-[80px]'
-                                } border border-white/20 transition-all duration-300`}>
-                                  <div className={`text-white font-bold ${
-                                    isSelected ? 'text-[11px]' : 'text-[10px]'
-                                  } transition-all duration-300`}>
+                                <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 min-w-[90px] border border-white/20 transition-all duration-300">
+                                  <div className="text-white font-bold text-[10px] transition-all duration-300">
                                     {prizeText}
                                   </div>
-                                  <div className={`text-white/80 ${
-                                    isSelected ? 'text-[10px] leading-tight text-center' : 'text-[9px]'
-                                  } transition-all duration-300`}>
+                                  <div className="text-white/80 text-[9px] leading-tight text-center transition-all duration-300">
                                     {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
                                   </div>
                                 </div>
