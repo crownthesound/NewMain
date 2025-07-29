@@ -465,11 +465,6 @@ export function PublicLeaderboard() {
                   {contest.description}
                 </p>
                 
-                {/* Description - Added back */}
-                <p className="text-sm text-white/90 text-center mb-4 line-clamp-2 px-4">
-                  {contest.description}
-                </p>
-                
                 {/* Prize Podium - Horizontal compact layout */}
                 <div className="flex justify-center items-end gap-2 mb-4">
                   {/* Second Place */}
