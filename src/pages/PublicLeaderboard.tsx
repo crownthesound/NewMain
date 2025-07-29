@@ -858,6 +858,9 @@ export function PublicLeaderboard() {
           {/* Leaderboard Heading - Moved to top */}
           <h2 className="text-xl font-bold text-white text-center mb-6 sm:mb-8">Leaderboard</h2>
           
+          {/* Leaderboard Heading - Moved to top */}
+          <h2 className="text-xl font-bold text-white text-center mb-6 sm:mb-8">Leaderboard</h2>
+          
           {/* Leaderboard Toggle Buttons */}
           <div className="flex justify-center mb-6 sm:mb-8">
             <div className="bg-white/5 rounded-full p-1 flex">
@@ -887,13 +890,14 @@ export function PublicLeaderboard() {
           {/* Content Area */}
           {leaderboardView === 'list' ? (
             /* Leaderboard View - Exact Design Match */
-            <div className="max-w-sm mx-auto">
-              {/* White Card Container */}
-              <div className="bg-white rounded-2xl overflow-hidden">
-                {/* GET CROWNED Header */}
-                <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-6 text-center font-bold text-lg">
-                  GET CROWNED.
-                </div>
+            <div>
+              <div className="max-w-sm mx-auto">
+                {/* White Card Container */}
+                <div className="bg-white rounded-2xl overflow-hidden">
+                  {/* GET CROWNED Header */}
+                  <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-6 text-center font-bold text-lg">
+                    GET CROWNED.
+                  </div>
                 
                 {/* Participants List */}
                 <div className="p-4">
