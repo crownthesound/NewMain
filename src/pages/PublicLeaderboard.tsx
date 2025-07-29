@@ -545,6 +545,32 @@ export function PublicLeaderboard() {
             <h2 className="text-xl font-bold text-white">Contest Details</h2>
           </div>
           
+          {/* Toggle Buttons */}
+          <div className="flex justify-center mb-6 sm:mb-8">
+            <div className="bg-white/5 rounded-full p-1 flex">
+              <button
+                onClick={() => setCurrentView('leaderboard')}
+                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
+                  currentView === 'leaderboard'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-white/60 hover:text-white'
+                }`}
+              >
+                List
+              </button>
+              <button
+                onClick={() => setCurrentView('videos')}
+                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
+                  currentView === 'videos'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-white/60 hover:text-white'
+                }`}
+              >
+                Featured Videos
+              </button>
+            </div>
+          </div>
+          
           <div className="text-center mb-6">
             <h2 className="text-xl font-bold text-white flex items-center justify-center gap-2">
               <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
