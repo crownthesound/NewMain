@@ -804,7 +804,7 @@ export function PublicLeaderboard() {
       </div>
 
       {/* Trending Entries Section */}
-      <div className="bg-gradient-to-b from-gray-800 to-gray-900 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+      <div className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-4 flex items-center justify-center gap-2 sm:gap-3">
