@@ -770,13 +770,6 @@ export function PublicLeaderboard() {
         </div>
         
         <div className="max-w-4xl mx-auto">
-          {/* Crown Logo - moved from hero section */}
-          <div className="flex justify-center mb-6">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 border-white shadow-xl">
-              <Crown className="h-6 w-6 text-white" />
-            </div>
-          </div>
-          
           <div className="text-center mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-2 flex items-center justify-center gap-2 sm:gap-3">
               <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-400" />
