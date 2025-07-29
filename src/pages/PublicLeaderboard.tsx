@@ -482,7 +482,6 @@ export function PublicLeaderboard() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/70"></div>
           
           {/* Black bottom section for expanded hero area */}
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-[#0A0A0A]"></div>
           
           {/* Header overlay on hero image */}
           <div className="absolute top-0 left-0 right-0 z-10 px-4 sm:px-6 lg:px-8 pt-4 sm:pt-8">
@@ -555,15 +554,6 @@ export function PublicLeaderboard() {
                 </p>
               </div>
             </div>
-          </div>
-          
-          <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center pt-8">
-            <button
-              onClick={handleJoinContest}
-              className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base relative z-50"
-            >
-              Sign up to join
-            </button>
           </div>
         </div>
       )}
