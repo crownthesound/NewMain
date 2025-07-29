@@ -665,44 +665,6 @@ export function PublicLeaderboard() {
               Sign up to join
             </button>
           </div>
-                                @{participant.tiktok_username}
-                              </div>
-                              <div className="text-xs sm:text-sm text-gray-500 sm:hidden">
-                                {formatNumber(participant.views)} views
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-                          <div className="text-right hidden sm:block">
-                            <div className="font-bold text-gray-900 text-sm sm:text-base">
-                              {formatNumber(participant.views)}
-                            </div>
-                            <div className="text-xs sm:text-sm text-gray-500">views</div>
-                          </div>
-                          <button 
-                            onClick={() => handleVideoClick({
-                              id: participant.video_id,
-                              title: participant.video_title || `Video by @${participant.tiktok_username}`,
-                              url: participant.video_url || '',
-                              video_url: participant.video_url,
-                              thumbnail: participant.thumbnail || '',
-                              username: participant.tiktok_username,
-                              views: participant.views,
-                              likes: participant.likes,
-                              comments: participant.comments,
-                              shares: participant.shares,
-                              rank: participant.rank
-                            }, 0)}
-                            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs sm:text-sm font-medium transition-colors"
-                          >
-                            Support
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
                 ) : (
                   <div className="text-center py-8 sm:py-12 lg:py-16">
                     <Target className="h-12 w-12 sm:h-16 sm:w-16 text-gray-300 mx-auto mb-4" />
