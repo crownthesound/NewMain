@@ -750,16 +750,6 @@ export function PublicLeaderboard() {
           <div className="flex justify-center mb-6 sm:mb-8">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
-                onClick={() => setCurrentView('videos')}
-               className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
-                  currentView === 'videos'
-                    ? 'bg-purple-600 text-white'
-                    : 'text-white/60 hover:text-white'
-               }`}
-              >
-                Leaderboard
-              </button>
-              <button
                 onClick={() => setCurrentView('leaderboard')}
                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
                   currentView === 'leaderboard'
@@ -768,6 +758,16 @@ export function PublicLeaderboard() {
                }`}
               >
                 List
+              </button>
+              <button
+                onClick={() => setCurrentView('videos')}
+               className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
+                  currentView === 'videos'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-white/60 hover:text-white'
+               }`}
+              >
+                Leaderboard
               </button>
             </div>
           </div>
