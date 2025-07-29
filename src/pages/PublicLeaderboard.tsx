@@ -436,11 +436,11 @@ export function PublicLeaderboard() {
     <div className="min-h-screen bg-[#0A0A0A]">
       {/* Hero Image Section */}
       {contest.cover_image && (
-        <div className="relative h-[30rem] sm:h-[25rem] md:h-[34rem] lg:h-[42rem] xl:h-[51rem] overflow-hidden">
+        <div className="relative h-[42rem] sm:h-[37rem] md:h-[46rem] lg:h-[54rem] xl:h-[63rem] overflow-hidden">
           <img
             src={contest.cover_image}
             alt={contest.name}
-            className="w-full h-full object-cover"
+            className="w-full h-[30rem] sm:h-[25rem] md:h-[34rem] lg:h-[42rem] xl:h-[51rem] object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-black/80"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/70"></div>
