@@ -723,18 +723,6 @@ export function PublicLeaderboard() {
                     title: 'Win Prizes',
                     description: 'Winners receive their prizes after verification is complete'
                   }
-                  {
-                    step: 5,
-                    icon: Users,
-                    title: 'Final Review',
-                    description: 'Crown will review top-ranked videos to verify eligibility and confirm winners'
-                  },
-                  {
-                    step: 6,
-                    icon: Gift,
-                    title: 'Win Prizes',
-                    description: 'Winners receive their prizes after verification is complete'
-                  }
                 ].map((step, index) => {
                   const Icon = step.icon;
                   return (
