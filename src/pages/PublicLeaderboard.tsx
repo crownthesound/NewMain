@@ -701,86 +701,67 @@ export function PublicLeaderboard() {
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
             <div className="p-3 sm:p-4 lg:p-6">
               {currentView === 'leaderboard' ? (
-                /* Leaderboard View */
-                participants.length > 0 ? (
-                  <div className="space-y-2 sm:space-y-3">
-                    {participants.map((participant, index) => (
-                      <div
-                        key={participant.user_id}
-                        className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors"
-                      >
-                        {/* Rank */}
-                        <div className="flex-shrink-0 w-8 sm:w-10 text-center">
-                          <div className="flex items-center justify-between gap-2 sm:gap-3">
-                            <span className="text-xs font-bold text-white">
-                              #{participant.rank}
+            /* Leaderboard View */
+            <div className="bg-white rounded-2xl p-6 max-w-md mx-auto">
+              {/* Header */}
+              <div className="text-center mb-6">
+                <h2 className="text-2xl font-black text-black mb-4">Leaderboard</h2>
+                <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-6 rounded-full font-bold text-lg">
+                  GET CROWNED.
+                </div>
+              </div>
+
+              {/* Participants List */}
+              {participants.length > 0 ? (
+                <div className="space-y-3">
+                  {participants.slice(0, 10).map((participant, index) => (
+                    <div
+                      key={participant.user_id}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    >
+                      {/* Left side - Rank and User */}
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg font-bold text-black">
+                            {participant.rank}
+                          </span>
+                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                            <span className="text-xs font-bold text-gray-600">
+                              {participant.tiktok_username?.charAt(0)?.toUpperCase() || 'U'}
                             </span>
-                            {getRankIcon(participant.rank)}
                           </div>
                         </div>
-
-                        {/* Video Thumbnail */}
-                        <div className="flex-shrink-0">
-                          <img
-                            src={participant.thumbnail}
-                            alt={participant.video_title}
-                            className="w-12 h-16 sm:w-16 sm:h-20 object-cover rounded-lg border border-white/20"
-                          />
-                        </div>
-
-                        {/* User Info */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="min-w-0 flex-1">
-                              <h3 className="font-semibold text-white text-sm sm:text-base line-clamp-1">
-                                {participant.video_title}
-                              </h3>
-                              <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs sm:text-sm text-white/60">
-                                  @{participant.tiktok_username}
-                                </span>
-                              </div>
-                              <div className="text-xs sm:text-sm text-gray-500 sm:hidden">
-                                {formatNumber(participant.views)} views
-                              </div>
-                            </div>
+                        <div>
+                          <div className="text-sm font-medium text-black">
+                            @{participant.tiktok_username}
                           </div>
-                        </div>
-
-                        {/* Stats - Hidden on mobile */}
-                        <div className="hidden sm:flex items-center gap-4 text-sm text-white/60">
-                          <div className="flex items-center gap-1">
-                            <Eye className="h-4 w-4" />
-                            <span>{formatNumber(participant.views)}</span>
+                          <div className="text-xs text-gray-500">
+                            {formatNumber(participant.views)} views
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Heart className="h-4 w-4" />
-                            <span>{formatNumber(participant.likes)}</span>
-                          </div>
-                        </div>
-
-                        {/* Support Button */}
-                        <div className="flex-shrink-0">
-                          <button className="px-3 py-1.5 sm:px-4 sm:py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs sm:text-sm font-medium transition-colors">
-                            Support
-                          </button>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 sm:py-12 lg:py-16">
-                    <Target className="h-12 w-12 sm:h-16 sm:w-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">No Participants Yet</h3>
-                    <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6">Be the first to join this contest!</p>
-                    <button
-                      onClick={handleJoinContest}
-                      className="px-4 py-2 sm:px-6 sm:py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base"
-                    >
-                      Join Contest
-                    </button>
-                  </div>
-                )
+
+                      {/* Right side - Support Button */}
+                      <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity">
+                        Support
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-600 mb-2">No Participants Yet</h3>
+                  <p className="text-gray-500 mb-6">Be the first to join this contest!</p>
+                  <button
+                    onClick={handleJoinContest}
+                    className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full font-medium transition-opacity hover:opacity-90"
+                  >
+                    Join Contest
+                  </button>
+                </div>
+              )}
+            </div>
               ) : (
                 /* Video Carousel View */
                 featuredVideos.length > 0 ? (
