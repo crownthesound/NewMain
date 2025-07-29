@@ -518,13 +518,13 @@ export function PublicLeaderboard() {
                 </div>
                 
                 {/* Prize Podium - Horizontal compact layout */}
-                <div className="relative max-w-sm mx-auto w-full mb-4">
+                <div className="relative max-w-7xl mx-auto w-full mb-4">
                   <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
                     <div className="flex">
                       {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                         const isSelected = index === currentPrizeIndex;
-                        const scale = isSelected ? 1 : 0.9;
-                        const opacity = isSelected ? 1 : 0.7;
+                        const scale = isSelected ? 1 : 0.85;
+                        const opacity = isSelected ? 1 : 0.6;
                         const rank = index + 1;
                         
                         // Get prize data from database
@@ -558,20 +558,20 @@ export function PublicLeaderboard() {
                         return (
                           <div 
                             key={index}
-                            className="flex-[0_0_100%] min-w-0 px-1 flex items-center justify-center"
+                            className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
                           >
                             <div 
                               className="relative transition-all duration-300 ease-out group will-change-transform"
                               style={{
                                 transform: `scale(${scale})`,
                                 opacity,
-                                width: '120px',
+                                width: '280px',
                                 maxWidth: '100%'
                               }}
                             >
                               <div className="text-center">
                                 <div className={`${
-                                  isSelected ? 'w-10 h-10' : 'w-8 h-8'
+                                  isSelected ? 'w-16 h-16' : 'w-12 h-12'
                                 } ${
                                   rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
                                   rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
@@ -581,21 +581,21 @@ export function PublicLeaderboard() {
                                   'bg-gradient-to-br from-slate-400 to-slate-600'
                                 } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
                                   {rank === 1 ? (
-                                    <Crown className={`${isSelected ? 'h-5 w-5' : 'h-4 w-4'} text-white transition-all duration-300`} />
+                                    <Crown className={`${isSelected ? 'h-8 w-8' : 'h-6 w-6'} text-white transition-all duration-300`} />
                                   ) : (
-                                    <span className={`text-white font-bold ${isSelected ? 'text-xs' : 'text-[10px]'} transition-all duration-300`}>{rank}</span>
+                                    <span className={`text-white font-bold ${isSelected ? 'text-base' : 'text-sm'} transition-all duration-300`}>{rank}</span>
                                   )}
                                 </div>
                                 <div className={`bg-black/60 backdrop-blur-sm rounded-lg ${
-                                  isSelected ? 'p-1.5 min-w-[60px]' : 'p-1 min-w-[50px]'
+                                  isSelected ? 'p-2.5 min-w-[100px]' : 'p-2 min-w-[80px]'
                                 } border border-white/20 transition-all duration-300`}>
                                   <div className={`text-white font-bold ${
-                                    isSelected ? 'text-[9px]' : 'text-[8px]'
+                                    isSelected ? 'text-[11px]' : 'text-[10px]'
                                   } transition-all duration-300`}>
                                     {prizeText}
                                   </div>
                                   <div className={`text-white/80 ${
-                                    isSelected ? 'text-[8px] leading-tight text-center' : 'text-[7px]'
+                                    isSelected ? 'text-[10px] leading-tight text-center' : 'text-[9px]'
                                   } transition-all duration-300`}>
                                     {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
                                   </div>
@@ -613,16 +613,16 @@ export function PublicLeaderboard() {
                     <>
                       <button
                         onClick={scrollPrizePrev}
-                        className="absolute left-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                        className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
                       >
-                        <ChevronLeft className="h-3 w-3" />
+                        <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
                       </button>
 
                       <button
                         onClick={scrollPrizeNext}
-                        className="absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                        className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
                       >
-                        <ChevronRight className="h-3 w-3" />
+                        <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
                       </button>
                     </>
                   )}
