@@ -783,7 +783,7 @@ export function PublicLeaderboard() {
 
         {featuredVideos.length > 0 ? (
             <div className="relative w-full">
-            <div className="overflow-hidden w-full" ref={emblaRef}>
+            <div className="overflow-hidden w-full flex justify-center" ref={emblaRef}>
               <div className="flex">
                 {featuredVideos.map((video, index) => {
                   const isSelected = index === currentVideoIndex;
@@ -793,15 +793,16 @@ export function PublicLeaderboard() {
                   return (
                     <div 
                       key={video.id}
-                        className="flex-[0_0_85%] min-w-0 px-2 sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_22%] flex items-center justify-center"
+                        className="flex-[0_0_85%] min-w-0 px-2 sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_22%] flex items-center justify-center mx-auto"
                       >
                       <div 
-                        className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer"
+                        className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer mx-auto"
                         style={{
                           transform: `scale(${scale})`,
                           opacity,
                             width: '280px',
-                          maxWidth: '100%'
+                          maxWidth: '100%',
+                          margin: '0 auto'
                         }}
                         onClick={() => handleVideoClick(video, index)}
                         >
