@@ -563,8 +563,7 @@ export function PublicLeaderboard() {
         <div className="max-w-7xl mx-auto">
           {/* Contest Details Heading */}
           <div className="text-center mb-6">
-            <h2 className="text-xl font-bold text-white flex items-center justify-center gap-2">
-              <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
+            <h2 className="text-xl font-bold text-white">
               Contest Details
             </h2>
           </div>
