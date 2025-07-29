@@ -202,6 +202,7 @@ export function PublicLeaderboard() {
       prizeEmblaApi.off('reInit', onSelect);
     };
   }, [prizeEmblaApi]);
+  
   const fetchContestData = async () => {
     try {
       const { data, error } = await supabase
@@ -348,6 +349,7 @@ export function PublicLeaderboard() {
 
   const scrollPrizePrev = () => prizeEmblaApi && prizeEmblaApi.scrollPrev();
   const scrollPrizeNext = () => prizeEmblaApi && prizeEmblaApi.scrollNext();
+  
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
       return `${(num / 1000000).toFixed(1)}M`;
@@ -724,12 +726,12 @@ export function PublicLeaderboard() {
           <div className="text-center mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-2 flex items-center justify-center gap-2 sm:gap-3">
               <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-400" />
-            Leaderboard
+              Leaderboard
             </h2>
           </div>
 
           <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl">
-          {/* Header */}
+            {/* Header */}
             <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-3 sm:p-4 text-center">
               <div className="flex items-center justify-between">
                 <h3 className="text-white font-black text-lg sm:text-xl tracking-wider">GET CROWNED.</h3>
@@ -743,230 +745,90 @@ export function PublicLeaderboard() {
               </div>
             </div>
 
-          {/* Leaderboard Table */}
+            {/* Leaderboard Table */}
             <div className="p-3 sm:p-4 lg:p-6">
-            {currentView === 'leaderboard' ? (
-              participants.length > 0 ? (
-                <div className="space-y-2 sm:space-y-3">
-                {participants.slice(0, 10).map((participant, index) => (
-                  <div
-                    key={participant.video_id}
-                      className="flex items-center justify-between p-2 sm:p-3 lg:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 flex-1 min-w-0">
-                        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                          <span className="text-lg sm:text-xl lg:text-2xl font-black text-gray-800">
-                          {participant.rank}
-                          </span>
-                        {participant.rank <= 3 && (
-                            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center">
-                              {participant.rank === 1 && <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500" />}
-                              {participant.rank === 2 && <Medal className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />}
-                              {participant.rank === 3 && <Medal className="h-4 w-4 sm:h-5 sm:w-5 text-amber-600" />}
-                            </div>
-                          )}
-                        </div>
-                      
-                        <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                            <span className="text-white text-xs sm:text-sm font-medium">
-                            {participant.tiktok_display_name?.charAt(0) || participant.tiktok_username?.charAt(0) || 'U'}
+              {currentView === 'leaderboard' ? (
+                participants.length > 0 ? (
+                  <div className="space-y-2 sm:space-y-3">
+                    {participants.slice(0, 10).map((participant, index) => (
+                      <div
+                        key={participant.video_id}
+                        className="flex items-center justify-between p-2 sm:p-3 lg:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      >
+                        <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 flex-1 min-w-0">
+                          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                            <span className="text-lg sm:text-xl lg:text-2xl font-black text-gray-800">
+                              {participant.rank}
                             </span>
+                            {participant.rank <= 3 && (
+                              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center">
+                                {participant.rank === 1 && <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500" />}
+                                {participant.rank === 2 && <Medal className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />}
+                                {participant.rank === 3 && <Medal className="h-4 w-4 sm:h-5 sm:w-5 text-amber-600" />}
+                              </div>
+                            )}
                           </div>
-                          <div className="min-w-0 flex-1">
-                            <div className="font-medium text-gray-900 text-sm sm:text-base truncate">
-                            @{participant.tiktok_username}
+                        
+                          <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                              <span className="text-white text-xs sm:text-sm font-medium">
+                                {participant.tiktok_display_name?.charAt(0) || participant.tiktok_username?.charAt(0) || 'U'}
+                              </span>
                             </div>
-                            <div className="text-xs sm:text-sm text-gray-500 sm:hidden">
-                              {formatNumber(participant.views)} views
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-                        <div className="text-right hidden sm:block">
-                          <div className="font-bold text-gray-900 text-sm sm:text-base">
-                          {formatNumber(participant.views)}
-                          </div>
-                          <div className="text-xs sm:text-sm text-gray-500">views</div>
-                        </div>
-                        <button 
-                          onClick={() => handleVideoClick({
-                            id: participant.video_id,
-                            title: participant.video_title || `Video by @${participant.tiktok_username}`,
-                            url: participant.video_url || '',
-                            video_url: participant.video_url,
-                            thumbnail: participant.thumbnail || '',
-                            username: participant.tiktok_username,
-                            views: participant.views,
-                            likes: participant.likes,
-                            comments: participant.comments,
-                            shares: participant.shares,
-                            rank: participant.rank
-                          }, 0)}
-                          className="px-3 py-1.5 sm:px-4 sm:py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs sm:text-sm font-medium transition-colors"
-                        >
-                          Support
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 sm:py-12 lg:py-16">
-                  <Target className="h-12 w-12 sm:h-16 sm:w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">No Participants Yet</h3>
-                  <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6">Be the first to join this contest!</p>
-                <button
-                  onClick={handleJoinContest}
-                    className="px-4 py-2 sm:px-6 sm:py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base"
-                  >
-                  Join Contest
-                </button>
-                </div>
-              )
-            ) : (
-              // Video Carousel View
-              <div className="py-4">
-                {featuredVideos.length > 0 ? (
-                  <div className="relative w-full">
-                    <div className="overflow-hidden w-full" ref={emblaRef}>
-                      <div className="flex">
-                        {featuredVideos.map((video, index) => {
-                          const isSelected = index === currentVideoIndex;
-                          const scale = isSelected ? 1 : 0.85;
-                          const opacity = isSelected ? 1 : 0.6;
-
-                          return (
-                            <div 
-                              key={video.id}
-                              className="flex-[0_0_100%] min-w-0 px-4 sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_22%] flex items-center justify-center"
-                            >
-                              <div 
-                                className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
-                                style={{
-                                  transform: `scale(${scale})`,
-                                  opacity,
-                                }}
-                                onClick={() => handleVideoClick(video, index)}
-                              >
-                                <div 
-                                  className="relative bg-black rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all shadow-2xl"
-                                  style={{ aspectRatio: '9/16' }}
-                                >
-                                  {/* Loading Placeholder */}
-                                  {!coverLoaded[video.id] && (
-                                    <div className="absolute inset-0 bg-black flex items-center justify-center">
-                                      <Loader2 className="h-6 w-6 animate-spin text-white/60" />
-                                    </div>
-                                  )}
-
-                                  {/* Thumbnail */}
-                                  <img
-                                    src={video.thumbnail}
-                                    alt={video.title}
-                                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                                      isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
-                                    }`}
-                                    loading={isSelected ? 'eager' : 'lazy'}
-                                    onLoad={() => handleCoverLoad(video.id)}
-                                  />
-
-                                  {/* Video Content */}
-                                  {isSelected && (
-                                    <div className="absolute inset-0">
-                                      {video.video_url ? (
-                                        <video
-                                          src={video.video_url}
-                                          className={`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
-                                            videoLoaded[video.id] ? 'opacity-100' : 'opacity-0'
-                                          }`}
-                                          autoPlay
-                                          loop
-                                          muted={isMuted}
-                                          playsInline
-                                          controls={false}
-                                          onLoadedData={() => handleVideoLoad(video.id)}
-                                        />
-                                      ) : null}
-                                    </div>
-                                  )}
-
-                                  {/* Gradient Overlay */}
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
-
-                                  {/* Views Badge */}
-                                  <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
-                                    <div className="px-2 py-1 sm:px-3 sm:py-1 bg-blue-500 text-white rounded-full text-xs sm:text-sm font-bold">
-                                      👁 {formatNumber(video.views || 0)}
-                                    </div>
-                                  </div>
-
-                                  {/* Video Info */}
-                                  <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
-                                    <div className="space-y-1 sm:space-y-2">
-                                      <h3 className="text-xs sm:text-sm lg:text-base font-medium text-white line-clamp-1">
-                                        {video.title}
-                                      </h3>
-                                      <div className="flex items-center gap-2 text-xs text-white/60">
-                                        <span>@{video.username}</span>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  {/* Mute Button */}
-                                  {isSelected && (
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        setIsMuted(!isMuted);
-                                      }}
-                                      className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/60 transition-colors"
-                                    >
-                                      {isMuted ? (
-                                        <VolumeX className="h-3 w-3 sm:h-4 sm:w-4" />
-                                      ) : (
-                                        <Volume2 className="h-3 w-3 sm:h-4 sm:w-4" />
-                                      )}
-                                    </button>
-                                  )}
-                                </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="font-medium text-gray-900 text-sm sm:text-base truncate">
+                                @{participant.tiktok_username}
+                              </div>
+                              <div className="text-xs sm:text-sm text-gray-500 sm:hidden">
+                                {formatNumber(participant.views)} views
                               </div>
                             </div>
-                          );
-                        })}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+                          <div className="text-right hidden sm:block">
+                            <div className="font-bold text-gray-900 text-sm sm:text-base">
+                              {formatNumber(participant.views)}
+                            </div>
+                            <div className="text-xs sm:text-sm text-gray-500">views</div>
+                          </div>
+                          <button 
+                            onClick={() => handleVideoClick({
+                              id: participant.video_id,
+                              title: participant.video_title || `Video by @${participant.tiktok_username}`,
+                              url: participant.video_url || '',
+                              video_url: participant.video_url,
+                              thumbnail: participant.thumbnail || '',
+                              username: participant.tiktok_username,
+                              views: participant.views,
+                              likes: participant.likes,
+                              comments: participant.comments,
+                              shares: participant.shares,
+                              rank: participant.rank
+                            }, 0)}
+                            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full text-xs sm:text-sm font-medium transition-colors"
+                          >
+                            Support
+                          </button>
+                        </div>
                       </div>
-                    </div>
-
-                    {/* Navigation Arrows */}
-                    {featuredVideos.length > 1 && (
-                      <>
-                        <button
-                          onClick={scrollPrev}
-                          className="absolute left-1 sm:left-4 lg:left-8 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                        >
-                          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
-                        </button>
-
-                        <button
-                          onClick={scrollNext}
-                          className="absolute right-1 sm:right-4 lg:right-8 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                        >
-                          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
-                        </button>
-                      </>
-                    )}
+                    ))}
                   </div>
                 ) : (
                   <div className="text-center py-8 sm:py-12 lg:py-16">
-                    <Music className="h-12 w-12 sm:h-16 sm:w-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">No Videos Yet</h3>
-                    <p className="text-sm sm:text-base text-gray-500">Be the first to submit your entry!</p>
+                    <Target className="h-12 w-12 sm:h-16 sm:w-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">No Participants Yet</h3>
+                    <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6">Be the first to join this contest!</p>
+                    <button
+                      onClick={handleJoinContest}
+                      className="px-4 py-2 sm:px-6 sm:py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base"
+                    >
+                      Join Contest
+                    </button>
                   </div>
-                )}
-              </div>
-            )}
+                )
+              ) : null}
             </div>
           </div>
         </div>
@@ -978,141 +840,141 @@ export function PublicLeaderboard() {
           <div className="text-center mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-4 flex items-center justify-center gap-2 sm:gap-3">
               <Flame className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
-            Trending Entries
+              Trending Entries
               <Flame className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
             </h2>
           </div>
 
-        {featuredVideos.length > 0 ? (
+          {featuredVideos.length > 0 ? (
             <div className="relative w-full">
-            <div className="overflow-hidden w-full" ref={emblaRef}>
-              <div className="flex">
-                {featuredVideos.map((video, index) => {
-                  const isSelected = index === currentVideoIndex;
-                  const scale = isSelected ? 1 : 0.85;
-                  const opacity = isSelected ? 1 : 0.6;
+              <div className="overflow-hidden w-full" ref={emblaRef}>
+                <div className="flex">
+                  {featuredVideos.map((video, index) => {
+                    const isSelected = index === currentVideoIndex;
+                    const scale = isSelected ? 1 : 0.85;
+                    const opacity = isSelected ? 1 : 0.6;
 
-                  return (
-                    <div 
-                      key={video.id}
+                    return (
+                      <div 
+                        key={video.id}
                         className="flex-[0_0_100%] min-w-0 px-4 sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_22%] flex items-center justify-center"
                       >
-                      <div 
-                        className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
-                        style={{
-                          transform: `scale(${scale})`,
-                          opacity,
-                        }}
-                        onClick={() => handleVideoClick(video, index)}
-                        >
                         <div 
+                          className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
+                          style={{
+                            transform: `scale(${scale})`,
+                            opacity,
+                          }}
+                          onClick={() => handleVideoClick(video, index)}
+                        >
+                          <div 
                             className="relative bg-black rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all shadow-2xl"
-                          style={{ aspectRatio: '9/16' }}
+                            style={{ aspectRatio: '9/16' }}
                           >
-                          {/* Loading Placeholder */}
-                          {!coverLoaded[video.id] && (
-                            <div className="absolute inset-0 bg-black flex items-center justify-center">
-                              <Loader2 className="h-6 w-6 animate-spin text-white/60" />
-                            </div>
-                          )}
+                            {/* Loading Placeholder */}
+                            {!coverLoaded[video.id] && (
+                              <div className="absolute inset-0 bg-black flex items-center justify-center">
+                                <Loader2 className="h-6 w-6 animate-spin text-white/60" />
+                              </div>
+                            )}
 
-                          {/* Thumbnail */}
-                          <img
-                            src={video.thumbnail}
-                            alt={video.title}
-                            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                              isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
-                            }`}
-                            loading={isSelected ? 'eager' : 'lazy'}
-                            onLoad={() => handleCoverLoad(video.id)}
-                          />
+                            {/* Thumbnail */}
+                            <img
+                              src={video.thumbnail}
+                              alt={video.title}
+                              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                                isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
+                              }`}
+                              loading={isSelected ? 'eager' : 'lazy'}
+                              onLoad={() => handleCoverLoad(video.id)}
+                            />
 
-                          {/* Video Content */}
-                          {isSelected && (
-                            <div className="absolute inset-0">
-                              {video.video_url ? (
-                                <video
-                                  src={video.video_url}
-                                  className={`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
-                                    videoLoaded[video.id] ? 'opacity-100' : 'opacity-0'
-                                  }`}
-                                  autoPlay
-                                  loop
-                                  muted={isMuted}
-                                  playsInline
-                                  controls={false}
-                                  onLoadedData={() => handleVideoLoad(video.id)}
-                                />
-                              ) : null}
-                            </div>
-                          )}
+                            {/* Video Content */}
+                            {isSelected && (
+                              <div className="absolute inset-0">
+                                {video.video_url ? (
+                                  <video
+                                    src={video.video_url}
+                                    className={`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
+                                      videoLoaded[video.id] ? 'opacity-100' : 'opacity-0'
+                                    }`}
+                                    autoPlay
+                                    loop
+                                    muted={isMuted}
+                                    playsInline
+                                    controls={false}
+                                    onLoadedData={() => handleVideoLoad(video.id)}
+                                  />
+                                ) : null}
+                              </div>
+                            )}
 
-                          {/* Gradient Overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
+                            {/* Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
 
-                          {/* Views Badge */}
+                            {/* Views Badge */}
                             <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
                               <div className="px-2 py-1 sm:px-3 sm:py-1 bg-blue-500 text-white rounded-full text-xs sm:text-sm font-bold">
-                              👁 {formatNumber(video.views || 0)}
+                                👁 {formatNumber(video.views || 0)}
                               </div>
                             </div>
 
-                          {/* Video Info */}
+                            {/* Video Info */}
                             <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
                               <div className="space-y-1 sm:space-y-2">
                                 <h3 className="text-xs sm:text-sm lg:text-base font-medium text-white line-clamp-1">
-                                {video.title}
+                                  {video.title}
                                 </h3>
                                 <div className="flex items-center gap-2 text-xs text-white/60">
-                                <span>@{video.username}</span>
+                                  <span>@{video.username}</span>
                                 </div>
                               </div>
                             </div>
 
-                          {/* Mute Button */}
-                          {isSelected && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setIsMuted(!isMuted);
-                              }}
+                            {/* Mute Button */}
+                            {isSelected && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setIsMuted(!isMuted);
+                                }}
                                 className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/60 transition-colors"
                               >
-                              {isMuted ? (
+                                {isMuted ? (
                                   <VolumeX className="h-3 w-3 sm:h-4 sm:w-4" />
-                              ) : (
+                                ) : (
                                   <Volume2 className="h-3 w-3 sm:h-4 sm:w-4" />
-                              )}
-                            </button>
-                          )}
+                                )}
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-            {/* Navigation Arrows */}
-            {featuredVideos.length > 1 && (
-              <>
-                <button
-                  onClick={scrollPrev}
+              {/* Navigation Arrows */}
+              {featuredVideos.length > 1 && (
+                <>
+                  <button
+                    onClick={scrollPrev}
                     className="absolute left-1 sm:left-4 lg:left-8 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
                   >
                     <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
-                </button>
+                  </button>
 
-                <button
-                  onClick={scrollNext}
+                  <button
+                    onClick={scrollNext}
                     className="absolute right-1 sm:right-4 lg:right-8 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
                   >
                     <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
-                </button>
-              </>
-            )}
+                  </button>
+                </>
+              )}
             </div>
-        ) : (
+          ) : (
             <div className="text-center py-8 sm:py-12 lg:py-16">
               <Music className="h-12 w-12 sm:h-16 sm:w-16 text-white/20 mx-auto mb-4" />
               <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">No Submissions Yet</h3>
@@ -1142,24 +1004,24 @@ export function PublicLeaderboard() {
       {/* Footer */}
       <footer className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 border-t border-white/10">
         <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col items-center justify-center gap-4">
-          <div className="flex items-center gap-2">
-            <Crown className="h-5 w-5 sm:h-6 sm:w-6 text-white/40" />
-            <span className="text-white/40 font-light tracking-wider">CROWN</span>
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="flex items-center gap-2">
+              <Crown className="h-5 w-5 sm:h-6 sm:w-6 text-white/40" />
+              <span className="text-white/40 font-light tracking-wider">CROWN</span>
+            </div>
+            <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm">
+              <Link to="/terms" className="text-white/60 hover:text-white transition-colors">
+                Terms of Service
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link to="/privacy" className="text-white/60 hover:text-white transition-colors">
+                Privacy Policy
+              </Link>
+            </div>
+            <p className="text-white/40 text-xs sm:text-sm text-center">
+              © {new Date().getFullYear()} Crown. All rights reserved.
+            </p>
           </div>
-          <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm">
-            <Link to="/terms" className="text-white/60 hover:text-white transition-colors">
-              Terms of Service
-            </Link>
-            <span className="text-white/20">•</span>
-            <Link to="/privacy" className="text-white/60 hover:text-white transition-colors">
-              Privacy Policy
-            </Link>
-          </div>
-          <p className="text-white/40 text-xs sm:text-sm text-center">
-            © {new Date().getFullYear()} Crown. All rights reserved.
-          </p>
-        </div>
         </div>
       </footer>
 
