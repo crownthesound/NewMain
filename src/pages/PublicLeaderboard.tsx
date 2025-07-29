@@ -140,8 +140,9 @@ export function PublicLeaderboard() {
   const [coverLoaded, setCoverLoaded] = useState<{[key: string]: boolean}>({});
   const [showFullDescription, setShowFullDescription] = useState(false);
 
-  // Add view state for toggling between leaderboard and video carousel
-  const [currentView, setCurrentView] = useState<'prizes' | 'how-to-join' | 'leaderboard' | 'videos'>('prizes');
+  // Separate state for each toggle section
+  const [contestDetailsView, setContestDetailsView] = useState<'prizes' | 'how-to-join'>('prizes');
+  const [leaderboardView, setLeaderboardView] = useState<'list' | 'videos'>('list');
 
   const { isConnected: isTikTokConnected } = useTikTokConnection();
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
@@ -550,13 +551,13 @@ export function PublicLeaderboard() {
             </h2>
           </div>
           
-          {/* Toggle Buttons */}
+          {/* Contest Details Toggle Buttons */}
           <div className="flex justify-center mb-6 sm:mb-8">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
-                onClick={() => setCurrentView('prizes')}
+                onClick={() => setContestDetailsView('prizes')}
                 className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
-                  currentView === 'prizes'
+                  contestDetailsView === 'prizes'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
                 }`}
@@ -564,9 +565,9 @@ export function PublicLeaderboard() {
                 Prizes
               </button>
               <button
-                onClick={() => setCurrentView('how-to-join')}
+                onClick={() => setContestDetailsView('how-to-join')}
                 className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
-                  currentView === 'how-to-join'
+                  contestDetailsView === 'how-to-join'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
                 }`}
@@ -577,7 +578,7 @@ export function PublicLeaderboard() {
           </div>
           
           {/* Content Area */}
-          {currentView === 'prizes' ? (
+          {contestDetailsView === 'prizes' ? (
             /* Prizes View */
             <div className="relative max-w-7xl mx-auto w-full">
               <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
@@ -746,13 +747,13 @@ export function PublicLeaderboard() {
             <h2 className="text-xl font-bold text-white">Leaderboard</h2>
           </div>
           
-          {/* Toggle Buttons */}
+          {/* Leaderboard Toggle Buttons */}
           <div className="flex justify-center mb-6 sm:mb-8">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
-                onClick={() => setCurrentView('leaderboard')}
+                onClick={() => setLeaderboardView('list')}
                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
-                  currentView === 'leaderboard'
+                  leaderboardView === 'list'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
                }`}
@@ -760,9 +761,9 @@ export function PublicLeaderboard() {
                 List
               </button>
               <button
-                onClick={() => setCurrentView('videos')}
+                onClick={() => setLeaderboardView('videos')}
                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
-                  currentView === 'videos'
+                  leaderboardView === 'videos'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
                }`}
@@ -773,7 +774,7 @@ export function PublicLeaderboard() {
           </div>
 
           {/* Content Area */}
-          {currentView === 'leaderboard' ? (
+          {leaderboardView === 'list' ? (
             /* Leaderboard View - Exact Design Match */
             <div className="max-w-sm mx-auto">
               {/* White Card Container */}
