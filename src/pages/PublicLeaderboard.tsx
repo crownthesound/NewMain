@@ -703,9 +703,6 @@ export function PublicLeaderboard() {
               {currentView === 'leaderboard' ? (
             /* Leaderboard View - Exact Design Match */
             <div className="max-w-sm mx-auto">
-              {/* Leaderboard Title */}
-              <h2 className="text-white text-2xl font-bold text-center mb-6">Leaderboard</h2>
-              
               {/* White Card Container */}
               <div className="bg-white rounded-2xl overflow-hidden">
                 {/* GET CROWNED Header */}
