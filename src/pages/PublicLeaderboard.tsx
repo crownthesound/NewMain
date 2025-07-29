@@ -711,7 +711,7 @@ export function PublicLeaderboard() {
                       >
                         {/* Rank */}
                         <div className="flex-shrink-0 w-8 sm:w-10 text-center">
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between gap-2 sm:gap-3">
                             <span className="text-xs font-bold text-white">
                               #{participant.rank}
                             </span>
