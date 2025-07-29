@@ -495,6 +495,10 @@ export function PublicLeaderboard() {
                 {/* Description - Now visible on mobile */}
                 <div className="px-1 max-w-sm mx-auto">
                   <p className={`text-sm text-white/90 text-center leading-relaxed mb-4 ${
+                    showFullDescription ? '' : 'line-clamp-2'
+                  }`}>
+                    {contest.description}
+                  </p>
                 </div>
                 
               </div>
@@ -599,14 +603,14 @@ export function PublicLeaderboard() {
                       <div 
                         className="relative transition-all duration-300 ease-out group will-change-transform"
                         style={{
-                          transform: `scale(${scale})`,
+                          transform: \`scale(${scale})`,
                           opacity,
                           width: '180px',
                           maxWidth: '100%'
                         }}
                       >
                         <div className="text-center">
-                          <div className={`w-10 h-10 ${
+                          <div className={\`w-10 h-10 ${
                             rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
                             rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
                             rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
@@ -625,7 +629,7 @@ export function PublicLeaderboard() {
                               {prizeText}
                             </div>
                             <div className="text-white/80 text-[8px] leading-tight text-center transition-all duration-300">
-                              {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
+                              {prizeAmount ? \`$${formatNumber(prizeAmount)}` : ''}
                             </div>
                           </div>
                         </div>
@@ -671,7 +675,7 @@ export function PublicLeaderboard() {
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
                 onClick={() => setCurrentView('leaderboard')}
-                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
+                className={\`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
                   currentView === 'leaderboard'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
@@ -681,7 +685,7 @@ export function PublicLeaderboard() {
               </button>
               <button
                 onClick={() => setCurrentView('videos')}
-                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
+                className={\`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
                   currentView === 'videos'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
@@ -774,7 +778,7 @@ export function PublicLeaderboard() {
                               <div 
                                 className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
                                 style={{
-                                  transform: `scale(${scale})`,
+                                  transform: \`scale(${scale})`,
                                   opacity,
                                 }}
                                 onClick={() => handleVideoClick(video, index)}
@@ -794,7 +798,7 @@ export function PublicLeaderboard() {
                                   <img
                                     src={video.thumbnail}
                                     alt={video.title}
-                                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                                    className={\`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
                                       isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
                                     }`}
                                     loading={isSelected ? 'eager' : 'lazy'}
@@ -807,7 +811,7 @@ export function PublicLeaderboard() {
                                       {video.video_url ? (
                                         <video
                                           src={video.video_url}
-                                          className={`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
+                                          className={\`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
                                             videoLoaded[video.id] ? 'opacity-100' : 'opacity-0'
                                           }`}
                                           autoPlay
