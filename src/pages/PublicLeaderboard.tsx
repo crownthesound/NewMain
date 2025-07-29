@@ -528,7 +528,11 @@ export function PublicLeaderboard() {
                       </div>
                       
                       {/* All Prize Places */}
-                      {contest?.prize_titles?.slice(0, contest?.num_winners || 5).map((prize, index) => {
+                      {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
+                        const prize = contest?.prize_titles?.[index] || { 
+                          rank: index + 1, 
+                          title: `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place` 
+                        };
                         const carouselIndex = index + 1; // +1 because index 0 is the default prize icon
                         const isSelected = carouselIndex === currentVideoIndex;
                         const scale = isSelected ? 1 : 0.85;
