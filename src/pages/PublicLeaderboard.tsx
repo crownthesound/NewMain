@@ -683,8 +683,9 @@ export function PublicLeaderboard() {
             </div>
           ) : (
             /* How to Join View */
-            <div className="relative bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden p-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="relative max-w-7xl mx-auto w-full">
+              <div className="overflow-hidden w-full">
+                <div className="flex gap-6 pb-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide">
                 {[
                   {
                     step: 1,
@@ -713,26 +714,29 @@ export function PublicLeaderboard() {
                 ].map((step, index) => {
                   const Icon = step.icon;
                   return (
-                    <div 
+                    <div
                       key={index}
-                      className="flex flex-col items-center text-center group"
+                      className="flex-shrink-0 w-80 max-w-[90vw] snap-start bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 group"
                     >
-                      <div className="relative flex-shrink-0 mb-4">
+                      <div className="flex flex-col items-center text-center">
+                        <div className="relative flex-shrink-0 mb-4">
                         <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center transform-gpu group-hover:scale-110 transition-all duration-700">
                           <Icon className="h-8 w-8 text-white" />
                         </div>
                         <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white">
                           {step.step}
                         </div>
-                      </div>
+                        </div>
                       
-                      <div className="flex-1">
-                        <h3 className="text-lg font-medium text-white mb-2">{step.title}</h3>
-                        <p className="text-sm text-white/60 leading-relaxed">{step.description}</p>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-medium text-white mb-2">{step.title}</h3>
+                          <p className="text-sm text-white/60 leading-relaxed">{step.description}</p>
+                        </div>
                       </div>
                     </div>
                   );
                 })}
+                </div>
               </div>
             </div>
           )}
