@@ -879,7 +879,7 @@ export function PublicLeaderboard() {
                     : 'text-white/60 hover:text-white'
                }`}
               >
-                Leaderboard
+                Video View
               </button>
             </div>
           </div>
