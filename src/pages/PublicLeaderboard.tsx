@@ -602,8 +602,8 @@ export function PublicLeaderboard() {
                 <div className="flex">
                   {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                     const isSelected = index === currentPrizeIndex;
-                    const scale = 1; // Keep all prizes the same size
-                    const opacity = 1; // Keep all prizes the same opacity
+                    const scale = isSelected ? 1.1 : 1; // Make selected prize slightly bigger
+                    const opacity = isSelected ? 1 : 0.8; // Highlight selected prize
                     const rank = index + 1;
                     
                     // Get prize data from database
@@ -637,37 +637,37 @@ export function PublicLeaderboard() {
                     return (
                       <div 
                         key={index}
-                        className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
+                        className="flex-[0_0_100%] min-w-0 px-3 md:flex-[0_0_50%] lg:flex-[0_0_33.333%] flex items-center justify-center"
                       >
                         <div 
                           className="relative transition-all duration-300 ease-out group will-change-transform"
                           style={{
                             transform: `scale(${scale})`,
                             opacity,
-                            width: '180px',
+                            width: '220px',
                             maxWidth: '100%'
                           }}
                         >
                           <div className="text-center">
-                            <div className={`w-10 h-10 ${
+                            <div className={`w-16 h-16 ${
                               rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
                               rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
                               rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
                               rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
                               rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
                               'bg-gradient-to-br from-slate-400 to-slate-600'
-                            } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
+                            } rounded-full flex items-center justify-center border-2 border-white/30 mb-3 mx-auto transition-all duration-300 shadow-lg`}>
                               {rank === 1 ? (
-                                <Crown className="h-5 w-5 text-white transition-all duration-300" />
+                                <Crown className="h-8 w-8 text-white transition-all duration-300" />
                               ) : (
-                                <span className="text-white font-bold text-xs transition-all duration-300">{rank}</span>
+                                <span className="text-white font-bold text-lg transition-all duration-300">{rank}</span>
                               )}
                             </div>
-                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[70px] border border-white/20 transition-all duration-300">
-                              <div className="text-white font-bold text-[9px] transition-all duration-300">
+                            <div className="bg-black/80 backdrop-blur-sm rounded-xl p-3 min-w-[120px] border border-white/30 transition-all duration-300 shadow-xl">
+                              <div className="text-white font-bold text-sm transition-all duration-300">
                                 {prizeText}
                               </div>
-                              <div className="text-white/80 text-[8px] leading-tight text-center transition-all duration-300">
+                              <div className="text-white/90 text-xs leading-tight text-center transition-all duration-300 mt-1">
                                 {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
                               </div>
                             </div>
