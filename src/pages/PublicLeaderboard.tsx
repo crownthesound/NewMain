@@ -410,7 +410,7 @@ export function PublicLeaderboard() {
     <div className="min-h-screen bg-[#0A0A0A]">
       {/* Hero Image Section */}
       {contest.cover_image && (
-        <div className="relative h-[25rem] sm:h-[21rem] md:h-[29rem] lg:h-[36rem] xl:h-[43rem] overflow-hidden">
+        <div className="relative h-[30rem] sm:h-[25rem] md:h-[34rem] lg:h-[42rem] xl:h-[51rem] overflow-hidden">
           <img
             src={contest.cover_image}
             alt={contest.name}
