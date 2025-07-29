@@ -462,7 +462,7 @@ export function PublicLeaderboard() {
                 
                 {/* Description - Now visible on mobile */}
                 <p className="text-sm text-white/90 text-center mb-4 line-clamp-2 px-4 leading-relaxed">
-                  {contest.description}
+                  {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
                 </p>
                 
                 {/* Prize Podium - Horizontal compact layout */}
