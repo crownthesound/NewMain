@@ -492,11 +492,14 @@ export function PublicLeaderboard() {
                 </div>
                 
                 {/* Prize Podium - Horizontal compact layout */}
-                <div className="relative w-full mb-4">
-                  <div className="w-full" ref={emblaRef}>
+                <div className="relative w-full mb-4 max-w-7xl mx-auto">
+                  <div className="overflow-hidden w-full" ref={emblaRef}>
                     <div className="flex">
                       {/* Default Prize Icon as first element */}
-                      <div className="flex-[0_0_33.333%] min-w-0 px-2 flex items-center justify-center">
+                      <div 
+                        key="default-prize"
+                        className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
+                      >
                         <div 
                           className="relative transition-all duration-300 ease-out group will-change-transform"
                           style={{
@@ -528,7 +531,7 @@ export function PublicLeaderboard() {
                       {contest?.prize_titles?.slice(0, contest?.num_winners || 5).map((prize, index) => {
                         const carouselIndex = index + 1; // +1 because index 0 is the default prize icon
                         const isSelected = carouselIndex === currentVideoIndex;
-                        const scale = isSelected ? 1.1 : 0.8;
+                        const scale = isSelected ? 1 : 0.85;
                         const opacity = isSelected ? 1 : 0.6;
                         const isFirst = index === 0;
                         const isSecond = index === 1;
@@ -539,13 +542,15 @@ export function PublicLeaderboard() {
                         return (
                           <div 
                             key={index}
-                            className="flex-[0_0_33.333%] min-w-0 px-2 flex items-center justify-center"
+                            className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
                           >
                             <div 
                               className="relative transition-all duration-300 ease-out group will-change-transform"
                               style={{
                                 transform: `scale(${scale})`,
                                 opacity,
+                                width: '280px',
+                                maxWidth: '100%'
                               }}
                             >
                               <div className="text-center">
@@ -596,6 +601,25 @@ export function PublicLeaderboard() {
                       })}
                     </div>
                   </div>
+
+                  {/* Navigation Arrows */}
+                  {contest?.prize_titles && contest.prize_titles.length > 1 && (
+                    <>
+                      <button
+                        onClick={scrollPrev}
+                        className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                      >
+                        <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                      </button>
+
+                      <button
+                        onClick={scrollNext}
+                        className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                      >
+                        <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                      </button>
+                    </>
+                  )}
                 </div>
                 
                 {/* Join Button - Centered */}
