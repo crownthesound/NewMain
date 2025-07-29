@@ -485,7 +485,7 @@ export function PublicLeaderboard() {
             {/* Mobile Layout */}
             <div className="block sm:hidden w-full h-full">
               {/* Compact Mobile Layout */}
-              <div className="flex flex-col h-full justify-center items-center text-center px-2">
+              <div className="flex flex-col h-full justify-end items-center text-center px-2 pb-20">
                 
                 {/* Title - Compact */}
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-4 tracking-tight leading-tight">
