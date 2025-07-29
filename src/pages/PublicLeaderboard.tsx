@@ -487,6 +487,79 @@ export function PublicLeaderboard() {
                   {contest.name.toUpperCase()}
                 </h1>
                 
+                {/* Prizes Section - Mobile */}
+                <div className="mb-6">
+                  <div className="text-center mb-4">
+                    <h2 className="text-lg font-black text-white mb-2 flex items-center justify-center gap-2">
+                      <Trophy className="h-5 w-5 text-yellow-400" />
+                      Prizes
+                    </h2>
+                  </div>
+                  
+                  <div className="flex gap-2 justify-center overflow-x-auto pb-2 px-2">
+                    {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
+                      const rank = index + 1;
+                      
+                      // Get prize data from database
+                      const prizeTitle = contest?.prize_titles?.[index];
+                      
+                      // Use actual database prize structure
+                      let prizeText;
+                      let prizeAmount = null;
+                      
+                      // Check if we have custom prize titles from database
+                      if (prizeTitle && prizeTitle.title) {
+                        prizeText = prizeTitle.title;
+                      } else {
+                        // Generate default place names
+                        prizeText = `${rank}${rank === 1 ? 'ST' : rank === 2 ? 'ND' : rank === 3 ? 'RD' : 'TH'} PLACE`;
+                      }
+                      
+                      // Calculate prize amount from database
+                      if (contest?.prize_per_winner && contest.prize_per_winner > 0) {
+                        // Use the actual prize_per_winner from database
+                        prizeAmount = contest.prize_per_winner;
+                        
+                        // If there are multiple winners, calculate distribution
+                        if (contest.num_winners && contest.num_winners > 1) {
+                          // First place gets full amount, others get reduced amounts
+                          const reductionFactor = Math.max(0.2, 1 - (index * 0.2));
+                          prizeAmount = Math.round(contest.prize_per_winner * reductionFactor);
+                        }
+                      }
+                      
+                      return (
+                        <div key={index} className="flex-shrink-0">
+                          <div className="text-center">
+                            <div className={`w-8 h-8 ${
+                              rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
+                              rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
+                              rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
+                              rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
+                              rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
+                              'bg-gradient-to-br from-slate-400 to-slate-600'
+                            } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto`}>
+                              {rank === 1 ? (
+                                <Crown className="h-4 w-4 text-white" />
+                              ) : (
+                                <span className="text-white font-bold text-xs">{rank}</span>
+                              )}
+                            </div>
+                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[60px] border border-white/20">
+                              <div className="text-white font-bold text-[8px]">
+                                {prizeText}
+                              </div>
+                              <div className="text-white/80 text-[7px] leading-tight text-center">
+                                {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                
                 {/* Description - Now visible on mobile */}
                 <div className="px-1 max-w-sm mx-auto">
                   <p className={`text-sm text-white/90 text-center leading-relaxed mb-4 ${
