@@ -459,7 +459,7 @@ export function PublicLeaderboard() {
                 </div>
                 
                 {/* Title - Compact */}
-                <h1 className="text-xl font-black text-white mb-2 text-center tracking-tight leading-tight">
+                <h1 className="text-xl font-black text-white mb-2 mt-6 text-center tracking-tight leading-tight">
                   {contest.name.toUpperCase()}
                 </h1>
                 
