@@ -534,66 +534,11 @@ export function PublicLeaderboard() {
                   {contest.description}
                 </p>
               </div>
-
-              {/* Prize Podium on Hero Image */}
-              <div className="flex justify-center items-end gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
-                {/* Second Place */}
-                <div className="text-center">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center border-2 border-white/20 mb-2 sm:mb-3">
-                    <span className="text-sm sm:text-base lg:text-lg">🥈</span>
-                  </div>
-                  <div className="bg-black/40 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/20">
-                    <div className="text-white font-bold text-xs sm:text-sm">SECOND PLACE</div>
-                    <div className="text-white/80 text-xs sm:text-sm mt-1">
-                      {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.8)}` : '$1.6K'}
-                    </div>
-                  </div>
-                </div>
-
-                {/* First Place */}
-                <div className="text-center">
-                  <div className="w-16 h-16 sm:w-18 sm:h-18 lg:w-20 lg:h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center border-2 border-white/20 mb-2 sm:mb-3">
-                    <Crown className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 text-white" />
-                  </div>
-                  <div className="bg-black/40 backdrop-blur-sm rounded-lg p-2 sm:p-3 lg:p-4 border border-white/20">
-                    <div className="text-white font-bold text-xs sm:text-sm lg:text-base">FIRST PLACE</div>
-                    <div className="text-white/90 text-xs sm:text-sm mt-1">
-                      EXCLUSIVE SPOT AT THE
-                    </div>
-                    <div className="text-white/90 text-xs sm:text-sm">
-                      DO-LAB IN THE DESERT
-                    </div>
-                    <div className="text-white/90 text-xs sm:text-sm">
-                      IN 2025.
-                    </div>
-                  </div>
-                </div>
-
-                {/* Third Place */}
-                <div className="text-center">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center border-2 border-white/20 mb-2 sm:mb-3">
-                    <span className="text-sm sm:text-base lg:text-lg">🥉</span>
-                  </div>
-                  <div className="bg-black/40 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/20">
-                    <div className="text-white font-bold text-xs sm:text-sm">THIRD PLACE</div>
-                    <div className="text-white/80 text-xs sm:text-sm mt-1">
-                      {contest.prize_per_winner ? `$${formatNumber(contest.prize_per_winner * 0.6)}` : '$1.2K'}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <button
-                onClick={handleJoinContest}
-                className="px-6 py-2.5 sm:px-8 sm:py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base"
-              >
-                Sign up to join
-              </button>
             </div>
           </div>
           
           {/* Prizes Section Above Button */}
-          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-md">
+          <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 w-full max-w-md">
             <div className="text-center mb-4">
               <h2 className="text-lg sm:text-xl font-black text-white mb-2 flex items-center justify-center gap-2">
                 <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
