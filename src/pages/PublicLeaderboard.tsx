@@ -133,6 +133,7 @@ export function PublicLeaderboard() {
   const [isMuted, setIsMuted] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState<{[key: string]: boolean}>({});
   const [coverLoaded, setCoverLoaded] = useState<{[key: string]: boolean}>({});
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   const { isConnected: isTikTokConnected } = useTikTokConnection();
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
@@ -461,9 +462,31 @@ export function PublicLeaderboard() {
                 </h1>
                 
                 {/* Description - Now visible on mobile */}
-                <p className="text-sm text-white/90 text-center mb-8 px-1 leading-relaxed max-w-sm mx-auto line-clamp-2">
-                  {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
-                </p>
+                <div className="mb-8 px-1 max-w-sm mx-auto">
+                  <p className={`text-sm text-white/90 text-center leading-relaxed ${
+                    showFullDescription ? '' : 'line-clamp-2'
+                  }`}>
+                    {contest.description || "Join this exciting music competition and showcase your talent to win amazing prizes!"}
+                  </p>
+                  {contest.description && contest.description.length > 100 && (
+                    <button
+                      onClick={() => setShowFullDescription(!showFullDescription)}
+                      className="mt-2 text-xs text-white/70 hover:text-white transition-colors flex items-center gap-1 mx-auto"
+                    >
+                      {showFullDescription ? (
+                        <>
+                          <span>Show less</span>
+                          <ChevronUp className="h-3 w-3" />
+                        </>
+                      ) : (
+                        <>
+                          <span>Show more</span>
+                          <ChevronDown className="h-3 w-3" />
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
                 
                 {/* Prize Podium - Horizontal compact layout */}
                 <div className="flex justify-center items-end gap-2 mb-4">
