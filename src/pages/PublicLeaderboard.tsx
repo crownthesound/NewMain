@@ -493,24 +493,24 @@ export function PublicLeaderboard() {
                 
                 {/* Prize Podium - Horizontal compact layout */}
                 <div className="relative w-full mb-4">
-                  <div className="overflow-hidden w-full" ref={emblaRef}>
+                  <div className="overflow-hidden w-full px-4" ref={emblaRef}>
                     <div className="flex">
                       {/* Default Prize Icon as first element */}
-                      <div className="flex-[0_0_33.333%] min-w-0 px-1 flex items-center justify-center">
+                      <div className="flex-[0_0_33.333%] min-w-0 px-2 flex items-center justify-center">
                         <div 
                           className="relative transition-all duration-300 ease-out group will-change-transform"
                           style={{
-                            transform: `scale(${currentVideoIndex === -1 ? 1 : 0.7})`,
-                            opacity: currentVideoIndex === -1 ? 1 : 0.5,
+                            transform: `scale(${currentVideoIndex === -1 ? 1 : 0.8})`,
+                            opacity: currentVideoIndex === -1 ? 1 : 0.6,
                           }}
                         >
                           <div className="text-center">
-                            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto">
-                              <Trophy className="h-5 w-5 text-white" />
+                            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto">
+                              <Trophy className="h-6 w-6 text-white" />
                             </div>
-                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[70px] border border-white/20">
-                              <div className="text-white font-bold text-[9px]">PRIZES</div>
-                              <div className="text-white/80 text-[8px]">Available</div>
+                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 min-w-[80px] border border-white/20">
+                              <div className="text-white font-bold text-[10px]">PRIZES</div>
+                              <div className="text-white/80 text-[9px]">Available</div>
                             </div>
                           </div>
                         </div>
@@ -519,8 +519,8 @@ export function PublicLeaderboard() {
                       {/* Actual Prize Places */}
                       {contest?.prize_titles?.slice(0, Math.min(5, contest?.num_winners || 3)).map((prize, index) => {
                         const isSelected = index === currentVideoIndex;
-                        const scale = isSelected ? 1.2 : 0.7;
-                        const opacity = isSelected ? 1 : 0.5;
+                        const scale = isSelected ? 1.1 : 0.8;
+                        const opacity = isSelected ? 1 : 0.6;
                         const isFirst = index === 0;
                         const isSecond = index === 1;
                         const isThird = index === 2;
@@ -528,7 +528,7 @@ export function PublicLeaderboard() {
                         return (
                           <div 
                             key={index}
-                            className="flex-[0_0_33.333%] min-w-0 px-1 flex items-center justify-center"
+                            className="flex-[0_0_33.333%] min-w-0 px-2 flex items-center justify-center"
                           >
                             <div 
                               className="relative transition-all duration-300 ease-out group will-change-transform"
@@ -540,7 +540,7 @@ export function PublicLeaderboard() {
                             >
                               <div className="text-center">
                                 <div className={`${
-                                  isSelected ? 'w-14 h-14' : 'w-10 h-10'
+                                  isSelected ? 'w-16 h-16' : 'w-12 h-12'
                                 } ${
                                   isFirst ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
                                   isSecond ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
@@ -548,16 +548,16 @@ export function PublicLeaderboard() {
                                   'bg-gradient-to-br from-blue-400 to-blue-600'
                                 } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
                                   {isFirst ? (
-                                    <Crown className={`${isSelected ? 'h-7 w-7' : 'h-5 w-5'} text-white transition-all duration-300`} />
+                                    <Crown className={`${isSelected ? 'h-8 w-8' : 'h-6 w-6'} text-white transition-all duration-300`} />
                                   ) : (
-                                    <span className={`text-white font-bold ${isSelected ? 'text-sm' : 'text-xs'} transition-all duration-300`}>{index + 1}</span>
+                                    <span className={`text-white font-bold ${isSelected ? 'text-base' : 'text-sm'} transition-all duration-300`}>{index + 1}</span>
                                   )}
                                 </div>
                                 <div className={`bg-black/60 backdrop-blur-sm rounded-lg ${
-                                  isSelected ? 'p-2 min-w-[90px]' : 'p-1.5 min-w-[70px]'
+                                  isSelected ? 'p-2.5 min-w-[100px]' : 'p-2 min-w-[80px]'
                                 } border border-white/20 transition-all duration-300`}>
                                   <div className={`text-white font-bold ${
-                                    isSelected ? 'text-[10px]' : 'text-[9px]'
+                                    isSelected ? 'text-[11px]' : 'text-[10px]'
                                   } transition-all duration-300`}>
                                     {isFirst ? '1ST PLACE' :
                                      isSecond ? '2ND PLACE' :
@@ -565,7 +565,7 @@ export function PublicLeaderboard() {
                                      `${index + 1}TH PLACE`}
                                   </div>
                                   <div className={`text-white/80 ${
-                                    isSelected ? 'text-[9px] leading-tight text-center' : 'text-[8px]'
+                                    isSelected ? 'text-[10px] leading-tight text-center' : 'text-[9px]'
                                   } transition-all duration-300`}>
                                     {isFirst ? 
                                       (contest?.prize_titles?.[0]?.title || 'EXCLUSIVE SPOT AT THE DO-LAB IN THE DESERT IN 2025.') :
@@ -588,16 +588,16 @@ export function PublicLeaderboard() {
                     <>
                       <button
                         onClick={() => emblaApi && emblaApi.scrollPrev()}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-10"
+                        className="absolute left-1 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-10"
                       >
-                        <ChevronLeft className="h-3 w-3" />
+                        <ChevronLeft className="h-4 w-4" />
                       </button>
 
                       <button
                         onClick={() => emblaApi && emblaApi.scrollNext()}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-10"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-10"
                       >
-                        <ChevronRight className="h-3 w-3" />
+                        <ChevronRight className="h-4 w-4" />
                       </button>
                     </>
                   )}
