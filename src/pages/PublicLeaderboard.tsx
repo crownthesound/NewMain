@@ -593,6 +593,16 @@ export function PublicLeaderboard() {
               </button>
             </div>
           </div>
+          
+          {/* Sign up button at bottom of hero */}
+          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
+            <button
+              onClick={handleJoinContest}
+              className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm relative z-50"
+            >
+              Sign up to join
+            </button>
+          </div>
         </div>
       )}
 
@@ -650,16 +660,6 @@ export function PublicLeaderboard() {
 
       {/* Leaderboard Section */}
       <div className="bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-        {/* Sign up button attached to top of this section */}
-        <div className="flex justify-center -mt-6 mb-6">
-          <button
-            onClick={handleJoinContest}
-            className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm relative z-50"
-          >
-            Sign up to join
-          </button>
-        </div>
-        
         {/* Prize Section - Moved from hero */}
         <div className="max-w-4xl mx-auto mb-8">
           <div className="text-center mb-6">
