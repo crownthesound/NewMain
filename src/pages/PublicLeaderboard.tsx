@@ -495,16 +495,21 @@ export function PublicLeaderboard() {
                 <div className="relative w-full mb-4 max-w-7xl mx-auto">
                   <div className="overflow-hidden w-full" ref={emblaRef}>
                     <div className="flex">
-                      {/* All Prize Places */}
+                      {/* All Prize Places - Use actual database data */}
                       {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                         const isSelected = index === currentVideoIndex;
                         const scale = isSelected ? 1 : 0.85;
                         const opacity = isSelected ? 1 : 0.6;
-                        const isFirst = index === 0;
-                        const isSecond = index === 1;
-                        const isThird = index === 2;
-                        const isFourth = index === 3;
-                        const isFifth = index === 4;
+                        const rank = index + 1;
+                        
+                        // Get prize data from database
+                        const prizeTitle = contest?.prize_titles?.[index];
+                        const prizeText = prizeTitle?.title || `${rank}${rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th'} Place`;
+                        
+                        // Calculate prize amount if monetary
+                        const prizeAmount = contest?.prize_per_winner ? 
+                          contest.prize_per_winner * Math.max(0.2, 1 - index * 0.2) : 
+                          null;
                         
                         return (
                           <div 
@@ -524,17 +529,17 @@ export function PublicLeaderboard() {
                                 <div className={`${
                                   isSelected ? 'w-16 h-16' : 'w-12 h-12'
                                 } ${
-                                  isFirst ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
-                                  isSecond ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
-                                  isThird ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
-                                  isFourth ? 'bg-gradient-to-br from-green-400 to-green-600' :
-                                  isFifth ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
+                                  rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
+                                  rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
+                                  rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
+                                  rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
+                                  rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
                                   'bg-gradient-to-br from-slate-400 to-slate-600'
                                 } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
-                                  {isFirst ? (
+                                  {rank === 1 ? (
                                     <Crown className={`${isSelected ? 'h-8 w-8' : 'h-6 w-6'} text-white transition-all duration-300`} />
                                   ) : (
-                                    <span className={`text-white font-bold ${isSelected ? 'text-base' : 'text-sm'} transition-all duration-300`}>{index + 1}</span>
+                                    <span className={`text-white font-bold ${isSelected ? 'text-base' : 'text-sm'} transition-all duration-300`}>{rank}</span>
                                   )}
                                 </div>
                                 <div className={`bg-black/60 backdrop-blur-sm rounded-lg ${
@@ -543,21 +548,19 @@ export function PublicLeaderboard() {
                                   <div className={`text-white font-bold ${
                                     isSelected ? 'text-[11px]' : 'text-[10px]'
                                   } transition-all duration-300`}>
-                                    {isFirst ? '1ST PLACE' :
-                                     isSecond ? '2ND PLACE' :
-                                     isThird ? '3RD PLACE' :
-                                     isFourth ? '4TH PLACE' :
-                                     isFifth ? '5TH PLACE' :
-                                     `${index + 1}TH PLACE`}
+                                    {rank === 1 ? '1ST PLACE' :
+                                     rank === 2 ? '2ND PLACE' :
+                                     rank === 3 ? '3RD PLACE' :
+                                     rank === 4 ? '4TH PLACE' :
+                                     rank === 5 ? '5TH PLACE' :
+                                     `${rank}TH PLACE`}
                                   </div>
                                   <div className={`text-white/80 ${
                                     isSelected ? 'text-[10px] leading-tight text-center' : 'text-[9px]'
                                   } transition-all duration-300`}>
-                                    {isFirst ? 
-                                      'EXCLUSIVE SPOT AT THE DO-LAB IN THE DESERT IN 2025.' :
-                                      contest?.prize_per_winner ? 
-                                        `$${formatNumber(contest.prize_per_winner * Math.max(0.2, 1 - index * 0.2))}` : 
-                                        `${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place`
+                                    {prizeAmount ? 
+                                      `$${formatNumber(prizeAmount)}` : 
+                                      prizeText
                                     }
                                   </div>
                                 </div>
