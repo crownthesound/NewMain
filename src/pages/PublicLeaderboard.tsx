@@ -137,7 +137,7 @@ export function PublicLeaderboard() {
     }
   }, [session, contest]);
 
-  const fetchContestDetails = async () => {
+  const fetchContestDetails = async (retryCount = 0) => {
     try {
       const { data, error } = await supabase
         .from('contests')
@@ -149,7 +149,17 @@ export function PublicLeaderboard() {
       setContest(data);
     } catch (error) {
       console.error('Error fetching contest details:', error);
-      toast.error('Failed to load contest details');
+      
+      // Check if it's a network error and we haven't exceeded max retries
+      if ((error instanceof TypeError || error.message?.includes('Failed to fetch')) && retryCount < 3) {
+        const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff: 1s, 2s, 4s
+        console.log(`Retrying fetchContestDetails in ${delay}ms (attempt ${retryCount + 1}/3)`);
+        setTimeout(() => {
+          fetchContestDetails(retryCount + 1);
+        }, delay);
+      } else {
+        toast.error('Failed to load contest details');
+      }
     }
   };
 
