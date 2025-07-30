@@ -614,7 +614,7 @@ export function PublicLeaderboard() {
               <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
                 <div className="flex justify-center">
                   {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
-                    const isSelected = index === currentPrizeIndex;
+                    const isSelected = true; // Always selected since we show all prizes
                     const scale = 1; // Keep all prizes the same size
                     const opacity = 1; // Keep all prizes the same opacity
                     const rank = index + 1;
@@ -691,25 +691,6 @@ export function PublicLeaderboard() {
                   })}
                 </div>
               </div>
-
-              {/* Navigation Arrows */}
-              {(contest?.num_winners || 5) > 1 && (
-                <>
-                  <button
-                    onClick={scrollPrizePrev}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </button>
-
-                  <button
-                    onClick={scrollPrizeNext}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                </>
-              )}
             </div>
           ) : (
             /* How to Join View */
