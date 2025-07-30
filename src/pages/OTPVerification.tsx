@@ -20,6 +20,7 @@ export function OTPVerification() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timeLeft, setTimeLeft] = useState(120); // 2 minutes
   const [canResend, setCanResend] = useState(false);
+  const [buttonCooldown, setButtonCooldown] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -166,8 +167,8 @@ export function OTPVerification() {
   const handleVerifyOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Prevent multiple submissions
-    if (loading) {
+    // Prevent multiple submissions during loading or cooldown
+    if (loading || buttonCooldown) {
       return;
     }
     
@@ -179,6 +180,12 @@ export function OTPVerification() {
     }
 
     setLoading(true);
+    setButtonCooldown(true);
+
+    // Set 5-second cooldown regardless of outcome
+    setTimeout(() => {
+      setButtonCooldown(false);
+    }, 5000);
 
     try {
       const {
@@ -325,14 +332,14 @@ export function OTPVerification() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || buttonCooldown}
                 className={`w-full py-3 sm:py-4 rounded-lg transition-colors font-medium text-lg ${
-                  loading
+                  loading || buttonCooldown
                     ? 'bg-white/50 text-black/50 cursor-not-allowed'
                     : 'bg-white text-black hover:bg-white/90'
                 }`}
               >
-                {loading ? (
+                {loading || buttonCooldown ? (
                   <Loader2 className="animate-spin h-5 w-5 mx-auto" />
                 ) : (
                   "Verify Code"
