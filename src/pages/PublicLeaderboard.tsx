@@ -467,18 +467,17 @@ export function PublicLeaderboard() {
     );
   }
 
-            onClick={() => {
-              if (session && userSubmission) {
-                // User has already submitted, navigate to management page
-                navigate(`/contest-management/${contest.id}`);
-              } else {
-                // User hasn't submitted yet, go through join flow
-                handleJoinContest();
-              }
-            }}
-            className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base relative z-50 flex items-center gap-2"
+  if (!contest) {
+    return (
+      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
+        <div className="text-center">
+          <Crown className="h-16 w-16 text-white/40 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-white mb-2">Contest Not Found</h1>
+          <p className="text-white/60 mb-6">The contest you're looking for doesn't exist.</p>
+          <Link
+            to="/"
+            className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors"
           >
-            {session ? (userSubmission ? 'Manage Submission' : 'Join Contest') : 'Sign up to join'}
             <span>Return Home</span>
           </Link>
         </div>
@@ -587,15 +586,6 @@ export function PublicLeaderboard() {
             </h2>
           </div>
           
-             onClick={() => {
-               if (session && userSubmission) {
-                 // User has already submitted, navigate to management page
-                 navigate(`/contest-management/${contest.id}`);
-               } else {
-                 // User hasn't submitted yet, go through join flow
-                 handleJoinContest();
-               }
-             }}
           <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
@@ -1097,14 +1087,7 @@ export function PublicLeaderboard() {
         isOpen={showTikTokSettings}
         onClose={() => setShowTikTokSettings(false)}
       />
-        onClick={() => {
-          setContestDetailsView('prizes');
-          // Reset prize carousel to first item when switching
-          setCurrentPrizeIndex(0);
-          if (prizeEmblaApi) {
-            prizeEmblaApi.scrollTo(0);
-          }
-        }}
+
       <ContestJoinModal
         isOpen={showJoinModal}
         onClose={() => setShowJoinModal(false)}
@@ -1114,14 +1097,7 @@ export function PublicLeaderboard() {
 
       <ViewSubmissionModal
         isOpen={showViewModal}
-        onClick={() => {
-          setContestDetailsView('how-to-join');
-          // Reset how-to-join carousel to first item when switching
-          setCurrentHowToJoinIndex(0);
-          if (howToJoinEmblaApi) {
-            howToJoinEmblaApi.scrollTo(0);
-          }
-        }}
+        onClose={() => setShowViewModal(false)}
         video={selectedVideo}
       />
 
