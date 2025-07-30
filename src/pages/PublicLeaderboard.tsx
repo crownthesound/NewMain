@@ -130,6 +130,7 @@ export function PublicLeaderboard() {
   const [showTikTokModal, setShowTikTokModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [showMobileModal, setShowMobileModal] = useState(false);
+  const [activeToggle, setActiveToggle] = useState<'prizes' | 'howToJoin' | 'rules' | 'about' | 'list' | 'videoView'>('prizes');
   const [selectedVideo, setSelectedVideo] = useState<VideoData | null>(null);
   const [userSubmission, setUserSubmission] = useState<any>(null);
   const [showTikTokSettings, setShowTikTokSettings] = useState(false);
@@ -246,7 +247,13 @@ export function PublicLeaderboard() {
       setContest(data);
     } catch (error) {
       console.error("Error fetching contest:", error);
-      toast.error("Contest not found");
+      
+      // Handle network errors specifically
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        toast.error('Unable to connect to server. Please check your internet connection.');
+      } else {
+        toast.error("Failed to load contest details");
+      }
       navigate("/");
     }
   };
