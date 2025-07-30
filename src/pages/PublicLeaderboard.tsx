@@ -119,14 +119,12 @@ interface Participant {
 export function PublicLeaderboard() {
   const { id } = useParams<{ id: string }>();
   const { session } = useAuth();
-  const [activeToggle, setActiveToggle] = useState<'prizes' | 'how-to-join' | 'rules' | 'about' | 'list' | 'video-view'>('prizes');
   const navigate = useNavigate();
   const { redirectToAuth } = useAuthRedirect();
   
   const [contest, setContest] = useState<Contest | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [featuredVideos, setFeaturedVideos] = useState<VideoData[]>([]);
-  const [leaderboard, setLeaderboard] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showTikTokModal, setShowTikTokModal] = useState(false);
