@@ -119,6 +119,7 @@ interface Participant {
 export function PublicLeaderboard() {
   const { id } = useParams<{ id: string }>();
   const { session } = useAuth();
+  const [activeToggle, setActiveToggle] = useState<'prizes' | 'how-to-join' | 'rules' | 'about' | 'list' | 'video-view'>('prizes');
   const navigate = useNavigate();
   const { redirectToAuth } = useAuthRedirect();
   
