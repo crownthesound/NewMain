@@ -140,6 +140,7 @@ export function PublicLeaderboard() {
   const [videoLoaded, setVideoLoaded] = useState<{[key: string]: boolean}>({});
   const [coverLoaded, setCoverLoaded] = useState<{[key: string]: boolean}>({});
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'video'>('list');
   const rulesRef = useRef<HTMLDivElement>(null);
 
   // Separate state for each toggle section
@@ -536,10 +537,16 @@ export function PublicLeaderboard() {
                 {/* Title - Compact */}
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-4 tracking-tight leading-tight">
                   {contest.name.toUpperCase()}
-        <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
-          {/* Header */}
-          <div className="p-4 sm:p-6 border-b border-white/10">
-            <h3 className="text-xl font-bold text-white text-center">Current Rankings</h3>
+                </h1>
+        
+                <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
+                  {/* Header */}
+                  <div className="p-4 sm:p-6 border-b border-white/10">
+                    <h3 className="text-xl font-bold text-white text-center">Current Rankings</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
