@@ -319,9 +319,9 @@ export function OTPVerification() {
 
               <button
                 type="submit"
-                disabled={loading || otp.some((digit) => !digit)}
+                disabled={loading}
                 className={`w-full py-3 sm:py-4 rounded-lg transition-colors font-medium text-lg ${
-                  loading || otp.some((digit) => !digit)
+                  loading
                     ? 'bg-white/50 text-black/50 cursor-not-allowed'
                     : 'bg-white text-black hover:bg-white/90'
                 }`}
