@@ -140,6 +140,7 @@ export function PublicLeaderboard() {
   const [videoLoaded, setVideoLoaded] = useState<{[key: string]: boolean}>({});
   const [coverLoaded, setCoverLoaded] = useState<{[key: string]: boolean}>({});
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'video'>('list');
   const rulesRef = useRef<HTMLDivElement>(null);
 
   // Separate state for each toggle section
@@ -932,60 +933,46 @@ export function PublicLeaderboard() {
                 Video View
               </button>
             </div>
-            
-            {/* List/Video View Toggle */}
-            <div className="flex justify-center mb-6">
-              <div className="bg-white/10 backdrop-blur-sm rounded-full p-1 border border-white/20">
-                <div className="flex">
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                      viewMode === 'list'
-                        ? 'bg-purple-600 text-white shadow-lg'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    List
-                  </button>
-                  <button
-                    onClick={() => setViewMode('video')}
-                    className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                      viewMode === 'video'
-                        ? 'bg-purple-600 text-white shadow-lg'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    Video View
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
-
-                              </span>
+            
+          {/* List/Video View Toggle */}
+          {leaderboardView === 'list' ? (
+            /* List View */
+            <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+              <div className="p-6">
+                <div className="space-y-4">
+                  {participants.length > 0 ? (
+                    participants.map((participant) => (
+                      <div key={participant.user_id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                        {/* Left side - Rank, Avatar, Name */}
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2">
+                            {getRankIcon(participant.rank)}
+                            <span className="text-lg font-bold text-gray-700">
+                              #{participant.rank}
+                            </span>
+                          </div>
+                          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                            <span className="text-xs font-bold text-gray-600">
+                              {participant.tiktok_username?.charAt(0)?.toUpperCase() || 'U'}
+                            </span>
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-black">
+                              @{participant.tiktok_username}
                             </div>
-                            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                              <span className="text-xs font-bold text-gray-600">
-                                {participant.tiktok_username?.charAt(0)?.toUpperCase() || 'U'}
-                              </span>
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium text-black">
-                                @{participant.tiktok_username}
-                              </div>
-                              <div className="text-xs text-gray-500 flex items-center gap-2">
-                                <span>{formatNumber(participant.views)} views</span>
-                              </div>
+                            <div className="text-xs text-gray-500 flex items-center gap-2">
+                              <span>{formatNumber(participant.views)} views</span>
                             </div>
                           </div>
-
-                          {/* Right side - Support Button */}
-                          <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity">
-                            Support
-                          </button>
                         </div>
-                      ))}
-                    </div>
+
+                        {/* Right side - Support Button */}
+                        <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity">
+                          Support
+                        </button>
+                      </div>
+                    ))
                   ) : (
                     <div className="text-center py-8">
                       <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
