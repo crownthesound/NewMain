@@ -248,68 +248,28 @@ export function PublicLeaderboard() {
       setContest(data);
     } catch (error) {
       console.error("Error fetching contest:", error);
-      // Check if it's a network error
-      if (error instanceof TypeError && error.message.includes('fetch')) {
-        console.warn("Backend server not reachable, continuing with limited functionality");
-        toast.error("Some features may be limited - backend server not available");
-      } else {
-        toast.error("Failed to load contest details");
-      }
+      toast.error("Contest not found");
       navigate("/");
     }
   };
 
   const fetchLeaderboard = async () => {
     try {
-      // Only attempt to fetch from backend if URL is configured and not localhost
-      if (backendUrl && !backendUrl.includes('localhost')) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
+      if (backendUrl && backendUrl !== "http://localhost:3000") {
         const response = await fetch(
-          `${backendUrl}/api/v1/contests/${id}/leaderboard?limit=200`,
-          {
-            signal: controller.signal,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
+          `${backendUrl}/api/v1/contests/${id}/leaderboard?limit=100`
         );
-
-        clearTimeout(timeoutId);
-
+        
         if (response.ok) {
           const data = await response.json();
           if (data.data?.leaderboard) {
             setParticipants(data.data.leaderboard);
           }
-        } else {
-          console.warn(`Leaderboard API returned ${response.status}`);
         }
-      } else {
-        console.warn('Backend URL not configured or using localhost - using mock data');
-        // Use mock participants when backend is not available
+      }
     } catch (error) {
-      console.warn('Error fetching leaderboard, using mock data:', error);
-      setLeaderboard(mockParticipants);
+      console.warn('Could not fetch leaderboard:', error);
     }
-        setParticipants(mockParticipants.slice(0, 15));
-          if (data.data?.leaderboard) {
-            setParticipants(data.data.leaderboard);
-          }
-        }
-      }
-    } catch (error) {
-      if (error instanceof Error && error.name === 'AbortError') {
-        console.warn('Leaderboard request timeout');
-      } else if (error instanceof TypeError && error.message.includes('fetch')) {
-        console.warn('Backend server not reachable, using mock data');
-        // Use mock participants when backend is not available
-        setParticipants(mockParticipants.slice(0, 15));
-      } else {
-        console.error("Error fetching leaderboard:", error);
-        toast.error("Failed to load leaderboard");
-      }
   };
 
   const fetchFeaturedVideos = async () => {
@@ -594,6 +554,67 @@ export function PublicLeaderboard() {
       {/* Prizes Section - Below Hero */}
       <div className="bg-black px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto">
+          {/* Contest Header */}
+          <div className="relative bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-2xl border border-white/10 overflow-hidden mb-8">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-blue-600/10"></div>
+            <div className="relative p-6 sm:p-8">
+              <div className="flex flex-col sm:flex-row items-start gap-6">
+                {/* Contest Image/Avatar */}
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/10 rounded-2xl flex items-center justify-center border-2 border-white/20 overflow-hidden flex-shrink-0">
+                  {contest.cover_image ? (
+                    <img
+                      src={contest.cover_image}
+                      alt={contest.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Trophy className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
+                  )}
+                </div>
+
+                {/* Contest Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                    <div>
+                      <h1 className="text-2xl sm:text-3xl font-black text-white mb-2">
+                        {contest.name}
+                      </h1>
+                      <p className="text-white/80 text-sm sm:text-base leading-relaxed">
+                        {contest.description}
+                      </p>
+                    </div>
+                    
+                    {/* Contest Status and Time */}
+                    <div className="flex flex-col items-start sm:items-end gap-2">
+                      <div className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(calculateContestStatus(contest))}`}>
+                        {getStatusLabel(calculateContestStatus(contest))}
+                      </div>
+                      <ContestCountdown contest={contest} className="text-white/80" />
+                    </div>
+                  </div>
+
+                  {/* Contest Meta Info */}
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-white/60">
+                    {contest.music_category && (
+                      <div className="flex items-center gap-1">
+                        <Music className="h-4 w-4" />
+                        <span>{contest.music_category}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-1">
+                      <Users className="h-4 w-4" />
+                      <span>{participants.length} participants</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Trophy className="h-4 w-4" />
+                      <span>{contest.num_winners || 3} winners</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Contest Details Heading */}
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
