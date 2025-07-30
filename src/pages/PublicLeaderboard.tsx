@@ -909,7 +909,7 @@ export function PublicLeaderboard() {
           
           {/* Leaderboard Toggle Buttons */}
           <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
-            <div className="bg-white/5 rounded-full p-1 flex">
+            <div className="flex bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10 flex-wrap gap-1">
               <button
                 onClick={() => handleLeaderboardViewChange('list')}
                className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
@@ -929,6 +929,26 @@ export function PublicLeaderboard() {
                }`}
               >
                 Video View
+              </button>
+              <button
+                onClick={() => setActiveView('prizes')}
+                className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full transition-all duration-300 font-medium text-sm sm:text-base whitespace-nowrap ${
+                  activeView === 'prizes'
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'text-white/60 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                Prizes
+              </button>
+              <button
+                onClick={() => setActiveView('howToJoin')}
+                className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full transition-all duration-300 font-medium text-sm sm:text-base whitespace-nowrap ${
+                  activeView === 'howToJoin'
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'text-white/60 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                How to Join
               </button>
             </div>
           </div>
