@@ -1045,7 +1045,7 @@ export function PublicLeaderboard() {
           onClick={handleJoinContest}
           className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-bold text-base sm:text-lg transition-colors"
         >
-          {session ? 'Join Contest' : 'Sign up to join'}
+          {session ? (userSubmission ? 'Manage Submission' : 'Join Contest') : 'Sign up to join'}
         </button>
       </div>
 
