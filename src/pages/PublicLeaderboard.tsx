@@ -583,7 +583,7 @@ export function PublicLeaderboard() {
           
           {/* Contest Details Toggle Buttons */}
           <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
-            <div className="bg-white/5 rounded-full p-1 flex">
+            <div className="bg-white/5 rounded-full p-1 flex flex-wrap gap-1">
               <button
                 onClick={() => setContestDetailsView('prizes')}
                 className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
