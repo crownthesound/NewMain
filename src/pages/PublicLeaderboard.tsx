@@ -547,40 +547,40 @@ export function PublicLeaderboard() {
                 </div>
                 
               </div>
+            </div>
+            
+            {/* Desktop Layout */}
+            <div className="hidden sm:block">
+              {/* Crown Logo at Top */}
+              <div className="mb-6 sm:mb-8">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mx-auto bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 sm:border-4 border-white/20 shadow-2xl">
+                  <Crown className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-white" />
+                </div>
+              </div>
+              
+              {/* Contest Title and Description */}
+              <div className="mb-3 sm:mb-4">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-4 tracking-tight">
+                  {contest.name.toUpperCase()}
+                </h1>
+                
+                <p className="text-sm sm:text-base lg:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8">
+                  {contest.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Prizes Section - Below Hero */}
+      <div className="bg-black px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto">
           {/* Contest Details Heading */}
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
               Contest Details
             </h2>
-            
-            {/* List/Video View Toggle */}
-            <div className="flex justify-center mt-4">
-              <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
-                <div className="flex">
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                      viewMode === 'list'
-                        ? 'bg-purple-600 text-white shadow-lg'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    List
-                  </button>
-                  <button
-                    onClick={() => setViewMode('video')}
-                    className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                      viewMode === 'video'
-                        ? 'bg-purple-600 text-white shadow-lg'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    Video View
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
           
           {/* Contest Details Toggle Buttons */}
@@ -940,16 +940,23 @@ export function PublicLeaderboard() {
             /* List View */
             <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
               <div className="p-6">
-                <div className="space-y-4">
-                  {participants.length > 0 ? (
-                    participants.map((participant) => (
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold text-gray-900">Current Rankings</h3>
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <TrendingUp className="h-4 w-4" />
+                    <span>Live Updates</span>
+                  </div>
+                </div>
+                
+                {participants.length > 0 ? (
+                  <div className="space-y-3">
+                    {participants.slice(0, 10).map((participant) => (
                       <div key={participant.user_id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
                         {/* Left side - Rank, Avatar, Name */}
                         <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-2">
-                            {getRankIcon(participant.rank)}
-                            <span className="text-lg font-bold text-gray-700">
-                              #{participant.rank}
+                          <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full text-white font-bold text-sm">
+                            <span>
+                              {participant.rank}
                             </span>
                           </div>
                           <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
@@ -972,21 +979,21 @@ export function PublicLeaderboard() {
                           Support
                         </button>
                       </div>
-                    ))
-                  ) : (
-                    <div className="text-center py-8">
-                      <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-600 mb-2">No Participants Yet</h3>
-                      <p className="text-gray-500 mb-6">Be the first to join this contest!</p>
-                      <button
-                        onClick={handleJoinContest}
-                        className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full font-medium transition-opacity hover:opacity-90"
-                      >
-                        Join Contest
-                      </button>
-                    </div>
-                  )}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-600 mb-2">No Participants Yet</h3>
+                    <p className="text-gray-500 mb-6">Be the first to join this contest!</p>
+                    <button
+                      onClick={handleJoinContest}
+                      className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full font-medium transition-opacity hover:opacity-90"
+                    >
+                      Join Contest
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
