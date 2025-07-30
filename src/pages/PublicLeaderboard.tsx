@@ -612,11 +612,11 @@ export function PublicLeaderboard() {
             /* Prizes View */
             <div className="relative max-w-7xl mx-auto w-full min-h-[120px]">
               <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
-                <div className="flex justify-center">
+                <div className="flex">
                   {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
-                    const isSelected = true; // Always selected since we show all prizes
-                    const scale = 1; // Keep all prizes the same size
-                    const opacity = 1; // Keep all prizes the same opacity
+                    const isSelected = index === currentPrizeIndex;
+                    const scale = isSelected ? 1 : 0.85;
+                    const opacity = isSelected ? 1 : 0.6;
                     const rank = index + 1;
                     
                     // Get prize data from database
@@ -650,7 +650,7 @@ export function PublicLeaderboard() {
                     return (
                       <div 
                         key={index}
-                        className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_25%] flex items-center justify-center"
+                        className="flex-[0_0_100%] min-w-0 px-4 flex items-center justify-center"
                       >
                         <div 
                           className="relative transition-all duration-300 ease-out group will-change-transform"
@@ -691,6 +691,21 @@ export function PublicLeaderboard() {
                   })}
                 </div>
               </div>
+              
+              {/* Navigation Arrows */}
+              <button
+                onClick={scrollPrizePrev}
+                className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+              >
+                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+
+              <button
+                onClick={scrollPrizeNext}
+                className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+              >
+                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
             </div>
           ) : (
             /* How to Join View */
