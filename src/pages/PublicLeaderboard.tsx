@@ -735,24 +735,6 @@ export function PublicLeaderboard() {
                       title: 'Submit Your Entry',
                       description: 'Come back to the contest page and tap "Join Competition" to officially enter'
                     },
-                    {
-                      step: 4,
-                      icon: Trophy,
-                      title: 'Climb the Leaderboard',
-                      description: 'Share your video and get more views to rise up in the contest rankings'
-                    },
-                    {
-                      step: 5,
-                      icon: Users,
-                      title: 'Final Review',
-                      description: 'Crown will review top-ranked videos to verify eligibility and confirm winners'
-                    },
-                    {
-                      step: 6,
-                      icon: Gift,
-                      title: 'Win Prizes',
-                      description: 'Winners receive their prizes after verification is complete'
-                    }
                   ].map((step, index) => {
                     const isSelected = index === currentHowToJoinIndex;
                     const scale = 1; // Keep all steps the same size
@@ -762,7 +744,7 @@ export function PublicLeaderboard() {
                     return (
                       <div
                         key={index}
-                        className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_50%] lg:flex-[0_0_33.333%] flex items-center justify-center"
+                        className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_33.333%] flex items-center justify-center"
                       >
                         <div 
                           className="relative transition-all duration-300 ease-out group will-change-transform"
@@ -794,19 +776,6 @@ export function PublicLeaderboard() {
               </div>
               
               {/* Navigation Arrows */}
-              <button
-                onClick={scrollHowToJoinPrev}
-                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-
-              <button
-                onClick={scrollHowToJoinNext}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
               
               {/* Desktop How to Join Steps */}
             </div>
