@@ -603,7 +603,7 @@ export function PublicLeaderboard() {
                     : 'text-white/60 hover:text-white'
                 }`}
               >
-                How to Join
+                How to Enter
               </button>
               <button
                 onClick={() => setContestDetailsView('rules')}
