@@ -248,28 +248,64 @@ export function PublicLeaderboard() {
       setContest(data);
     } catch (error) {
       console.error("Error fetching contest:", error);
-      toast.error("Contest not found");
+      // Check if it's a network error
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        console.warn("Backend server not reachable, continuing with limited functionality");
+        toast.error("Some features may be limited - backend server not available");
+      } else {
+        toast.error("Failed to load contest details");
+      }
       navigate("/");
     }
   };
 
   const fetchLeaderboard = async () => {
     try {
-      if (backendUrl && backendUrl !== "http://localhost:3000") {
+      // Only attempt to fetch from backend if URL is configured and not localhost
+      if (backendUrl && !backendUrl.includes('localhost')) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
         const response = await fetch(
-          `${backendUrl}/api/v1/contests/${id}/leaderboard?limit=100`
+          `${backendUrl}/api/v1/contests/${id}/leaderboard?limit=200`,
+          {
+            signal: controller.signal,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
         );
-        
+
+        clearTimeout(timeoutId);
+
         if (response.ok) {
           const data = await response.json();
+          if (data.data?.leaderboard) {
+            setParticipants(data.data.leaderboard);
+          }
+        } else {
+          console.warn(`Leaderboard API returned ${response.status}`);
+        }
+      } else {
+        console.warn('Backend URL not configured or using localhost - using mock data');
+        // Use mock participants when backend is not available
+        setParticipants(mockParticipants.slice(0, 15));
           if (data.data?.leaderboard) {
             setParticipants(data.data.leaderboard);
           }
         }
       }
     } catch (error) {
-      console.warn('Could not fetch leaderboard:', error);
-    }
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.warn('Leaderboard request timeout');
+      } else if (error instanceof TypeError && error.message.includes('fetch')) {
+        console.warn('Backend server not reachable, using mock data');
+        // Use mock participants when backend is not available
+        setParticipants(mockParticipants.slice(0, 15));
+      } else {
+        console.error("Error fetching leaderboard:", error);
+        toast.error("Failed to load leaderboard");
+      }
   };
 
   const fetchFeaturedVideos = async () => {
