@@ -891,8 +891,8 @@ export function PublicLeaderboard() {
                   <div className="relative w-full min-h-[400px]">
                     <div className="overflow-hidden w-full" ref={emblaRef}>
                       <div className="flex justify-center">
-                        {featuredVideos.map((video, index) => {
-                          const isSelected = index === currentVideoIndex;
+                        {featuredVideos.slice(0, 1).map((video, index) => {
+                          const isSelected = true; // Always selected since there's only one
                           const scale = isSelected ? 1 : 0.85;
                           const opacity = isSelected ? 1 : 0.6;
 
@@ -996,25 +996,6 @@ export function PublicLeaderboard() {
                         })}
                       </div>
                     </div>
-
-                    {/* Navigation Arrows */}
-                    {featuredVideos.length > 1 && (
-                      <>
-                        <button
-                          onClick={scrollPrev}
-                          className="absolute left-1 sm:left-4 lg:left-8 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                        >
-                          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
-                        </button>
-
-                        <button
-                          onClick={scrollNext}
-                          className="absolute right-1 sm:right-4 lg:right-8 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                        >
-                          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
-                        </button>
-                      </>
-                    )}
                   </div>
                 ) : (
                   <div className="text-center py-8 sm:py-12 lg:py-16 min-h-[400px] flex items-center justify-center">
