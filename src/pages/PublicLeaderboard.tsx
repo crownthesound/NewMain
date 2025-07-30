@@ -931,6 +931,46 @@ export function PublicLeaderboard() {
                 Video View
               </button>
             </div>
+            <button
+              onClick={() => setActiveToggle('rules')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeToggle === 'rules'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-white/10 text-white/60 hover:text-white hover:bg-white/20'
+              }`}
+            >
+              Rules
+            </button>
+            <button
+              onClick={() => setActiveToggle('about')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeToggle === 'about'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-white/10 text-white/60 hover:text-white hover:bg-white/20'
+              }`}
+            >
+              About
+            </button>
+            <button
+              onClick={() => setActiveToggle('list')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeToggle === 'list'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-white/10 text-white/60 hover:text-white hover:bg-white/20'
+              }`}
+            >
+              List
+            </button>
+            <button
+              onClick={() => setActiveToggle('video')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeToggle === 'video'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-white/10 text-white/60 hover:text-white hover:bg-white/20'
+              }`}
+            >
+              Video
+            </button>
           </div>
 
           {/* Content Area */}
@@ -1178,6 +1218,240 @@ export function PublicLeaderboard() {
             <p className="text-white/40 text-xs text-center">
               © {new Date().getFullYear()} Crown. All rights reserved.
             </p>
+
+            {activeToggle === 'rules' && (
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-400" />
+                  Contest Rules
+                </h3>
+                {contest.rules ? (
+                  <div className="prose prose-invert max-w-none">
+                    <p className="text-white/80 leading-relaxed">{contest.rules}</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-6 h-6 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                      <p className="text-white/80">Follow all contest guidelines and requirements</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-6 h-6 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                      <p className="text-white/80">Content must be original and appropriate</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-6 h-6 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                      <p className="text-white/80">One entry per participant</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-6 h-6 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center text-sm font-bold">4</span>
+                      <p className="text-white/80">Must be submitted before the deadline</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeToggle === 'about' && (
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <Info className="h-5 w-5 text-blue-400" />
+                  About This Contest
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-sm font-semibold text-white/80 mb-2 uppercase tracking-wide">Description</h4>
+                    <p className="text-white/90 leading-relaxed">{contest.description}</p>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="text-sm font-semibold text-white/80 mb-2 uppercase tracking-wide">Category</h4>
+                      <p className="text-white/90">{contest.music_category}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-white/80 mb-2 uppercase tracking-wide">Participants</h4>
+                      <p className="text-white/90">{participants.length} entries</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-white/80 mb-2 uppercase tracking-wide">Duration</h4>
+                      <p className="text-white/90">{formatDate(contest.start_date)} - {formatDate(contest.end_date)}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-white/80 mb-2 uppercase tracking-wide">Winners</h4>
+                      <p className="text-white/90">{contest.num_winners} prizes available</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeToggle === 'list' && (
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5 text-purple-400" />
+                  Leaderboard
+                </h3>
+                
+                {/* Mobile View */}
+                <div className="block sm:hidden space-y-3">
+                  {participants.map((participant, index) => (
+                    <div
+                      key={participant.id || index}
+                      className="bg-white/5 rounded-lg p-4 border border-white/10"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                            {getRankIcon(participant.rank)}
+                            <span className={`font-bold ${getRankColor(participant.rank)}`}>
+                              #{participant.rank}
+                            </span>
+                          </div>
+                          <div>
+                            <div className="font-medium text-white">
+                              @{participant.username}
+                            </div>
+                            <div className="text-sm text-white/60">
+                              {formatNumber(participant.views)} views
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => handlePlayVideo(participant)}
+                          className="p-2 rounded-full hover:bg-white/10 transition-colors"
+                        >
+                          <Play className="h-5 w-5 text-white/60" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Desktop View */}
+                <div className="hidden sm:block overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-white/10">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
+                          Rank
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
+                          Participant
+                        </th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-white/60 uppercase tracking-wider">
+                          Views
+                        </th>
+                        <th className="px-4 py-3 text-center text-xs font-medium text-white/60 uppercase tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/10">
+                      {participants.map((participant, index) => (
+                        <tr key={participant.id || index} className="hover:bg-white/5">
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              {getRankIcon(participant.rank)}
+                              <span className={`font-bold ${getRankColor(participant.rank)}`}>
+                                #{participant.rank}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-4">
+                            <div className="font-medium text-white">
+                              @{participant.username}
+                            </div>
+                            {participant.full_name && (
+                              <div className="text-sm text-white/60">
+                                {participant.full_name}
+                              </div>
+                            )}
+                          </td>
+                          <td className="px-4 py-4 text-right">
+                            <span className="font-medium text-white">
+                              {formatNumber(participant.views)}
+                            </span>
+                          </td>
+                          <td className="px-4 py-4 text-center">
+                            <button
+                              onClick={() => handlePlayVideo(participant)}
+                              className="p-2 rounded-full hover:bg-white/10 transition-colors inline-flex items-center justify-center"
+                            >
+                              <Play className="h-5 w-5 text-white/60" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {activeToggle === 'video' && (
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <Video className="h-5 w-5 text-red-400" />
+                  Video Gallery
+                </h3>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {participants.slice(0, 12).map((participant, index) => (
+                    <div
+                      key={participant.id || index}
+                      className="group relative bg-white/5 rounded-lg overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer"
+                      onClick={() => handlePlayVideo(participant)}
+                    >
+                      <div className="aspect-video relative">
+                        <img
+                          src={participant.thumbnail || 'https://images.pexels.com/photos/7500307/pexels-photo-7500307.jpeg'}
+                          alt={`${participant.username} video`}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                        
+                        {/* Rank Badge */}
+                        <div className="absolute top-2 left-2">
+                          <div className={`px-2 py-1 rounded-full text-xs font-bold ${
+                            participant.rank === 1 ? 'bg-yellow-500/80 text-yellow-100' :
+                            participant.rank === 2 ? 'bg-gray-400/80 text-gray-100' :
+                            participant.rank === 3 ? 'bg-amber-600/80 text-amber-100' :
+                            'bg-white/20 text-white'
+                          }`}>
+                            #{participant.rank}
+                          </div>
+                        </div>
+                        
+                        {/* Play Button Overlay */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                            <Play className="h-6 w-6 text-white ml-1" />
+                          </div>
+                        </div>
+                        
+                        {/* Video Info */}
+                        <div className="absolute bottom-0 left-0 right-0 p-3">
+                          <div className="font-medium text-white text-sm mb-1">
+                            @{participant.username}
+                          </div>
+                          <div className="text-white/60 text-xs">
+                            {formatNumber(participant.views)} views
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {participants.length > 12 && (
+                  <div className="mt-4 text-center">
+                    <p className="text-white/60 text-sm">
+                      Showing top 12 submissions. View the full leaderboard above.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </footer>
