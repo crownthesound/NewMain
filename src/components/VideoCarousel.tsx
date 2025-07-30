@@ -46,6 +46,11 @@ export function VideoCarousel() {
         await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
       }
       
+      // Check if we're online
+      if (!navigator.onLine) {
+        throw new Error('No internet connection');
+      }
+
       const { data, error: supabaseError } = await supabase
         .from('video_links')
         .select('*')
@@ -80,14 +85,16 @@ export function VideoCarousel() {
       console.error('Error fetching videos:', error);
       
       // Retry up to 3 times for network errors
-      if (retryCount < 3 && (error instanceof TypeError || error.message?.includes('fetch'))) {
+      if (retryCount < 3 && (error instanceof TypeError || error.message?.includes('fetch') || error.message?.includes('Failed to fetch'))) {
         console.log(`Retrying fetch videos (attempt ${retryCount + 1}/3)...`);
         return fetchVideos(retryCount + 1);
       }
       
       // Show user-friendly error message
-      const errorMessage = error instanceof TypeError 
-        ? 'Unable to connect to server. Please check your internet connection.'
+      const errorMessage = !navigator.onLine
+        ? 'No internet connection. Please check your network.'
+        : error instanceof TypeError || error.message?.includes('Failed to fetch')
+        ? 'Unable to connect to server. Please check your internet connection and try again.'
         : error instanceof Error ? error.message : 'Failed to load videos';
       setError(errorMessage);
       toast.error(errorMessage);
@@ -104,10 +111,25 @@ export function VideoCarousel() {
       fetchVideos();
     };
 
+    // Listen for online/offline events
+    const handleOnline = () => {
+      console.log('Connection restored, refetching videos...');
+      fetchVideos();
+    };
+
+    const handleOffline = () => {
+      console.log('Connection lost');
+      setError('No internet connection. Please check your network.');
+    };
+
     window.addEventListener('refreshVideoCarousel', handleRefresh);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
     return () => {
       window.removeEventListener('refreshVideoCarousel', handleRefresh);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 

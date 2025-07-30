@@ -249,11 +249,16 @@ function App() {
   }, [location.search, session]);
 
   useEffect(() => {
-    const fetchActiveContests = async (retryCount = 0) => {
+    const fetchActiveContests = async (retryCount = 0, showToast = true) => {
       try {
         // Add a small delay for retries
         if (retryCount > 0) {
           await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+        }
+
+        // Check if we're online
+        if (!navigator.onLine) {
+          throw new Error('No internet connection');
         }
 
         const { data, error } = await supabase
@@ -284,23 +289,46 @@ function App() {
       } catch (error) {
         console.error("Error fetching active contests:", error);
         
-        // Retry up to 3 times for network errors
-        if (retryCount < 3 && (error instanceof TypeError || error.message?.includes('fetch'))) {
+        // Retry up to 3 times for network errors, but don't show toast on retries
+        if (retryCount < 3 && (error instanceof TypeError || error.message?.includes('fetch') || error.message?.includes('Failed to fetch'))) {
           console.log(`Retrying fetch active contests (attempt ${retryCount + 1}/3)...`);
-          return fetchActiveContests(retryCount + 1);
+          return fetchActiveContests(retryCount + 1, false);
         }
         
-        // Show user-friendly error message
-        const errorMessage = error instanceof TypeError 
-          ? "Unable to connect to server. Please check your internet connection."
-          : "Failed to load contests";
-        toast.error(errorMessage);
+        // Show user-friendly error message only after all retries fail and on initial load
+        if (showToast) {
+          const errorMessage = !navigator.onLine
+            ? "No internet connection. Please check your network."
+            : error instanceof TypeError || error.message?.includes('Failed to fetch')
+            ? "Unable to connect to server. Please check your internet connection and try again."
+            : error.message || "Failed to load contests";
+          toast.error(errorMessage);
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchActiveContests();
+
+    // Listen for online/offline events
+    const handleOnline = () => {
+      console.log('Connection restored, refetching contests...');
+      fetchActiveContests(0, false);
+    };
+
+    const handleOffline = () => {
+      console.log('Connection lost');
+      toast.error('Connection lost. Please check your internet connection.');
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
   // Check TikTok connection status after authentication
