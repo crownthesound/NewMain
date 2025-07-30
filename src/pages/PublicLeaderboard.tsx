@@ -407,6 +407,16 @@ export function PublicLeaderboard() {
     return num.toString();
   };
 
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    });
+  };
+
   const getRankIcon = (rank: number) => {
     const colors = {
       1: "text-yellow-400",
