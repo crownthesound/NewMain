@@ -289,6 +289,10 @@ export function PublicLeaderboard() {
       } else {
         console.warn('Backend URL not configured or using localhost - using mock data');
         // Use mock participants when backend is not available
+    } catch (error) {
+      console.warn('Error fetching leaderboard, using mock data:', error);
+      setLeaderboard(mockParticipants);
+    }
         setParticipants(mockParticipants.slice(0, 15));
           if (data.data?.leaderboard) {
             setParticipants(data.data.leaderboard);
