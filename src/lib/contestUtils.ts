@@ -192,19 +192,3 @@ export function validateContestDates(startDate: string, endDate: string): {
 
   return { isValid: true };
 }
-
-/**
- * Get CSS color class for rank display
- */
-export function getRankColor(rank: number): string {
-  switch (rank) {
-    case 1:
-      return 'text-yellow-400';
-    case 2:
-      return 'text-gray-400';
-    case 3:
-      return 'text-amber-600';
-    default:
-      return 'text-white/60';
-  }
-}
