@@ -140,6 +140,7 @@ export function PublicLeaderboard() {
   const [videoLoaded, setVideoLoaded] = useState<{[key: string]: boolean}>({});
   const [coverLoaded, setCoverLoaded] = useState<{[key: string]: boolean}>({});
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [activeView, setActiveView] = useState<'list' | 'video' | 'prizes' | 'howToJoin'>('list');
 
   // Separate state for each toggle section
   const [contestDetailsView, setContestDetailsView] = useState<'prizes' | 'how-to-join' | 'rules' | 'about'>('prizes');
