@@ -140,7 +140,6 @@ export function PublicLeaderboard() {
   const [videoLoaded, setVideoLoaded] = useState<{[key: string]: boolean}>({});
   const [coverLoaded, setCoverLoaded] = useState<{[key: string]: boolean}>({});
   const [showFullDescription, setShowFullDescription] = useState(false);
-  const [viewMode, setViewMode] = useState<'list' | 'video'>('list');
   const rulesRef = useRef<HTMLDivElement>(null);
 
   // Separate state for each toggle section
@@ -248,52 +247,27 @@ export function PublicLeaderboard() {
       setContest(data);
     } catch (error) {
       console.error("Error fetching contest:", error);
-      // Check if it's a network error
-      if (error instanceof TypeError && error.message.includes('fetch')) {
-        console.warn("Backend server not reachable, continuing with limited functionality");
-        toast.error("Some features may be limited - backend server not available");
-      } else {
-        toast.error("Failed to load contest details");
-      }
+      toast.error("Contest not found");
       navigate("/");
     }
   };
 
   const fetchLeaderboard = async () => {
     try {
-      // Only attempt to fetch from backend if URL is configured and not localhost
-      if (backendUrl && !backendUrl.includes('localhost')) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
+      if (backendUrl && backendUrl !== "http://localhost:3000") {
         const response = await fetch(
-          `${backendUrl}/api/v1/contests/${id}/leaderboard?limit=200`,
-          {
-            signal: controller.signal,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
+          `${backendUrl}/api/v1/contests/${id}/leaderboard?limit=100`
         );
-
-        clearTimeout(timeoutId);
-
+        
         if (response.ok) {
           const data = await response.json();
           if (data.data?.leaderboard) {
             setParticipants(data.data.leaderboard);
           }
-        } else {
-          console.warn(`Leaderboard API returned ${response.status}`);
         }
-      } else {
-        console.warn('Backend URL not configured or using localhost - using mock data');
-        // Use mock participants when backend is not available
-        setParticipants(mockParticipants.slice(0, 15));
       }
     } catch (error) {
-      console.warn('Error fetching leaderboard, using mock data:', error);
-      setParticipants(mockParticipants.slice(0, 15));
+      console.warn('Could not fetch leaderboard:', error);
     }
   };
 
@@ -474,46 +448,6 @@ export function PublicLeaderboard() {
     }
   };
 
-  // Mock participants data
-  const mockParticipants = [
-    {
-      rank: 1,
-      user_id: "1",
-      full_name: "John Doe",
-      tiktok_username: "johndoe",
-      tiktok_display_name: "John Doe",
-      tiktok_account_name: "johndoe",
-      tiktok_account_id: "1",
-      video_id: "1",
-      video_title: "Amazing Performance",
-      video_url: "https://example.com/video1",
-      thumbnail: "https://example.com/thumb1",
-      views: 150000,
-      likes: 12000,
-      comments: 500,
-      shares: 200,
-      submission_date: "2024-01-01"
-    },
-    {
-      rank: 2,
-      user_id: "2",
-      full_name: "Jane Smith",
-      tiktok_username: "janesmith",
-      tiktok_display_name: "Jane Smith",
-      tiktok_account_name: "janesmith",
-      tiktok_account_id: "2",
-      video_id: "2",
-      video_title: "Incredible Talent",
-      video_url: "https://example.com/video2",
-      thumbnail: "https://example.com/thumb2",
-      views: 120000,
-      likes: 10000,
-      comments: 400,
-      shares: 150,
-      submission_date: "2024-01-02"
-    }
-  ];
-
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0A0A0A] bg-gradient-to-br from-[#0A0A0A] via-[#1A1A1A] to-[#2A2A2A] flex items-center justify-center">
@@ -603,13 +537,35 @@ export function PublicLeaderboard() {
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-4 tracking-tight leading-tight">
                   {contest.name.toUpperCase()}
                 </h1>
-        
-                <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
-                  {/* Header */}
-                  <div className="p-4 sm:p-6 border-b border-white/10">
-                    <h3 className="text-xl font-bold text-white text-center">Current Rankings</h3>
-                  </div>
+                
+                {/* Description - Now visible on mobile */}
+                <div className="px-1 max-w-sm mx-auto">
+                  <p className="text-sm text-white/90 text-center leading-relaxed mb-4">
+                    {contest.description}
+                  </p>
                 </div>
+                
+              </div>
+            </div>
+            
+            {/* Desktop Layout */}
+            <div className="hidden sm:block">
+              {/* Crown Logo at Top */}
+              <div className="mb-6 sm:mb-8">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mx-auto bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 sm:border-4 border-white/20 shadow-2xl">
+                  <Crown className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-white" />
+                </div>
+              </div>
+              
+              {/* Contest Title and Description */}
+              <div className="mb-3 sm:mb-4">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-4 tracking-tight">
+                  {contest.name.toUpperCase()}
+                </h1>
+                
+                <p className="text-sm sm:text-base lg:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8">
+                  {contest.description}
+                </p>
               </div>
             </div>
           </div>
@@ -624,35 +580,6 @@ export function PublicLeaderboard() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
               Contest Details
             </h2>
-            
-            {/* List/Video View Toggle */}
-            <div className="flex justify-center mb-6">
-              <div className="bg-white/10 backdrop-blur-sm rounded-full p-1 border border-white/20">
-                <div className="flex">
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                      viewMode === 'list'
-                        ? 'bg-white text-black shadow-lg'
-                        : 'text-white hover:bg-white/10'
-                    }`}
-                  >
-                    List
-                  </button>
-                  <button
-                    onClick={() => setViewMode('video')}
-                    className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                      viewMode === 'video'
-                        ? 'bg-white text-black shadow-lg'
-                        : 'text-white hover:bg-white/10'
-                    }`}
-                  >
-                    Video View
-                  </button>
-                </div>
-              </div>
-            </div>
-
           </div>
           
           {/* Contest Details Toggle Buttons */}
