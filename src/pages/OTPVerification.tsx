@@ -165,6 +165,12 @@ export function OTPVerification() {
 
   const handleVerifyOTP = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Prevent multiple submissions
+    if (loading) {
+      return;
+    }
+    
     const otpCode = otp.join("");
 
     if (otpCode.length !== 6) {
