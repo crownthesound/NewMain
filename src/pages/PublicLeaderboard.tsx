@@ -1083,7 +1083,14 @@ export function PublicLeaderboard() {
         isOpen={showTikTokSettings}
         onClose={() => setShowTikTokSettings(false)}
       />
-
+        onClick={() => {
+          setContestDetailsView('prizes');
+          // Reset prize carousel to first item when switching
+          setCurrentPrizeIndex(0);
+          if (prizeEmblaApi) {
+            prizeEmblaApi.scrollTo(0);
+          }
+        }}
       <ContestJoinModal
         isOpen={showJoinModal}
         onClose={() => setShowJoinModal(false)}
@@ -1093,7 +1100,14 @@ export function PublicLeaderboard() {
 
       <ViewSubmissionModal
         isOpen={showViewModal}
-        onClose={() => setShowViewModal(false)}
+        onClick={() => {
+          setContestDetailsView('how-to-join');
+          // Reset how-to-join carousel to first item when switching
+          setCurrentHowToJoinIndex(0);
+          if (howToJoinEmblaApi) {
+            howToJoinEmblaApi.scrollTo(0);
+          }
+        }}
         video={selectedVideo}
       />
 
