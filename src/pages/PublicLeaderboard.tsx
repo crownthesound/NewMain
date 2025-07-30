@@ -126,6 +126,7 @@ export function PublicLeaderboard() {
   const [contest, setContest] = useState<Contest | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [featuredVideos, setFeaturedVideos] = useState<VideoData[]>([]);
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showTikTokModal, setShowTikTokModal] = useState(false);
