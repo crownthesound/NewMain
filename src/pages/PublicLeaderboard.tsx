@@ -714,7 +714,7 @@ export function PublicLeaderboard() {
           ) : (
             /* How to Join View */
             <div className="relative max-w-7xl mx-auto w-full min-h-[120px]">
-              <div className="overflow-hidden w-full flex justify-center" ref={howToJoinEmblaRef}>
+              <div className="overflow-hidden w-full" ref={howToJoinEmblaRef}>
                 <div className="flex">
                   {[
                     {
@@ -762,14 +762,14 @@ export function PublicLeaderboard() {
                     return (
                       <div
                         key={index}
-                        className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.333%] lg:flex-[0_0_20%] flex items-center justify-center"
+                        className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_50%] lg:flex-[0_0_16.666%] xl:flex-[0_0_16.666%] flex items-center justify-center"
                       >
                         <div 
                           className="relative transition-all duration-300 ease-out group will-change-transform"
                           style={{
                             transform: `scale(${scale})`,
                             opacity,
-                            width: '180px',
+                            width: '160px',
                             maxWidth: '100%'
                           }}
                         >
