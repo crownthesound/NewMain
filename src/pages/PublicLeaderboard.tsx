@@ -312,21 +312,15 @@ export function PublicLeaderboard() {
     if (!session) return;
     
     try {
-      console.log('Fetching user submission for contest:', id, 'user:', session.user.id);
       const { data, error } = await supabase
         .from("contest_links")
         .select("*")
         .eq("contest_id", id)
         .eq("created_by", session.user.id)
         .eq("is_contest_submission", true)
-        .maybeSingle();
+        .single();
 
-      if (error) {
-        console.error('Error fetching user submission:', error);
-        throw error;
-      }
-      
-      console.log('User submission data:', data);
+      if (error && error.code !== 'PGRST116') throw error;
       setUserSubmission(data);
     } catch (error) {
       console.error("Error fetching user submission:", error);
@@ -469,15 +463,16 @@ export function PublicLeaderboard() {
 
   if (!contest) {
     return (
-      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0A0A0A] bg-gradient-to-br from-[#0A0A0A] via-[#1A1A1A] to-[#2A2A2A] flex items-center justify-center">
         <div className="text-center">
-          <Crown className="h-16 w-16 text-white/40 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-white mb-2">Contest Not Found</h1>
-          <p className="text-white/60 mb-6">The contest you're looking for doesn't exist.</p>
+          <Trophy className="h-16 w-16 text-white/20 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-white mb-2">Contest Not Found</h2>
+          <p className="text-white/60 mb-6">This contest may have ended or been removed.</p>
           <Link
             to="/"
-            className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors"
+            className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base relative z-50 flex items-center gap-2"
           >
+            <Home className="h-4 w-4" />
             <span>Return Home</span>
           </Link>
         </div>
@@ -586,6 +581,7 @@ export function PublicLeaderboard() {
             </h2>
           </div>
           
+          {/* Contest Details Toggle Buttons */}
           <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
@@ -1049,7 +1045,7 @@ export function PublicLeaderboard() {
           onClick={handleJoinContest}
           className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-bold text-base sm:text-lg transition-colors"
         >
-          {session ? (userSubmission ? 'Manage Submission' : 'Join Contest') : 'Sign up to join'}
+          {session ? 'Join Contest' : 'Sign up to join'}
         </button>
       </div>
 
@@ -1087,7 +1083,14 @@ export function PublicLeaderboard() {
         isOpen={showTikTokSettings}
         onClose={() => setShowTikTokSettings(false)}
       />
-
+        onClick={() => {
+          setContestDetailsView('prizes');
+          // Reset prize carousel to first item when switching
+          setCurrentPrizeIndex(0);
+          if (prizeEmblaApi) {
+            prizeEmblaApi.scrollTo(0);
+          }
+        }}
       <ContestJoinModal
         isOpen={showJoinModal}
         onClose={() => setShowJoinModal(false)}
@@ -1097,7 +1100,14 @@ export function PublicLeaderboard() {
 
       <ViewSubmissionModal
         isOpen={showViewModal}
-        onClose={() => setShowViewModal(false)}
+        onClick={() => {
+          setContestDetailsView('how-to-join');
+          // Reset how-to-join carousel to first item when switching
+          setCurrentHowToJoinIndex(0);
+          if (howToJoinEmblaApi) {
+            howToJoinEmblaApi.scrollTo(0);
+          }
+        }}
         video={selectedVideo}
       />
 
