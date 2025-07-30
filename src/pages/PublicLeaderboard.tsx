@@ -897,16 +897,16 @@ export function PublicLeaderboard() {
                 featuredVideos.length > 0 ? (
                   <div className="relative w-full min-h-[400px]">
                     <div className="overflow-hidden w-full" ref={emblaRef}>
-                      <div className="flex justify-center">
-                        {featuredVideos.slice(0, 1).map((video, index) => {
-                          const isSelected = true; // Always selected since there's only one
+                      <div className="flex">
+                        {featuredVideos.map((video, index) => {
+                          const isSelected = index === currentVideoIndex;
                           const scale = isSelected ? 1 : 0.85;
                           const opacity = isSelected ? 1 : 0.6;
 
                           return (
                             <div 
                               key={video.id}
-                              className="flex-[0_0_100%] min-w-0 px-4 sm:flex-[0_0_45%] md:flex-[0_0_30%] lg:flex-[0_0_22%] flex items-center justify-center"
+                              className="flex-[0_0_100%] min-w-0 px-4 flex items-center justify-center"
                             >
                               <div 
                                 className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
@@ -1003,6 +1003,21 @@ export function PublicLeaderboard() {
                         })}
                       </div>
                     </div>
+                    
+                    {/* Navigation Arrows */}
+                    <button
+                      onClick={scrollPrev}
+                      className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                    >
+                      <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </button>
+
+                    <button
+                      onClick={scrollNext}
+                      className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                    >
+                      <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </button>
                   </div>
                 ) : (
                   <div className="text-center py-8 sm:py-12 lg:py-16 min-h-[400px] flex items-center justify-center">
