@@ -312,15 +312,21 @@ export function PublicLeaderboard() {
     if (!session) return;
     
     try {
+      console.log('Fetching user submission for contest:', id, 'user:', session.user.id);
       const { data, error } = await supabase
         .from("contest_links")
         .select("*")
         .eq("contest_id", id)
         .eq("created_by", session.user.id)
         .eq("is_contest_submission", true)
-        .single();
+        .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error) {
+        console.error('Error fetching user submission:', error);
+        throw error;
+      }
+      
+      console.log('User submission data:', data);
       setUserSubmission(data);
     } catch (error) {
       console.error("Error fetching user submission:", error);
@@ -461,18 +467,18 @@ export function PublicLeaderboard() {
     );
   }
 
-  if (!contest) {
-    return (
-      <div className="min-h-screen bg-[#0A0A0A] bg-gradient-to-br from-[#0A0A0A] via-[#1A1A1A] to-[#2A2A2A] flex items-center justify-center">
-        <div className="text-center">
-          <Trophy className="h-16 w-16 text-white/20 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-2">Contest Not Found</h2>
-          <p className="text-white/60 mb-6">This contest may have ended or been removed.</p>
-          <Link
-            to="/"
+            onClick={() => {
+              if (session && userSubmission) {
+                // User has already submitted, navigate to management page
+                navigate(`/contest-management/${contest.id}`);
+              } else {
+                // User hasn't submitted yet, go through join flow
+                handleJoinContest();
+              }
+            }}
             className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-colors text-sm sm:text-base relative z-50 flex items-center gap-2"
           >
-            <Home className="h-4 w-4" />
+            {session ? (userSubmission ? 'Manage Submission' : 'Join Contest') : 'Sign up to join'}
             <span>Return Home</span>
           </Link>
         </div>
