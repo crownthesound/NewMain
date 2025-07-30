@@ -932,36 +932,36 @@ export function PublicLeaderboard() {
                 Video View
               </button>
             </div>
+            
+            {/* List/Video View Toggle */}
+            <div className="flex justify-center mb-6">
+              <div className="bg-white/10 backdrop-blur-sm rounded-full p-1 border border-white/20">
+                <div className="flex">
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
+                      viewMode === 'list'
+                        ? 'bg-purple-600 text-white shadow-lg'
+                        : 'text-white/60 hover:text-white'
+                    }`}
+                  >
+                    List
+                  </button>
+                  <button
+                    onClick={() => setViewMode('video')}
+                    className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
+                      viewMode === 'video'
+                        ? 'bg-purple-600 text-white shadow-lg'
+                        : 'text-white/60 hover:text-white'
+                    }`}
+                  >
+                    Video View
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Content Area */}
-          {leaderboardView === 'list' ? (
-            /* Leaderboard View - Exact Design Match */
-            <div className="max-w-sm mx-auto">
-              {/* White Card Container */}
-              <div className="bg-white rounded-2xl overflow-hidden">
-                {/* GET CROWNED Header */}
-                <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-6 text-center font-bold text-lg">
-                  GET CROWNED.
-                </div>
-                
-                {/* Participants List */}
-                <div className="p-4">
-                  {participants.length > 0 ? (
-                    <div className="space-y-2">
-                      {participants.slice(0, 10).map((participant, index) => (
-                        <div
-                          key={participant.user_id}
-                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                        >
-                          {/* Left side - Rank, Avatar, and User Info */}
-                          <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-1 w-8">
-                              {participant.rank === 1 && (
-                                <Crown className="h-4 w-4 text-yellow-500" />
-                              )}
-                              <span className="text-sm font-bold text-black">
-                                {participant.rank}
                               </span>
                             </div>
                             <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
