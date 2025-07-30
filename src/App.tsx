@@ -260,7 +260,7 @@ function App() {
           .from("contests")
           .select("*")
           .eq("status", "active")
-          .order("created_at", { ascending: false });
+          .single();
 
         if (error) throw error;
 
