@@ -259,8 +259,7 @@ function App() {
         const { data, error } = await supabase
           .from("contests")
           .select("*")
-          .eq("status", "active")
-          .single();
+          .eq("status", "active");
 
         if (error) throw error;
 
