@@ -320,7 +320,11 @@ export function OTPVerification() {
               <button
                 type="submit"
                 disabled={loading || otp.some((digit) => !digit)}
-                className="w-full bg-white text-black py-3 sm:py-4 rounded-lg hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium text-lg"
+                className={`w-full py-3 sm:py-4 rounded-lg transition-colors font-medium text-lg ${
+                  loading || otp.some((digit) => !digit)
+                    ? 'bg-white/50 text-black/50 cursor-not-allowed'
+                    : 'bg-white text-black hover:bg-white/90'
+                }`}
               >
                 {loading ? (
                   <Loader2 className="animate-spin h-5 w-5 mx-auto" />
