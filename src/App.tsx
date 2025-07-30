@@ -313,7 +313,7 @@ function App() {
             .from("tiktok_profiles")
             .select("*")
             .eq("user_id", session.user.id)
-            .single();
+            .maybeSingle();
 
           // Only show TikTok modal on home page, not on contest pages
           const isContestPage = location.pathname.includes('/l/') || location.pathname.includes('/contest');
