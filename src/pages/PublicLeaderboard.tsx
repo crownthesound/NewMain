@@ -26,6 +26,7 @@ import {
   Award,
   Target,
   Zap,
+  BarChart3,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
