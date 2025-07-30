@@ -581,7 +581,15 @@ export function PublicLeaderboard() {
             </h2>
           </div>
           
-          {/* Contest Details Toggle Buttons */}
+             onClick={() => {
+               if (session && userSubmission) {
+                 // User has already submitted, navigate to management page
+                 navigate(`/contest-management/${contest.id}`);
+               } else {
+                 // User hasn't submitted yet, go through join flow
+                 handleJoinContest();
+               }
+             }}
           <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
