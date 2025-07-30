@@ -890,7 +890,7 @@ export function PublicLeaderboard() {
                 featuredVideos.length > 0 ? (
                   <div className="relative w-full min-h-[400px]">
                     <div className="overflow-hidden w-full" ref={emblaRef}>
-                      <div className="flex">
+                      <div className="flex justify-center">
                         {featuredVideos.map((video, index) => {
                           const isSelected = index === currentVideoIndex;
                           const scale = isSelected ? 1 : 0.85;
