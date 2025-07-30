@@ -142,7 +142,7 @@ export function PublicLeaderboard() {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   // Separate state for each toggle section
-  const [contestDetailsView, setContestDetailsView] = useState<'prizes' | 'how-to-join'>('prizes');
+  const [contestDetailsView, setContestDetailsView] = useState<'prizes' | 'how-to-join' | 'rules' | 'about'>('prizes');
   const [leaderboardView, setLeaderboardView] = useState<'list' | 'videos'>('list');
 
   const { isConnected: isTikTokConnected } = useTikTokConnection();
@@ -627,7 +627,6 @@ export function PublicLeaderboard() {
             </div>
           </div>
           
-  const [contestDetailsView, setContestDetailsView] = useState<'prizes' | 'how-to-join' | 'rules' | 'about'>('prizes');@@ .. @@
           {/* Content Area */}
           {contestDetailsView === 'prizes' ? (
             /* Prizes View */
@@ -1193,14 +1192,7 @@ export function PublicLeaderboard() {
         isOpen={showTikTokSettings}
         onClose={() => setShowTikTokSettings(false)}
       />
-        onClick={() => {
-          setContestDetailsView('prizes');
-          // Reset prize carousel to first item when switching
-          setCurrentPrizeIndex(0);
-          if (prizeEmblaApi) {
-            prizeEmblaApi.scrollTo(0);
-          }
-        }}
+
       <ContestJoinModal
         isOpen={showJoinModal}
         onClose={() => setShowJoinModal(false)}
@@ -1210,14 +1202,7 @@ export function PublicLeaderboard() {
 
       <ViewSubmissionModal
         isOpen={showViewModal}
-        onClick={() => {
-          setContestDetailsView('how-to-join');
-          // Reset how-to-join carousel to first item when switching
-          setCurrentHowToJoinIndex(0);
-          if (howToJoinEmblaApi) {
-            howToJoinEmblaApi.scrollTo(0);
-          }
-        }}
+        onClose={() => setShowViewModal(false)}
         video={selectedVideo}
       />
 
