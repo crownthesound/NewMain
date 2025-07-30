@@ -140,6 +140,7 @@ export function PublicLeaderboard() {
   const [videoLoaded, setVideoLoaded] = useState<{[key: string]: boolean}>({});
   const [coverLoaded, setCoverLoaded] = useState<{[key: string]: boolean}>({});
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const rulesRef = useRef<HTMLDivElement>(null);
 
   // Separate state for each toggle section
   const [contestDetailsView, setContestDetailsView] = useState<'prizes' | 'how-to-join' | 'rules' | 'about'>('prizes');
@@ -808,7 +809,7 @@ export function PublicLeaderboard() {
             </div>
           ) : contestDetailsView === 'rules' ? (
             /* Rules View */
-            <div className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px] flex items-center justify-center">
+            <div ref={rulesRef} className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px] flex items-center justify-center">
               <div className="bg-black/60 backdrop-blur-sm rounded-2xl border border-white/20 p-8 max-w-4xl w-full">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
