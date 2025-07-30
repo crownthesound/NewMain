@@ -57,7 +57,8 @@ import {
   getStatusLabel, 
   getStatusColor,
   formatTimeRemaining,
-  getTimeRemaining 
+  getTimeRemaining,
+  getRankColor
 } from "../lib/contestUtils";
 import { ContestCountdown } from "../components/ContestCountdown";
 import useEmblaCarousel from 'embla-carousel-react';
