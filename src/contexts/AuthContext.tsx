@@ -95,6 +95,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       setLoading(false);
+    }).catch(async (error) => {
+      console.error("Error getting session:", error);
+      
+      // Check if the error is related to expired OTP
+      if (error?.message?.includes('otp_expired') || 
+          error?.code === 'otp_expired' ||
+          (error?.status === 403 && error?.body?.includes('otp_expired'))) {
+        console.log("Expired OTP detected, clearing session");
+        await signOut();
+      }
+      
+      setLoading(false);
     });
 
     // Listen for auth changes
