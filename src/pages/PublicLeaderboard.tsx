@@ -612,7 +612,7 @@ export function PublicLeaderboard() {
             /* Prizes View */
             <div className="relative max-w-7xl mx-auto w-full min-h-[120px]">
               <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
-                <div className="flex">
+                <div className="flex justify-center">
                   {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                     const isSelected = index === currentPrizeIndex;
                     const scale = 1; // Keep all prizes the same size
