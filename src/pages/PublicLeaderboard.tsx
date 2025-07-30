@@ -615,8 +615,8 @@ export function PublicLeaderboard() {
                 <div className="flex">
                   {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                     const isSelected = index === currentPrizeIndex;
-                    const scale = isSelected ? 1 : 0.85;
-                    const opacity = isSelected ? 1 : 0.6;
+                    const scale = 1;
+                    const opacity = 1;
                     const rank = index + 1;
                     
                     // Get prize data from database
@@ -733,8 +733,8 @@ export function PublicLeaderboard() {
                     },
                   ].map((step, index) => {
                     const isSelected = index === currentHowToJoinIndex;
-                    const scale = isSelected ? 1 : 0.85;
-                    const opacity = isSelected ? 1 : 0.6;
+                    const scale = 1;
+                    const opacity = 1;
                     const Icon = step.icon;
                     
                     return (
@@ -900,8 +900,8 @@ export function PublicLeaderboard() {
                       <div className="flex">
                         {featuredVideos.map((video, index) => {
                           const isSelected = index === currentVideoIndex;
-                          const scale = isSelected ? 1 : 0.85;
-                          const opacity = isSelected ? 1 : 0.6;
+                          const scale = 1;
+                          const opacity = 1;
 
                           return (
                             <div 
