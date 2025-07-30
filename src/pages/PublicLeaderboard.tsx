@@ -604,9 +604,30 @@ export function PublicLeaderboard() {
               >
                 How to Join
               </button>
+              <button
+                onClick={() => setContestDetailsView('rules')}
+                className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
+                  contestDetailsView === 'rules'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-white/60 hover:text-white'
+                }`}
+              >
+                Rules
+              </button>
+              <button
+                onClick={() => setContestDetailsView('about')}
+                className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
+                  contestDetailsView === 'about'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-white/60 hover:text-white'
+                }`}
+              >
+                About
+              </button>
             </div>
           </div>
           
+  const [contestDetailsView, setContestDetailsView] = useState<'prizes' | 'how-to-join' | 'rules' | 'about'>('prizes');@@ .. @@
           {/* Content Area */}
           {contestDetailsView === 'prizes' ? (
             /* Prizes View */
@@ -707,7 +728,7 @@ export function PublicLeaderboard() {
                 <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
               </button>
             </div>
-          ) : (
+          ) : contestDetailsView === 'how-to-join' ? (
             /* How to Join View */
             <div className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px]">
               <div className="overflow-hidden w-full" ref={howToJoinEmblaRef}>
@@ -785,6 +806,95 @@ export function PublicLeaderboard() {
               >
                 <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
               </button>
+            </div>
+          ) : contestDetailsView === 'rules' ? (
+            /* Rules View */
+            <div className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px] flex items-center justify-center">
+              <div className="bg-black/60 backdrop-blur-sm rounded-2xl border border-white/20 p-8 max-w-4xl w-full">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <AlertCircle className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-6">Contest Rules</h3>
+                  {contest?.rules ? (
+                    <div className="text-white/90 text-lg leading-relaxed whitespace-pre-line">
+                      {contest.rules}
+                    </div>
+                  ) : (
+                    <div className="space-y-4 text-white/80 text-left">
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <span className="text-white text-sm font-bold">1</span>
+                        </div>
+                        <p>All submissions must be original performances and follow contest guidelines</p>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <span className="text-white text-sm font-bold">2</span>
+                        </div>
+                        <p>Videos must be posted on TikTok and submitted through the contest platform</p>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <span className="text-white text-sm font-bold">3</span>
+                        </div>
+                        <p>Rankings are based on video views and engagement metrics</p>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <span className="text-white text-sm font-bold">4</span>
+                        </div>
+                        <p>Winners will be verified for eligibility before prize distribution</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* About View */
+            <div className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px] flex items-center justify-center">
+              <div className="bg-black/60 backdrop-blur-sm rounded-2xl border border-white/20 p-8 max-w-4xl w-full">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Info className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-6">About This Contest</h3>
+                  <div className="text-white/90 text-lg leading-relaxed mb-6">
+                    {contest?.description}
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
+                    <div className="bg-white/10 rounded-lg p-4">
+                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
+                        <Music className="h-4 w-4 text-blue-400" />
+                        Category
+                      </h4>
+                      <p className="text-white/80">{contest?.music_category || 'Music'}</p>
+                    </div>
+                    <div className="bg-white/10 rounded-lg p-4">
+                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
+                        <Users className="h-4 w-4 text-green-400" />
+                        Participants
+                      </h4>
+                      <p className="text-white/80">{participants.length} Entered</p>
+                    </div>
+                    <div className="bg-white/10 rounded-lg p-4">
+                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
+                        <Calendar className="h-4 w-4 text-yellow-400" />
+                        Duration
+                      </h4>
+                      <p className="text-white/80">{formatTimeRemaining(timeRemaining) || 'Contest Active'}</p>
+                    </div>
+                    <div className="bg-white/10 rounded-lg p-4">
+                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
+                        <Trophy className="h-4 w-4 text-purple-400" />
+                        Winners
+                      </h4>
+                      <p className="text-white/80">{contest?.num_winners || 5} Prize Positions</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
