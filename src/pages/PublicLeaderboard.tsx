@@ -572,21 +572,21 @@ export function PublicLeaderboard() {
       )}
       
       {/* Prizes Section - Below Hero */}
-      <div className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className="bg-black px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto">
           {/* Contest Details Heading */}
-          <div className="text-center mb-6 sm:mb-8">
-            <h2 className="text-xl font-bold text-white">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
               Contest Details
             </h2>
           </div>
           
           {/* Contest Details Toggle Buttons */}
-          <div className="flex justify-center mb-6 sm:mb-8">
+          <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
                 onClick={() => setContestDetailsView('prizes')}
-                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
+                className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
                   contestDetailsView === 'prizes'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
@@ -596,7 +596,7 @@ export function PublicLeaderboard() {
               </button>
               <button
                 onClick={() => setContestDetailsView('how-to-join')}
-                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
+                className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
                   contestDetailsView === 'how-to-join'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
@@ -610,7 +610,7 @@ export function PublicLeaderboard() {
           {/* Content Area */}
           {contestDetailsView === 'prizes' ? (
             /* Prizes View */
-            <div className="relative max-w-7xl mx-auto w-full min-h-[120px]">
+            <div className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px]">
               <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
                 <div className="flex">
                   {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
@@ -657,30 +657,30 @@ export function PublicLeaderboard() {
                           style={{
                             transform: `scale(${scale})`,
                             opacity,
-                            width: '180px',
+                            width: '220px',
                             maxWidth: '100%'
                           }}
                         >
                           <div className="text-center">
-                            <div className={`w-10 h-10 ${
+                            <div className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 ${
                               rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
                               rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
                               rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800' :
                               rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
                               rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
                               'bg-gradient-to-br from-slate-400 to-slate-600'
-                            } rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
+                            } rounded-full flex items-center justify-center border border-white/20 mb-2 sm:mb-3 mx-auto transition-all duration-300`}>
                               {rank === 1 ? (
-                                <Crown className="h-5 w-5 text-white transition-all duration-300" />
+                                <Crown className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white transition-all duration-300" />
                               ) : (
-                                <span className="text-white font-bold text-xs transition-all duration-300">{rank}</span>
+                                <span className="text-white font-bold text-sm sm:text-base lg:text-lg transition-all duration-300">{rank}</span>
                               )}
                             </div>
-                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[70px] border border-white/20 transition-all duration-300">
-                              <div className="text-white font-bold text-[9px] transition-all duration-300">
+                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 min-w-[90px] sm:min-w-[110px] border border-white/20 transition-all duration-300">
+                              <div className="text-white font-bold text-xs sm:text-sm lg:text-base transition-all duration-300">
                                 {prizeText}
                               </div>
-                              <div className="text-white/80 text-[8px] leading-tight text-center transition-all duration-300">
+                              <div className="text-white/80 text-xs sm:text-sm leading-tight text-center transition-all duration-300">
                                 {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
                               </div>
                             </div>
@@ -695,21 +695,21 @@ export function PublicLeaderboard() {
               {/* Navigation Arrows */}
               <button
                 onClick={scrollPrizePrev}
-                className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
               >
-                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
               </button>
 
               <button
                 onClick={scrollPrizeNext}
-                className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
               >
-                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
               </button>
             </div>
           ) : (
             /* How to Join View */
-            <div className="relative max-w-7xl mx-auto w-full min-h-[120px]">
+            <div className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px]">
               <div className="overflow-hidden w-full" ref={howToJoinEmblaRef}>
                 <div className="flex">
                   {[
@@ -747,19 +747,19 @@ export function PublicLeaderboard() {
                           style={{
                             transform: `scale(${scale})`,
                             opacity,
-                            width: '180px',
+                            width: '220px',
                             maxWidth: '100%'
                           }}
                         >
                           <div className="text-center">
-                            <div className={`w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center border border-white/20 mb-1 mx-auto transition-all duration-300`}>
-                              <Icon className="h-5 w-5 text-white transition-all duration-300" />
+                            <div className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center border border-white/20 mb-2 sm:mb-3 mx-auto transition-all duration-300`}>
+                              <Icon className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white transition-all duration-300" />
                             </div>
-                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-1.5 min-w-[70px] border border-white/20 transition-all duration-300">
-                              <div className="text-white font-bold text-[9px] transition-all duration-300">
+                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 min-w-[90px] sm:min-w-[110px] border border-white/20 transition-all duration-300">
+                              <div className="text-white font-bold text-xs sm:text-sm lg:text-base transition-all duration-300">
                                 {step.title}
                               </div>
-                              <div className="text-white/80 text-[8px] leading-tight text-center transition-all duration-300">
+                              <div className="text-white/80 text-xs sm:text-sm leading-tight text-center transition-all duration-300">
                                 STEP {step.step}
                               </div>
                             </div>
@@ -774,16 +774,16 @@ export function PublicLeaderboard() {
               {/* Navigation Arrows */}
               <button
                 onClick={scrollHowToJoinPrev}
-                className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
               >
-                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
               </button>
 
               <button
                 onClick={scrollHowToJoinNext}
-                className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
               >
-                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
               </button>
             </div>
           )}
@@ -791,19 +791,19 @@ export function PublicLeaderboard() {
       </div>
       
       {/* Main Content Area */}
-      <div ref={leaderboardSectionRef} className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div ref={leaderboardSectionRef} className="bg-black px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto">
           {/* Leaderboard Heading */}
-          <div className="text-center mb-6 sm:mb-8">
-            <h2 className="text-xl font-bold text-white">Leaderboard</h2>
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">Leaderboard</h2>
           </div>
           
           {/* Leaderboard Toggle Buttons */}
-          <div className="flex justify-center mb-6 sm:mb-8">
+          <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
             <div className="bg-white/5 rounded-full p-1 flex">
               <button
                 onClick={() => handleLeaderboardViewChange('list')}
-               className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
+               className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
                   leaderboardView === 'list'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
@@ -813,7 +813,7 @@ export function PublicLeaderboard() {
               </button>
               <button
                 onClick={() => handleLeaderboardViewChange('videos')}
-               className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium transition-all text-sm sm:text-base ${
+               className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
                   leaderboardView === 'videos'
                     ? 'bg-purple-600 text-white'
                     : 'text-white/60 hover:text-white'
@@ -895,7 +895,7 @@ export function PublicLeaderboard() {
           ) : (
             /* Video Carousel View */
                 featuredVideos.length > 0 ? (
-                  <div className="relative w-full min-h-[400px]">
+                  <div className="relative w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px]">
                     <div className="overflow-hidden w-full" ref={emblaRef}>
                       <div className="flex">
                         {featuredVideos.map((video, index) => {
@@ -917,7 +917,7 @@ export function PublicLeaderboard() {
                                 onClick={() => handleVideoClick(video, index)}
                               >
                                 <div 
-                                  className="relative bg-black rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all shadow-2xl"
+                                  className="relative bg-black rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all shadow-2xl max-w-[320px] sm:max-w-[360px] lg:max-w-[400px] mx-auto"
                                   style={{ aspectRatio: '9/16' }}
                                 >
                                   {/* Loading Placeholder */}
@@ -1007,24 +1007,24 @@ export function PublicLeaderboard() {
                     {/* Navigation Arrows */}
                     <button
                       onClick={scrollPrev}
-                      className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                      className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
                     >
-                      <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                      <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
                     </button>
 
                     <button
                       onClick={scrollNext}
-                      className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                      className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
                     >
-                      <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                      <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
                     </button>
                   </div>
                 ) : (
-                  <div className="text-center py-8 sm:py-12 lg:py-16 min-h-[400px] flex items-center justify-center">
+                  <div className="text-center py-12 sm:py-16 lg:py-20 min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center">
                     <div>
-                      <Music className="h-12 w-12 sm:h-16 sm:w-16 text-white/30 mx-auto mb-4" />
-                      <h3 className="text-lg sm:text-xl font-semibold text-white/60 mb-2">No Videos Yet</h3>
-                      <p className="text-sm sm:text-base text-white/40">Contest videos will appear here once submitted!</p>
+                      <Music className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 text-white/30 mx-auto mb-6" />
+                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white/60 mb-4">No Videos Yet</h3>
+                      <p className="text-base sm:text-lg lg:text-xl text-white/40">Contest videos will appear here once submitted!</p>
                     </div>
                   </div>
                 )
