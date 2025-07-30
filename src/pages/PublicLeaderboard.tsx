@@ -715,7 +715,7 @@ export function PublicLeaderboard() {
             /* How to Join View */
             <div className="relative max-w-7xl mx-auto w-full min-h-[120px] flex justify-center">
               <div className="overflow-hidden w-full max-w-4xl" ref={howToJoinEmblaRef}>
-                <div className="flex">
+                <div className="flex justify-center">
                   {[
                     {
                       step: 1,
