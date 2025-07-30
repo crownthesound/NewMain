@@ -128,6 +128,7 @@ export function PublicLeaderboard() {
   const [loading, setLoading] = useState(true);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showTikTokModal, setShowTikTokModal] = useState(false);
+  const [activeToggle, setActiveToggle] = useState<'prizes' | 'how-to-join' | 'rules' | 'about' | 'list' | 'video'>('prizes');
   const [showViewModal, setShowViewModal] = useState(false);
   const [showMobileModal, setShowMobileModal] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<VideoData | null>(null);
