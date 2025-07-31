@@ -569,6 +569,179 @@ export function PublicLeaderboard() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Contest Details Content */}
+        {mainView === 'details' && (
+          <div className="space-y-8">
+            {/* Contest Details Toggle */}
+            <div className="flex justify-center">
+              <div className="bg-white/5 rounded-full p-1 flex">
+                <button
+                  onClick={() => handleToggleChange('prizes')}
+                  className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
+                    activeToggle === 'prizes'
+                      ? 'bg-white text-black'
+                      : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  Prizes
+                </button>
+                <button
+                  onClick={() => handleToggleChange('how-to-enter')}
+                  className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
+                    activeToggle === 'how-to-enter'
+                      ? 'bg-white text-black'
+                      : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  How to Enter
+                </button>
+                <button
+                  onClick={() => handleToggleChange('rules')}
+                  className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
+                    activeToggle === 'rules'
+                      ? 'bg-white text-black'
+                      : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  Rules
+                </button>
+                <button
+                  onClick={() => handleToggleChange('about')}
+                  className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
+                    activeToggle === 'about'
+                      ? 'bg-white text-black'
+                      : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  About
+                </button>
+              </div>
+            </div>
+
+            {/* Contest Details Content */}
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 sm:p-8">
+              {activeToggle === 'prizes' && (
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <Trophy className="h-6 w-6 text-yellow-400" />
+                    Prize Distribution
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {contest.prize_titles?.slice(0, contest.num_winners || 5).map((prize: any, index: number) => (
+                      <div
+                        key={index}
+                        className={`p-4 rounded-lg border transition-all hover:scale-105 ${
+                          index === 0
+                            ? 'bg-yellow-500/10 border-yellow-500/30'
+                            : index === 1
+                            ? 'bg-gray-400/10 border-gray-400/30'
+                            : index === 2
+                            ? 'bg-amber-600/10 border-amber-600/30'
+                            : 'bg-white/5 border-white/10'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 mb-2">
+                          {getRankIcon(index + 1)}
+                          <span className={`text-sm font-medium ${getRankColor(index + 1)}`}>
+                            {index + 1}{index === 0 ? 'st' : index === 1 ? 'nd' : index === 2 ? 'rd' : 'th'} Place
+                          </span>
+                        </div>
+                        <div className="text-lg font-bold text-white">
+                          {contest.prize_tier === 'monetary'
+                            ? `$${formatCurrency((contest.prize_per_winner || 0) * (1 - index * 0.2))}`
+                            : prize.title}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeToggle === 'how-to-enter' && (
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <UserPlus className="h-6 w-6 text-blue-400" />
+                    How to Enter
+                  </h3>
+                  <HowToEnterCarousel />
+                </div>
+              )}
+
+              {activeToggle === 'rules' && (
+                <div ref={rulesRef}>
+                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <FileText className="h-6 w-6 text-green-400" />
+                    Contest Rules
+                  </h3>
+                  <div className="space-y-6">
+                    <div className="prose prose-invert max-w-none">
+                      <p className="text-white/80 leading-relaxed">
+                        {contest.rules || contest.description || 'Contest rules will be updated soon.'}
+                      </p>
+                    </div>
+                    
+                    {contest.hashtags && contest.hashtags.length > 0 && (
+                      <div>
+                        <h4 className="text-lg font-semibold text-white mb-3">Required Hashtags</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {contest.hashtags.map((hashtag, index) => (
+                            <span
+                              key={index}
+                              className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-medium"
+                            >
+                              #{hashtag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {activeToggle === 'about' && (
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <Info className="h-6 w-6 text-purple-400" />
+                    About This Contest
+                  </h3>
+                  <div className="space-y-6">
+                    <div className="prose prose-invert max-w-none">
+                      <p className="text-white/80 leading-relaxed text-lg">
+                        {contest.description}
+                      </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="text-sm font-semibold text-white/60 uppercase tracking-wide mb-1">Category</h4>
+                          <p className="text-white">{contest.music_category || 'Music'}</p>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold text-white/60 uppercase tracking-wide mb-1">Duration</h4>
+                          <p className="text-white">{formatTimeLeft(contest.end_date)}</p>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="text-sm font-semibold text-white/60 uppercase tracking-wide mb-1">Total Winners</h4>
+                          <p className="text-white">{contest.num_winners || 5} winners</p>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold text-white/60 uppercase tracking-wide mb-1">End Date</h4>
+                          <p className="text-white">{formatDate(contest.end_date)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         </div>
       )}
       
