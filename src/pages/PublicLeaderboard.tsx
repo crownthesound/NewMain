@@ -620,98 +620,50 @@ export function PublicLeaderboard() {
               Contest Details
             </h2>
           </div>
-        {boardDetailView === 'board' && (
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="px-6 py-4 text-left text-xs font-medium text-white/40 uppercase tracking-wider">
-                      Rank
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-white/40 uppercase tracking-wider">
-                      Participant
-                    </th>
-                    <th className="px-6 py-4 text-right text-xs font-medium text-white/40 uppercase tracking-wider">
-                      Views
-                    </th>
-                    <th className="px-6 py-4 text-center text-xs font-medium text-white/40 uppercase tracking-wider">
-                      Video
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/10">
-                  {participants.map((participant, index) => (
-                    <tr key={index} className="hover:bg-white/5 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center justify-center">
-                            {getRankIcon(participant.rank)}
-                          </div>
-                          <span className={`text-lg font-bold ${getRankColor(participant.rank)}`}>
-                            #{participant.rank}
-                          </span>
-                          <div className="flex items-center">
-                            {getRankChangeIcon(participant.rank, participant.previousRank)}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          {participant.avatar_url ? (
-                            <img
-                              src={participant.avatar_url}
-                              alt={`${participant.username} profile`}
-                              className="w-10 h-10 rounded-full object-cover border border-white/10"
-                            />
-                          ) : (
-                            <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center border border-white/10">
-                              <span className="text-white text-sm font-medium">
-                                {participant.tiktok_display_name?.charAt(0) || participant.username?.charAt(0) || 'U'}
-                              </span>
-                            </div>
-                          )}
-                          <div>
-                            <div className="font-medium text-white">
-                              {participant.tiktok_display_name || participant.full_name || participant.username}
-                            </div>
-                            <div className="text-sm text-white/60">
-                              @{participant.username}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <span className="text-lg font-bold text-white">
-                          {formatNumber(participant.views)}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        {participant.video_url ? (
-                          <button
-                            onClick={() => handleVideoClick({
-                              ...participant,
-                              id: participant.video_id || '',
-                              title: participant.video_title || `Video by ${participant.username}`,
-                              url: participant.video_url || '',
-                              thumbnail: participant.thumbnail || '',
-                              likes: participant.likes || 0,
-                              comments: participant.comments || 0,
-                              shares: participant.shares || 0,
-                              rank: participant.rank
-                            })}
-                            className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors group"
-                          >
-                            <Play className="h-5 w-5 text-white group-hover:scale-110 transition-transform" />
-                          </button>
-                        ) : (
-                          <span className="text-white/40 text-sm">No video</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          
+          {/* Contest Details Toggle Buttons */}
+          <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
+            <div className="bg-white/5 rounded-full p-1 flex">
+              <button
+                onClick={() => setContestDetailsView('prizes')}
+                className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
+                  contestDetailsView === 'prizes'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-white/60 hover:text-white'
+                }`}
+              >
+                Prizes
+              </button>
+              <button
+                onClick={() => setContestDetailsView('how-to-join')}
+                className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
+                  contestDetailsView === 'how-to-join'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-white/60 hover:text-white'
+                }`}
+              >
+                How to Enter
+              </button>
+              <button
+                onClick={() => setContestDetailsView('rules')}
+                className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
+                  contestDetailsView === 'rules'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-white/60 hover:text-white'
+                }`}
+              >
+                Rules
+              </button>
+              <button
+                onClick={() => setContestDetailsView('about')}
+                className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
+                  contestDetailsView === 'about'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-white/60 hover:text-white'
+                }`}
+              >
+                About
+              </button>
             </div>
           </div>
           
@@ -1227,86 +1179,6 @@ export function PublicLeaderboard() {
                 )
           )}
         </div>
-      </div>
-
-      {/* Board/Detail Toggle */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <div className="flex justify-center">
-          <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
-            <div className="flex">
-              <button
-                onClick={() => setBoardDetailView('board')}
-                className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                  boardDetailView === 'board'
-                    ? 'bg-white text-black'
-                    : 'text-white/60 hover:text-white'
-                }`}
-              >
-                Board
-              </button>
-              <button
-                onClick={() => setBoardDetailView('detail')}
-                className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                  boardDetailView === 'detail'
-                    ? 'bg-white text-black'
-                    : 'text-white/60 hover:text-white'
-                }`}
-              >
-                Detail
-              </button>
-            </div>
-          </div>
-        )}
-
-        {boardDetailView === 'detail' && (
-          <>
-            {/* Toggle Buttons */}
-            <div className="flex justify-center mb-8">
-              <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
-                <div className="flex flex-wrap justify-center gap-1">
-                  <button
-                    onClick={() => setDetailsView('prizes')}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                      detailsView === 'prizes'
-                        ? 'bg-white text-black'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    Prizes
-                  </button>
-                  <button
-                    onClick={() => setDetailsView('how-to-enter')}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                      detailsView === 'how-to-enter'
-                        ? 'bg-white text-black'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    How to Enter
-                  </button>
-                  <button
-                    onClick={() => setDetailsView('rules')}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                      detailsView === 'rules'
-                        ? 'bg-white text-black'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    Rules
-                  </button>
-                  <button
-                    onClick={() => setDetailsView('about')}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                      detailsView === 'about'
-                        ? 'bg-white text-black'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    About
-                  </button>
-                </div>
-              </div>
-            </div>
       </div>
 
       {/* Call to Action Section */}
