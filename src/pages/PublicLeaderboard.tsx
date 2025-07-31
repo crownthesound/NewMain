@@ -188,24 +188,6 @@ export function PublicLeaderboard() {
         fetchUserSubmission();
       }
     }
-
-    // Listen for online/offline events
-    const handleOnline = () => {
-      console.log('Connection restored, refetching featured videos...');
-      fetchFeaturedVideos(0, false);
-    };
-
-    const handleOffline = () => {
-      console.log('Connection lost');
-    };
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
   }, [id, session]);
 
   useEffect(() => {
@@ -294,10 +276,26 @@ export function PublicLeaderboard() {
 
   const fetchFeaturedVideos = async (retryCount = 0, showToast = true) => {
     try {
+      const { data, error } = await supabase
+        .from("contest_links")
+        .select("*")
+        .eq("contest_id", id)
+        .eq("is_contest_submission", true)
+        .eq("active", true)
+        .order("views", { ascending: false })
+        .limit(10);
+
       // Check if we're online
       if (!navigator.onLine) {
         throw new Error('No internet connection');
       }
+
+      if (error) throw error;
+
+      const videosWithRank = (data || []).map((video, index) => ({
+        ...video,
+        rank: index + 1,
+      }));
 
       // Only attempt to fetch if backend URL is properly configured and not localhost
       if (!backendUrl || backendUrl.includes('localhost')) {
@@ -319,33 +317,16 @@ export function PublicLeaderboard() {
 
       clearTimeout(timeoutId);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      setFeaturedVideos(videosWithRank);
 
-      const data = await response.json();
-      
-      if (data && data.videos) {
-        const videosWithRank = data.videos.map((video: any, index: number) => ({
-          ...video,
-          rank: index + 1,
-        }));
-        
-        setFeaturedVideos(videosWithRank);
-
-        // Initialize loading states
-        const initialLoadState = videosWithRank.reduce((acc: any, video: any) => ({
-          ...acc,
-          [video.id]: false
-        }), {});
-        setCoverLoaded(initialLoadState);
-        setVideoLoaded(initialLoadState);
-      } else {
-        setFeaturedVideos([]);
-      }
-    } catch (error: any) {
-      console.error('Error fetching featured videos:', error);
-      
+      // Initialize loading states
+      const initialLoadState = videosWithRank.reduce((acc, video) => ({
+        ...acc,
+        [video.id]: false
+      }), {});
+      setCoverLoaded(initialLoadState);
+      setVideoLoaded(initialLoadState);
+    } catch (error) {
       // Retry up to 3 times for network errors, but don't show toast on retries
       if (retryCount < 3 && (error instanceof TypeError || error.message?.includes('fetch') || error.message?.includes('Failed to fetch'))) {
         console.log(`Retrying fetch featured videos (attempt ${retryCount + 1}/3)...`);
@@ -365,6 +346,7 @@ export function PublicLeaderboard() {
           toast.error(errorMessage);
         }
       }
+      // Set empty array to prevent UI issues
       
       // Set empty array as fallback
       setFeaturedVideos([]);
@@ -1150,140 +1132,140 @@ export function PublicLeaderboard() {
             </div>
           ) : (
             /* Video Carousel View */
-            featuredVideos.length > 0 ? (
-              <div className="relative w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px]">
-                <div className="overflow-hidden w-full" ref={emblaRef}>
-                  <div className="flex">
-                    {featuredVideos.map((video, index) => {
-                      const isSelected = index === currentVideoIndex;
-                      const scale = 1;
-                      const opacity = 1;
+                featuredVideos.length > 0 ? (
+                  <div className="relative w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px]">
+                    <div className="overflow-hidden w-full" ref={emblaRef}>
+                      <div className="flex">
+                        {featuredVideos.map((video, index) => {
+                          const isSelected = index === currentVideoIndex;
+                          const scale = 1;
+                          const opacity = 1;
 
-                      return (
-                        <div 
-                          key={video.id}
-                          className="flex-[0_0_100%] min-w-0 px-4 flex items-center justify-center"
-                        >
-                          <div 
-                            className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
-                            style={{
-                             transform: `scale(${scale})`,
-                              opacity,
-                            }}
-                            onClick={() => handleVideoClick(video, index)}
-                          >
+                          return (
                             <div 
-                              className="relative bg-black rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all shadow-2xl max-w-[320px] sm:max-w-[360px] lg:max-w-[400px] mx-auto"
-                              style={{ aspectRatio: '9/16' }}
+                              key={video.id}
+                              className="flex-[0_0_100%] min-w-0 px-4 flex items-center justify-center"
                             >
-                              {/* Loading Placeholder */}
-                              {!coverLoaded[video.id] && (
-                                <div className="absolute inset-0 bg-black flex items-center justify-center">
-                                  <Loader2 className="h-6 w-6 animate-spin text-white/60" />
-                                </div>
-                              )}
-
-                              {/* Thumbnail */}
-                              <img
-                                src={video.thumbnail}
-                                alt={video.title}
-                               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                                  isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
-                               }`}
-                                loading={isSelected ? 'eager' : 'lazy'}
-                                onLoad={() => handleCoverLoad(video.id)}
-                              />
-
-                              {/* Video Content */}
-                              {isSelected && (
-                                <div className="absolute inset-0">
-                                  {video.video_url ? (
-                                    <video
-                                      src={video.video_url}
-                                     className={`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
-                                        videoLoaded[video.id] ? 'opacity-100' : 'opacity-0'
-                                     }`}
-                                      autoPlay
-                                      loop
-                                      muted={isMuted}
-                                      playsInline
-                                      controls={false}
-                                      onLoadedData={() => handleVideoLoad(video.id)}
-                                    />
-                                  ) : null}
-                                </div>
-                              )}
-
-                              {/* Gradient Overlay */}
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
-
-                              {/* Views Badge */}
-                              <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
-                                <div className="px-2 py-1 sm:px-3 sm:py-1 bg-blue-500 text-white rounded-full text-xs sm:text-sm font-bold">
-                                  👁 {formatNumber(video.views || 0)}
-                                </div>
-                              </div>
-
-                              {/* Video Info */}
-                              <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
-                                <div className="space-y-1 sm:space-y-2">
-                                  <h3 className="text-xs sm:text-sm lg:text-base font-medium text-white line-clamp-1">
-                                    {video.title}
-                                  </h3>
-                                  <div className="flex items-center gap-2 text-xs text-white/60">
-                                    <span>@{video.username}</span>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Mute Button */}
-                              {isSelected && (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setIsMuted(!isMuted);
-                                  }}
-                                  className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/60 transition-colors"
+                              <div 
+                                className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
+                                style={{
+                                 transform: `scale(${scale})`,
+                                  opacity,
+                                }}
+                                onClick={() => handleVideoClick(video, index)}
+                              >
+                                <div 
+                                  className="relative bg-black rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all shadow-2xl max-w-[320px] sm:max-w-[360px] lg:max-w-[400px] mx-auto"
+                                  style={{ aspectRatio: '9/16' }}
                                 >
-                                  {isMuted ? (
-                                    <VolumeX className="h-3 w-3 sm:h-4 sm:w-4" />
-                                  ) : (
-                                    <Volume2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                                  {/* Loading Placeholder */}
+                                  {!coverLoaded[video.id] && (
+                                    <div className="absolute inset-0 bg-black flex items-center justify-center">
+                                      <Loader2 className="h-6 w-6 animate-spin text-white/60" />
+                                    </div>
                                   )}
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                
-                {/* Navigation Arrows */}
-                <button
-                  onClick={scrollPrev}
-                  className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                >
-                  <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
-                </button>
 
-                <button
-                  onClick={scrollNext}
-                  className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                >
-                  <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
-                </button>
-              </div>
-            ) : (
-              <div className="text-center py-12 sm:py-16 lg:py-20 min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center">
-                <div>
-                  <Music className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 text-white/30 mx-auto mb-6" />
-                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white/60 mb-4">No Videos Yet</h3>
-                  <p className="text-base sm:text-lg lg:text-xl text-white/40">Contest videos will appear here once submitted!</p>
-                </div>
-              </div>
-            )
+                                  {/* Thumbnail */}
+                                  <img
+                                    src={video.thumbnail}
+                                    alt={video.title}
+                                   className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                                      isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
+                                   }`}
+                                    loading={isSelected ? 'eager' : 'lazy'}
+                                    onLoad={() => handleCoverLoad(video.id)}
+                                  />
+
+                                  {/* Video Content */}
+                                  {isSelected && (
+                                    <div className="absolute inset-0">
+                                      {video.video_url ? (
+                                        <video
+                                          src={video.video_url}
+                                         className={`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
+                                            videoLoaded[video.id] ? 'opacity-100' : 'opacity-0'
+                                         }`}
+                                          autoPlay
+                                          loop
+                                          muted={isMuted}
+                                          playsInline
+                                          controls={false}
+                                          onLoadedData={() => handleVideoLoad(video.id)}
+                                        />
+                                      ) : null}
+                                    </div>
+                                  )}
+
+                                  {/* Gradient Overlay */}
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
+
+                                  {/* Views Badge */}
+                                  <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
+                                    <div className="px-2 py-1 sm:px-3 sm:py-1 bg-blue-500 text-white rounded-full text-xs sm:text-sm font-bold">
+                                      👁 {formatNumber(video.views || 0)}
+                                    </div>
+                                  </div>
+
+                                  {/* Video Info */}
+                                  <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
+                                    <div className="space-y-1 sm:space-y-2">
+                                      <h3 className="text-xs sm:text-sm lg:text-base font-medium text-white line-clamp-1">
+                                        {video.title}
+                                      </h3>
+                                      <div className="flex items-center gap-2 text-xs text-white/60">
+                                        <span>@{video.username}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Mute Button */}
+                                  {isSelected && (
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsMuted(!isMuted);
+                                      }}
+                                      className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/60 transition-colors"
+                                    >
+                                      {isMuted ? (
+                                        <VolumeX className="h-3 w-3 sm:h-4 sm:w-4" />
+                                      ) : (
+                                        <Volume2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                                      )}
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    
+                    {/* Navigation Arrows */}
+                    <button
+                      onClick={scrollPrev}
+                      className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                    >
+                      <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
+                    </button>
+
+                    <button
+                      onClick={scrollNext}
+                      className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                    >
+                      <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-center py-12 sm:py-16 lg:py-20 min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center">
+                    <div>
+                      <Music className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 text-white/30 mx-auto mb-6" />
+                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white/60 mb-4">No Videos Yet</h3>
+                      <p className="text-base sm:text-lg lg:text-xl text-white/40">Contest videos will appear here once submitted!</p>
+                    </div>
+                  </div>
+                )
           )}
         </div>
       </div>
