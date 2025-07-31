@@ -1354,7 +1354,8 @@ export function PublicLeaderboard() {
             </p>
           </div>
         </div>
-      </footer>
+        </div>
+      )}
 
       {/* Modals */}
       <TikTokSettingsModal
