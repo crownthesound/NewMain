@@ -1207,6 +1207,18 @@ export function PublicLeaderboard() {
           </div>
         </div>
 
+        {/* Detail View Content */}
+        {boardDetailView === 'detail' && (
+          <>
+            {/* Detail Toggle Buttons */}
+            <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
+              <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
+                <div className="flex flex-wrap justify-center gap-1">
+                  <button
+                    onClick={() => setDetailsView('prizes')}
+                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
+                      detailsView === 'prizes'
+                        ? 'bg-white text-black'
                         : 'text-white/60 hover:text-white'
                     }`}
                   >
@@ -1214,7 +1226,7 @@ export function PublicLeaderboard() {
                   </button>
                   <button
                     onClick={() => setDetailsView('how-to-enter')}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
+                    className={\`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
                       detailsView === 'how-to-enter'
                         ? 'bg-white text-black'
                         : 'text-white/60 hover:text-white'
@@ -1224,7 +1236,7 @@ export function PublicLeaderboard() {
                   </button>
                   <button
                     onClick={() => setDetailsView('rules')}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
+                    className={\`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
                       detailsView === 'rules'
                         ? 'bg-white text-black'
                         : 'text-white/60 hover:text-white'
@@ -1234,7 +1246,7 @@ export function PublicLeaderboard() {
                   </button>
                   <button
                     onClick={() => setDetailsView('about')}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
+                    className={\`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
                       detailsView === 'about'
                         ? 'bg-white text-black'
                         : 'text-white/60 hover:text-white'
