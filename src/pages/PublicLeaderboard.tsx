@@ -1226,7 +1226,7 @@ export function PublicLeaderboard() {
                   </button>
                   <button
                     onClick={() => setDetailsView('how-to-enter')}
-                    className={\`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
+                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
                       detailsView === 'how-to-enter'
                         ? 'bg-white text-black'
                         : 'text-white/60 hover:text-white'
