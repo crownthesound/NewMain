@@ -1207,6 +1207,15 @@ export function PublicLeaderboard() {
           </div>
         </div>
 
+        {boardDetailView === 'board' && (
+          <div className="bg-black/60 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-white/5">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-white/40 uppercase tracking-wider">
+                      Rank
+                    </th>
                     <th className="px-6 py-4 text-left text-xs font-medium text-white/40 uppercase tracking-wider">
                       Participant
                     </th>
