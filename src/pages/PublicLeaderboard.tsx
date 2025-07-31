@@ -671,6 +671,7 @@ export function PublicLeaderboard() {
                   onClick={() => setContestDetailsView('prizes')}
                   className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
                     contestDetailsView === 'prizes'
+                      ? 'bg-white text-black'
                       : 'text-white/60 hover:text-white'
                   }`}
                 >
@@ -943,6 +944,10 @@ export function PublicLeaderboard() {
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-6">About This Contest</h3>
                   <div className="text-white/90 text-lg leading-relaxed mb-6">
+                    {contest.description}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
