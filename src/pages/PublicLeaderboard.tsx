@@ -409,6 +409,17 @@ export function PublicLeaderboard() {
     return num.toString();
   };
 
+  const getRankChangeIcon = (currentRank: number, previousRank?: number) => {
+    if (!previousRank) return <Minus className="h-3 w-3 text-white/40" />;
+
+    if (currentRank < previousRank) {
+      return <ArrowUp className="h-3 w-3 text-green-500" />;
+    } else if (currentRank > previousRank) {
+      return <ArrowDown className="h-3 w-3 text-red-500" />;
+    }
+    return <Minus className="h-3 w-3 text-white/40" />;
+  };
+
   const getRankIcon = (rank: number) => {
     const colors = {
       1: "text-yellow-400",
