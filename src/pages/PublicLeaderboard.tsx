@@ -1200,26 +1200,9 @@ export function PublicLeaderboard() {
         <div className="flex justify-center">
           <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
             <div className="flex">
-              <button
-                onClick={() => setBoardDetailView('board')}
-                className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                  boardDetailView === 'board'
-                    ? 'bg-white text-black'
-                    : 'text-white/60 hover:text-white'
-                }`}
-              >
+              <div className="px-6 py-2 rounded-full bg-white text-black shadow-lg font-medium">
                 Board
-              </button>
-              <button
-                onClick={() => setBoardDetailView('detail')}
-                className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                  boardDetailView === 'detail'
-                    ? 'bg-white text-black'
-                    : 'text-white/60 hover:text-white'
-                }`}
-              >
-                Detail
-              </button>
+              </div>
             </div>
           </div>
         </div>
