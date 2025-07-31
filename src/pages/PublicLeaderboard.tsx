@@ -671,7 +671,6 @@ export function PublicLeaderboard() {
                   onClick={() => setContestDetailsView('prizes')}
                   className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
                     contestDetailsView === 'prizes'
-                      ? 'bg-white text-black'
                       : 'text-white/60 hover:text-white'
                   }`}
                 >
@@ -944,40 +943,6 @@ export function PublicLeaderboard() {
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-6">About This Contest</h3>
                   <div className="text-white/90 text-lg leading-relaxed mb-6">
-                    {contest?.description}
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
-                    <div className="bg-white/10 rounded-lg p-4">
-                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
-                        <Music className="h-4 w-4 text-blue-400" />
-                        Category
-                      </h4>
-                      <p className="text-white/80">{contest?.music_category || 'Music'}</p>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4">
-                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
-                        <Users className="h-4 w-4 text-green-400" />
-                        Participants
-                      </h4>
-                      <p className="text-white/80">{participants.length} Entered</p>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4">
-                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-yellow-400" />
-                        Duration
-                      </h4>
-                      <p className="text-white/80">{formatTimeRemaining(timeRemaining) || 'Contest Active'}</p>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4">
-                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
-                        <Trophy className="h-4 w-4 text-purple-400" />
-                        Winners
-                      </h4>
-                      <p className="text-white/80">{contest?.num_winners || 5} Prize Positions</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           )}
         </div>
