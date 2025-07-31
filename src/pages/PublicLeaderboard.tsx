@@ -185,6 +185,24 @@ export function PublicLeaderboard() {
       fetchLeaderboard();
       fetchFeaturedVideos();
       if (session) {
+
+    // Listen for online/offline events
+    const handleOnline = () => {
+      console.log('Connection restored, refetching featured videos...');
+      fetchFeaturedVideos(0, false);
+    };
+
+    const handleOffline = () => {
+      console.log('Connection lost');
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
         fetchUserSubmission();
       }
     }
@@ -285,12 +303,35 @@ export function PublicLeaderboard() {
         .order("views", { ascending: false })
         .limit(10);
 
+      // Check if we're online
+      if (!navigator.onLine) {
+        throw new Error('No internet connection');
+      }
+
       if (error) throw error;
 
       const videosWithRank = (data || []).map((video, index) => ({
         ...video,
         rank: index + 1,
-      }));
+      // Only attempt to fetch if backend URL is properly configured and not localhost
+      if (!backendUrl || backendUrl.includes('localhost')) {
+        console.warn('Backend URL not configured or using localhost - skipping featured videos fetch');
+        setFeaturedVideos([]);
+        return;
+      }
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+      const response = await fetch(`${backendUrl}/api/v1/videos/featured`, {
+        signal: controller.signal,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      clearTimeout(timeoutId);
 
       setFeaturedVideos(videosWithRank);
 
@@ -301,9 +342,27 @@ export function PublicLeaderboard() {
       }), {});
       setCoverLoaded(initialLoadState);
       setVideoLoaded(initialLoadState);
-    } catch (error) {
-      console.error("Error fetching featured videos:", error);
+      // Retry up to 3 times for network errors, but don't show toast on retries
+      if (retryCount < 3 && (error instanceof TypeError || error.message?.includes('fetch') || error.message?.includes('Failed to fetch'))) {
+        console.log(`Retrying fetch featured videos (attempt ${retryCount + 1}/3)...`);
+        return fetchFeaturedVideos(retryCount + 1, false);
+      }
+      
+      // Show user-friendly error message only after all retries fail and on initial load
+      if (showToast) {
+        const errorMessage = !navigator.onLine
+          ? "No internet connection. Please check your network."
+          : error instanceof TypeError || error.message?.includes('Failed to fetch')
+          ? "Unable to connect to server. Featured videos unavailable."
+          : error.message || "Failed to load featured videos";
+        
+        // Only show error toast if it's not a localhost/configuration issue
+        if (backendUrl && !backendUrl.includes('localhost')) {
+          toast.error(errorMessage);
+        }
       // Set empty array to prevent UI issues
+      
+      // Set empty array as fallback
       setFeaturedVideos([]);
       setCoverLoaded({});
       setVideoLoaded({});
