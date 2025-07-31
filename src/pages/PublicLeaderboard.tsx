@@ -1181,6 +1181,36 @@ export function PublicLeaderboard() {
         </div>
       </div>
 
+      {/* Board/Detail Toggle */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <div className="flex justify-center">
+          <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
+            <div className="flex">
+              <button
+                onClick={() => setBoardDetailView('board')}
+                className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
+                  boardDetailView === 'board'
+                    ? 'bg-white text-black'
+                    : 'text-white/60 hover:text-white'
+                }`}
+              >
+                Board
+              </button>
+              <button
+                onClick={() => setBoardDetailView('detail')}
+                className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
+                  boardDetailView === 'detail'
+                    ? 'bg-white text-black'
+                    : 'text-white/60 hover:text-white'
+                }`}
+              >
+                Detail
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Call to Action Section */}
       <div className="bg-black text-center py-12 sm:py-16 lg:py-20 px-4">
         <h2 className="text-2xl sm:text-4xl lg:text-6xl font-black text-white/20 mb-4 sm:mb-6 lg:mb-8 tracking-wider leading-tight">
