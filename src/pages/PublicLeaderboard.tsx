@@ -1354,7 +1354,6 @@ export function PublicLeaderboard() {
             </p>
           </div>
         </div>
-        </div>
       )}
 
       {/* Modals */}
