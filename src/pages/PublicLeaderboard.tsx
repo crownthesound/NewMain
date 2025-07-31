@@ -131,11 +131,6 @@ export function PublicLeaderboard() {
   const [showTikTokModal, setShowTikTokModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [showMobileModal, setShowMobileModal] = useState(false);
-  const [mainView, setMainView] = useState<'leaderboard' | 'details'>('leaderboard');
-
-  const handlePlayVideo = () => {
-    toast.success('Video player coming soon!');
-  };
   const [selectedVideo, setSelectedVideo] = useState<VideoData | null>(null);
   const [userSubmission, setUserSubmission] = useState<any>(null);
   const [showTikTokSettings, setShowTikTokSettings] = useState(false);
@@ -411,17 +406,6 @@ export function PublicLeaderboard() {
       return `${(num / 1000).toFixed(1)}K`;
     }
     return num.toString();
-  };
-
-  const getRankChangeIcon = (currentRank: number, previousRank?: number) => {
-    if (!previousRank) return <Minus className="h-3 w-3 text-white/40" />;
-
-    if (currentRank < previousRank) {
-      return <ArrowUp className="h-3 w-3 text-green-500" />;
-    } else if (currentRank > previousRank) {
-      return <ArrowDown className="h-3 w-3 text-red-500" />;
-    }
-    return <Minus className="h-3 w-3 text-white/40" />;
   };
 
   const getRankIcon = (rank: number) => {
@@ -958,405 +942,241 @@ export function PublicLeaderboard() {
       {/* Main Content Area */}
       <div ref={leaderboardSectionRef} className="bg-black px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto">
-          {/* Main Toggle - Leaderboard vs Details */}
-          <div className="flex justify-center mb-8">
-            <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
-              <div className="flex">
-                <button
-                  onClick={() => setMainView('leaderboard')}
-                  className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                    mainView === 'leaderboard'
-                      ? 'bg-white text-black'
-                      : 'text-white/60 hover:text-white'
-                  }`}
-                >
-                  Leaderboard
-                </button>
-                <button
-                  onClick={() => setMainView('details')}
-                  className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                    mainView === 'details'
-                      ? 'bg-white text-black'
-                      : 'text-white/60 hover:text-white'
-                  }`}
-                >
-                  Details
-                </button>
-              </div>
+          {/* Leaderboard Heading */}
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">Leaderboard</h2>
+          </div>
+          
+          {/* Leaderboard Toggle Buttons */}
+          <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
+            <div className="bg-white/5 rounded-full p-1 flex">
+              <button
+                onClick={() => handleLeaderboardViewChange('list')}
+               className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
+                  leaderboardView === 'list'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-white/60 hover:text-white'
+               }`}
+              >
+                List
+              </button>
+              <button
+                onClick={() => handleLeaderboardViewChange('videos')}
+               className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
+                  leaderboardView === 'videos'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-white/60 hover:text-white'
+               }`}
+              >
+                Video View
+              </button>
             </div>
           </div>
 
-          {/* Leaderboard View */}
-          {mainView === 'leaderboard' && (
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
-              {/* Desktop View */}
-              <div className="hidden sm:block">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-white/10">
-                      <th className="px-6 py-4 text-left text-xs font-medium text-white/40 uppercase tracking-wider">
-                        Rank
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-white/40 uppercase tracking-wider">
-                        Participant
-                      </th>
-                      <th className="px-6 py-4 text-right text-xs font-medium text-white/40 uppercase tracking-wider">
-                        Views
-                      </th>
-                      <th className="px-6 py-4 text-center text-xs font-medium text-white/40 uppercase tracking-wider">
-                        Change
-                      </th>
-                      <th className="px-6 py-4 text-center text-xs font-medium text-white/40 uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/10">
-                    {participants.map((participant) => (
-                      <tr key={participant.rank} className="hover:bg-white/5">
-                        <td className="px-6 py-4 whitespace-nowrap">
+          {/* Content Area */}
+          {leaderboardView === 'list' ? (
+            /* Leaderboard View - Exact Design Match */
+            <div className="max-w-sm mx-auto">
+              {/* White Card Container */}
+              <div className="bg-white rounded-2xl overflow-hidden">
+                {/* GET CROWNED Header */}
+                <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-6 text-center font-bold text-lg">
+                  GET CROWNED.
+                </div>
+                
+                {/* Participants List */}
+                <div className="p-4">
+                  {participants.length > 0 ? (
+                    <div className="space-y-2">
+                      {participants.slice(0, 10).map((participant, index) => (
+                        <div
+                          key={participant.user_id}
+                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                        >
+                          {/* Left side - Rank, Avatar, and User Info */}
                           <div className="flex items-center gap-3">
-                            {getRankIcon(participant.rank)}
-                            <span
-                              className={`font-bold text-lg ${getRankColor(
-                                participant.rank
-                              )}`}
-                            >
-                              #{participant.rank}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
-                              <span className="text-white text-sm font-medium">
-                                {participant.username.charAt(0).toUpperCase()}
+                            <div className="flex items-center gap-1 w-8">
+                              {participant.rank === 1 && (
+                                <Crown className="h-4 w-4 text-yellow-500" />
+                              )}
+                              <span className="text-sm font-bold text-black">
+                                {participant.rank}
+                              </span>
+                            </div>
+                            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                              <span className="text-xs font-bold text-gray-600">
+                                {participant.tiktok_username?.charAt(0)?.toUpperCase() || 'U'}
                               </span>
                             </div>
                             <div>
-                              <div className="font-medium text-white">
-                                @{participant.username}
+                              <div className="text-sm font-medium text-black">
+                                @{participant.tiktok_username}
                               </div>
-                              <div className="text-sm text-white/60">
-                                {participant.full_name}
+                              <div className="text-xs text-gray-500 flex items-center gap-2">
+                                <span>{formatNumber(participant.views)} views</span>
                               </div>
                             </div>
                           </div>
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <span className="text-lg font-bold text-white">
-                            {formatNumber(participant.views)}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          {getRankChangeIcon(
-                            participant.rank,
-                            participant.previousRank
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <button
-                            onClick={handlePlayVideo}
-                            className="p-2 rounded-full hover:bg-white/10 transition-colors"
-                          >
-                            <Play className="h-5 w-5 text-white/60" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
 
-              {/* Mobile View */}
-              <div className="block sm:hidden divide-y divide-white/10">
-                {participants.map((participant) => (
-                  <div key={participant.rank} className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-2">
-                          {getRankIcon(participant.rank)}
-                          <span
-                            className={`font-bold ${getRankColor(
-                              participant.rank
-                            )}`}
-                          >
-                            #{participant.rank}
-                          </span>
+                          {/* Right side - Support Button */}
+                          <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity">
+                            Support
+                          </button>
                         </div>
-                        <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs font-medium">
-                            {participant.username.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                        <div>
-                          <div className="font-medium text-white text-sm">
-                            @{participant.username}
-                          </div>
-                          <div className="text-xs text-white/60">
-                            {formatNumber(participant.views)} views
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {getRankChangeIcon(
-                          participant.rank,
-                          participant.previousRank
-                        )}
-                        <button
-                          onClick={handlePlayVideo}
-                          className="p-2 rounded-full hover:bg-white/10 transition-colors"
-                        >
-                          <Play className="h-4 w-4 text-white/60" />
-                        </button>
-                      </div>
+                      ))}
                     </div>
-                  </div>
-                ))}
+                  ) : (
+                    <div className="text-center py-8">
+                      <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-gray-600 mb-2">No Participants Yet</h3>
+                      <p className="text-gray-500 mb-6">Be the first to join this contest!</p>
+                      <button
+                        onClick={handleJoinContest}
+                        className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full font-medium transition-opacity hover:opacity-90"
+                      >
+                        Join Contest
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          )}
+          ) : (
+            /* Video Carousel View */
+                featuredVideos.length > 0 ? (
+                  <div className="relative w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px]">
+                    <div className="overflow-hidden w-full" ref={emblaRef}>
+                      <div className="flex">
+                        {featuredVideos.map((video, index) => {
+                          const isSelected = index === currentVideoIndex;
+                          const scale = 1;
+                          const opacity = 1;
 
-          {/* Details View */}
-          {mainView === 'details' && (
-            <>
-              {/* Leaderboard Heading */}
-              <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">Leaderboard</h2>
-              </div>
-              
-              {/* Leaderboard Toggle Buttons */}
-              <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
-                <div className="bg-white/5 rounded-full p-1 flex">
-                  <button
-                    onClick={() => handleLeaderboardViewChange('list')}
-                   className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
-                      leaderboardView === 'list'
-                        ? 'bg-purple-600 text-white'
-                        : 'text-white/60 hover:text-white'
-                   }`}
-                  >
-                    List
-                  </button>
-                  <button
-                    onClick={() => handleLeaderboardViewChange('videos')}
-                   className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
-                      leaderboardView === 'videos'
-                        ? 'bg-purple-600 text-white'
-                        : 'text-white/60 hover:text-white'
-                   }`}
-                  >
-                    Video View
-                  </button>
-                </div>
-              </div>
-
-              {/* Content Area */}
-              {leaderboardView === 'list' ? (
-                /* Leaderboard View - Exact Design Match */
-                <div className="max-w-sm mx-auto">
-                  {/* White Card Container */}
-                  <div className="bg-white rounded-2xl overflow-hidden">
-                    {/* GET CROWNED Header */}
-                    <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-6 text-center font-bold text-lg">
-                      GET CROWNED.
-                    </div>
-                    
-                    {/* Participants List */}
-                    <div className="p-4">
-                      {participants.length > 0 ? (
-                        <div className="space-y-2">
-                          {participants.slice(0, 10).map((participant, index) => (
-                            <div
-                              key={participant.user_id}
-                              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                          return (
+                            <div 
+                              key={video.id}
+                              className="flex-[0_0_100%] min-w-0 px-4 flex items-center justify-center"
                             >
-                              {/* Left side - Rank, Avatar, and User Info */}
-                              <div className="flex items-center gap-3">
-                                <div className="flex items-center gap-1 w-8">
-                                  {participant.rank === 1 && (
-                                    <Crown className="h-4 w-4 text-yellow-500" />
-                                  )}
-                                  <span className="text-sm font-bold text-black">
-                                    {participant.rank}
-                                  </span>
-                                </div>
-                                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                                  <span className="text-xs font-bold text-gray-600">
-                                    {participant.tiktok_username?.charAt(0)?.toUpperCase() || 'U'}
-                                  </span>
-                                </div>
-                                <div>
-                                  <div className="text-sm font-medium text-black">
-                                    @{participant.tiktok_username}
-                                  </div>
-                                  <div className="text-xs text-gray-500 flex items-center gap-2">
-                                    <span>{formatNumber(participant.views)} views</span>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Right side - Support Button */}
-                              <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity">
-                                Support
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-center py-8">
-                          <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                          <h3 className="text-lg font-semibold text-gray-600 mb-2">No Participants Yet</h3>
-                          <p className="text-gray-500 mb-6">Be the first to join this contest!</p>
-                          <button
-                            onClick={handleJoinContest}
-                            className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full font-medium transition-opacity hover:opacity-90"
-                          >
-                            Join Contest
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                /* Video Carousel View */
-                    featuredVideos.length > 0 ? (
-                      <div className="relative w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px]">
-                        <div className="overflow-hidden w-full" ref={emblaRef}>
-                          <div className="flex">
-                            {featuredVideos.map((video, index) => {
-                              const isSelected = index === currentVideoIndex;
-                              const scale = 1;
-                              const opacity = 1;
-
-                              return (
+                              <div 
+                                className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
+                                style={{
+                                 transform: `scale(${scale})`,
+                                  opacity,
+                                }}
+                                onClick={() => handleVideoClick(video, index)}
+                              >
                                 <div 
-                                  key={video.id}
-                                  className="flex-[0_0_100%] min-w-0 px-4 flex items-center justify-center"
+                                  className="relative bg-black rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all shadow-2xl max-w-[320px] sm:max-w-[360px] lg:max-w-[400px] mx-auto"
+                                  style={{ aspectRatio: '9/16' }}
                                 >
-                                  <div 
-                                    className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
-                                    style={{
-                                     transform: `scale(${scale})`,
-                                      opacity,
-                                    }}
-                                    onClick={() => handleVideoClick(video, index)}
-                                  >
-                                    <div 
-                                      className="relative bg-black rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all shadow-2xl max-w-[320px] sm:max-w-[360px] lg:max-w-[400px] mx-auto"
-                                      style={{ aspectRatio: '9/16' }}
-                                    >
-                                      {/* Loading Placeholder */}
-                                      {!coverLoaded[video.id] && (
-                                        <div className="absolute inset-0 bg-black flex items-center justify-center">
-                                          <Loader2 className="h-6 w-6 animate-spin text-white/60" />
-                                        </div>
-                                      )}
+                                  {/* Loading Placeholder */}
+                                  {!coverLoaded[video.id] && (
+                                    <div className="absolute inset-0 bg-black flex items-center justify-center">
+                                      <Loader2 className="h-6 w-6 animate-spin text-white/60" />
+                                    </div>
+                                  )}
 
-                                      {/* Thumbnail */}
-                                      <img
-                                        src={video.thumbnail}
-                                        alt={video.title}
-                                       className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                                          isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
-                                       }`}
-                                        loading={isSelected ? 'eager' : 'lazy'}
-                                        onLoad={() => handleCoverLoad(video.id)}
-                                      />
+                                  {/* Thumbnail */}
+                                  <img
+                                    src={video.thumbnail}
+                                    alt={video.title}
+                                   className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                                      isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
+                                   }`}
+                                    loading={isSelected ? 'eager' : 'lazy'}
+                                    onLoad={() => handleCoverLoad(video.id)}
+                                  />
 
-                                      {/* Video Content */}
-                                      {isSelected && (
-                                        <div className="absolute inset-0">
-                                          {video.video_url ? (
-                                            <video
-                                              src={video.video_url}
-                                             className={`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
-                                                videoLoaded[video.id] ? 'opacity-100' : 'opacity-0'
-                                             }`}
-                                              autoPlay
-                                              loop
-                                              muted={isMuted}
-                                              playsInline
-                                              controls={false}
-                                              onLoadedData={() => handleVideoLoad(video.id)}
-                                            />
-                                          ) : null}
-                                        </div>
-                                      )}
+                                  {/* Video Content */}
+                                  {isSelected && (
+                                    <div className="absolute inset-0">
+                                      {video.video_url ? (
+                                        <video
+                                          src={video.video_url}
+                                         className={`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
+                                            videoLoaded[video.id] ? 'opacity-100' : 'opacity-0'
+                                         }`}
+                                          autoPlay
+                                          loop
+                                          muted={isMuted}
+                                          playsInline
+                                          controls={false}
+                                          onLoadedData={() => handleVideoLoad(video.id)}
+                                        />
+                                      ) : null}
+                                    </div>
+                                  )}
 
-                                      {/* Gradient Overlay */}
-                                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
+                                  {/* Gradient Overlay */}
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
 
-                                      {/* Views Badge */}
-                                      <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
-                                        <div className="px-2 py-1 sm:px-3 sm:py-1 bg-blue-500 text-white rounded-full text-xs sm:text-sm font-bold">
-                                          👁 {formatNumber(video.views || 0)}
-                                        </div>
-                                      </div>
-
-                                      {/* Video Info */}
-                                      <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
-                                        <div className="space-y-1 sm:space-y-2">
-                                          <h3 className="text-xs sm:text-sm lg:text-base font-medium text-white line-clamp-1">
-                                            {video.title}
-                                          </h3>
-                                          <div className="flex items-center gap-2 text-xs text-white/60">
-                                            <span>@{video.username}</span>
-                                          </div>
-                                        </div>
-                                      </div>
-
-                                      {/* Mute Button */}
-                                      {isSelected && (
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            setIsMuted(!isMuted);
-                                          }}
-                                          className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/60 transition-colors"
-                                        >
-                                          {isMuted ? (
-                                            <VolumeX className="h-3 w-3 sm:h-4 sm:w-4" />
-                                          ) : (
-                                            <Volume2 className="h-3 w-3 sm:h-4 sm:w-4" />
-                                          )}
-                                        </button>
-                                      )}
+                                  {/* Views Badge */}
+                                  <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
+                                    <div className="px-2 py-1 sm:px-3 sm:py-1 bg-blue-500 text-white rounded-full text-xs sm:text-sm font-bold">
+                                      👁 {formatNumber(video.views || 0)}
                                     </div>
                                   </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                        
-                        {/* Navigation Arrows */}
-                        <button
-                          onClick={scrollPrev}
-                          className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                        >
-                          <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
-                        </button>
 
-                        <button
-                          onClick={scrollNext}
-                          className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                        >
-                          <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
-                        </button>
+                                  {/* Video Info */}
+                                  <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
+                                    <div className="space-y-1 sm:space-y-2">
+                                      <h3 className="text-xs sm:text-sm lg:text-base font-medium text-white line-clamp-1">
+                                        {video.title}
+                                      </h3>
+                                      <div className="flex items-center gap-2 text-xs text-white/60">
+                                        <span>@{video.username}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Mute Button */}
+                                  {isSelected && (
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsMuted(!isMuted);
+                                      }}
+                                      className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/60 transition-colors"
+                                    >
+                                      {isMuted ? (
+                                        <VolumeX className="h-3 w-3 sm:h-4 sm:w-4" />
+                                      ) : (
+                                        <Volume2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                                      )}
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
-                    ) : (
-                      <div className="text-center py-12 sm:py-16 lg:py-20 min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center">
-                        <div>
-                          <Music className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 text-white/30 mx-auto mb-6" />
-                          <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white/60 mb-4">No Videos Yet</h3>
-                          <p className="text-base sm:text-lg lg:text-xl text-white/40">Contest videos will appear here once submitted!</p>
-                        </div>
-                      </div>
-                    )
-              )}
-            </>
+                    </div>
+                    
+                    {/* Navigation Arrows */}
+                    <button
+                      onClick={scrollPrev}
+                      className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                    >
+                      <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
+                    </button>
+
+                    <button
+                      onClick={scrollNext}
+                      className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                    >
+                      <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-center py-12 sm:py-16 lg:py-20 min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center">
+                    <div>
+                      <Music className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 text-white/30 mx-auto mb-6" />
+                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white/60 mb-4">No Videos Yet</h3>
+                      <p className="text-base sm:text-lg lg:text-xl text-white/40">Contest videos will appear here once submitted!</p>
+                    </div>
+                  </div>
+                )
           )}
         </div>
       </div>
