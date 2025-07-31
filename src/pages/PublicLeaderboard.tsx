@@ -132,6 +132,10 @@ export function PublicLeaderboard() {
   const [showViewModal, setShowViewModal] = useState(false);
   const [showMobileModal, setShowMobileModal] = useState(false);
   const [mainView, setMainView] = useState<'leaderboard' | 'details'>('leaderboard');
+
+  const handlePlayVideo = () => {
+    toast.success('Video player coming soon!');
+  };
   const [selectedVideo, setSelectedVideo] = useState<VideoData | null>(null);
   const [userSubmission, setUserSubmission] = useState<any>(null);
   const [showTikTokSettings, setShowTikTokSettings] = useState(false);
