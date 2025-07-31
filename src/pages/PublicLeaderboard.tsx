@@ -131,6 +131,7 @@ export function PublicLeaderboard() {
   const [showTikTokModal, setShowTikTokModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [showMobileModal, setShowMobileModal] = useState(false);
+  const [mainView, setMainView] = useState<'leaderboard' | 'details'>('leaderboard');
   const [selectedVideo, setSelectedVideo] = useState<VideoData | null>(null);
   const [userSubmission, setUserSubmission] = useState<any>(null);
   const [showTikTokSettings, setShowTikTokSettings] = useState(false);
