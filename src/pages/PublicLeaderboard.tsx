@@ -274,39 +274,45 @@ export function PublicLeaderboard() {
 
   const fetchFeaturedVideos = async () => {
     try {
-      const { data, error } = await supabase
-        .from("contest_links")
-        .select("*")
-        .eq("contest_id", id)
-        .eq("is_contest_submission", true)
-        .eq("active", true)
-        .order("views", { ascending: false })
-        .limit(10);
+      // Check if we're online
+      if (!navigator.onLine) {
+        console.warn('No internet connection - skipping featured videos fetch');
+        return;
+      }
 
-      if (error) throw error;
+      // Only attempt to fetch if backend URL is properly configured and not localhost
+      if (!backendUrl || backendUrl.includes('localhost')) {
+        console.warn('Backend URL not configured or using localhost - skipping featured videos fetch');
+        return;
+      }
 
-      const videosWithRank = (data || []).map((video, index) => ({
-        ...video,
-        rank: index + 1,
-      }));
+      const response = await fetch(`${backendUrl}/api/v1/videos/featured`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        // Add timeout to prevent hanging requests
+        signal: AbortSignal.timeout(10000), // 10 second timeout
+      });
 
-      setFeaturedVideos(videosWithRank);
-
-      // Initialize loading states
-      const initialLoadState = videosWithRank.reduce((acc, video) => ({
-        ...acc,
-        [video.id]: false
-      }), {});
-      setCoverLoaded(initialLoadState);
-      setVideoLoaded(initialLoadState);
+      if (response.ok) {
+        const data = await response.json();
+        setFeaturedVideos(data.videos || []);
+      } else {
+        console.warn(`Featured videos API returned ${response.status}: ${response.statusText}`);
+      }
     } catch (error) {
-      console.error("Error fetching featured videos:", error);
-      // Set empty array to prevent UI issues
-      setFeaturedVideos([]);
-      setCoverLoaded({});
-      setVideoLoaded({});
-    } finally {
-      setLoading(false);
+      // Handle different types of errors
+      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        console.warn('Network error fetching featured videos - backend may be unavailable:', error.message);
+        // Don't show toast error for network issues as this is expected when backend is down
+      } else if (error.name === 'AbortError') {
+        console.warn('Featured videos request timed out');
+      } else {
+        console.error('Unexpected error fetching featured videos:', error);
+        toast.error('Failed to load featured videos');
+      }
     }
   };
 
