@@ -1,48 +1,25 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import {
   Crown,
-  Medal,
-  Star,
-  ArrowUp,
-  ArrowDown,
-  Minus,
-  Clock,
   Trophy,
-  Share2,
-  Play,
   Home,
   Users,
-  Gift,
-  Sparkles,
-  TrendingUp,
-  Eye,
-  Heart,
-  MessageCircle,
-  Share,
   Calendar,
   Music,
-  Award,
   Target,
-  Zap,
   ChevronLeft,
   ChevronRight,
-  ChevronDown,
-  ChevronUp,
   Volume2,
   VolumeX,
   Loader2,
-  UserPlus,
-  Settings,
-  ExternalLink,
   Info,
   CheckCircle,
   AlertCircle,
-  Flame,
   Video,
   Upload,
-  FileText,
+  List,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../contexts/AuthContext";
@@ -54,12 +31,9 @@ import { useTikTokConnection } from "../hooks/useTikTokConnection";
 import { useAuthRedirect } from "../hooks/useAuthRedirect";
 import { 
   calculateContestStatus, 
-  getStatusLabel, 
-  getStatusColor,
   formatTimeRemaining,
   getTimeRemaining 
 } from "../lib/contestUtils";
-import { ContestCountdown } from "../components/ContestCountdown";
 import useEmblaCarousel from 'embla-carousel-react';
 
 interface Contest {
@@ -140,14 +114,12 @@ export function PublicLeaderboard() {
   const [isMuted, setIsMuted] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState<{[key: string]: boolean}>({});
   const [coverLoaded, setCoverLoaded] = useState<{[key: string]: boolean}>({});
-  const [showFullDescription, setShowFullDescription] = useState(false);
   const rulesRef = useRef<HTMLDivElement>(null);
 
   // Separate state for each toggle section
-  const [contestDetailsView, setContestDetailsView] = useState<'prizes' | 'how-to-join' | 'rules' | 'about'>('prizes');
+  const [contestDetailsView, setContestDetailsView] = useState<'prizes' | 'how-to-join'>('prizes');
   const [leaderboardView, setLeaderboardView] = useState<'list' | 'videos'>('list');
   const [boardDetailView, setBoardDetailView] = useState<'board' | 'detail'>('board');
-  const [detailsView, setDetailsView] = useState<'prizes' | 'how-to-enter' | 'rules' | 'about'>('prizes');
 
   const { isConnected: isTikTokConnected } = useTikTokConnection();
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
@@ -410,6 +382,34 @@ export function PublicLeaderboard() {
     }
   };
 
+  const handleSupportClick = () => {
+    // Create a support video object
+    const supportVideo: VideoData = {
+      id: 'support-video',
+      title: 'How to Use the Platform',
+      url: 'https://example.com/support-video', // Replace with actual support video URL
+      video_url: 'https://example.com/support-video.mp4', // Replace with actual video URL
+      thumbnail: 'https://example.com/support-thumbnail.jpg', // Replace with actual thumbnail
+      username: 'Support Team',
+      views: null,
+      likes: null,
+      comments: null,
+      shares: null,
+      avatar_url: null
+    };
+    
+    setSelectedVideo(supportVideo);
+    setCurrentVideoIndex(0);
+    
+    // Check if mobile
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      setShowMobileModal(true);
+    } else {
+      setShowViewModal(true);
+    }
+  };
+
   const handleCoverLoad = (videoId: string) => {
     setCoverLoaded(prev => ({
       ...prev,
@@ -455,96 +455,7 @@ export function PublicLeaderboard() {
     return num.toString();
   };
 
-  const getRankIcon = (rank: number) => {
-    const colors = {
-      1: "text-yellow-400",
-      2: "text-gray-400", 
-      3: "text-amber-600",
-      4: "text-blue-400",
-      5: "text-green-400",
-    };
 
-    const color = colors[rank as keyof typeof colors] || "text-slate-400";
-
-    if (rank === 1) {
-      return (
-        <div className="relative">
-          <Crown className={`h-5 w-5 ${color}`} />
-          <Sparkles className="absolute -top-1 -right-1 h-3 w-3 text-yellow-300 animate-pulse" />
-        </div>
-      );
-    }
-
-    return (
-      <div className="relative">
-        <Crown className={`h-5 w-5 ${color}`} />
-      </div>
-    );
-  };
-
-  const getRankColor = (rank: number) => {
-    const colors = {
-      1: "text-yellow-400",
-      2: "text-gray-400", 
-      3: "text-amber-600",
-      4: "text-blue-400",
-      5: "text-green-400",
-    };
-
-    return colors[rank as keyof typeof colors] || "text-slate-400";
-  };
-
-  const getRankChangeIcon = (rank: number, previousRank?: number) => {
-    if (!previousRank) return null;
-    
-    if (rank < previousRank) {
-      return <ArrowUp className="h-3 w-3 text-green-400" />;
-    } else if (rank > previousRank) {
-      return <ArrowDown className="h-3 w-3 text-red-400" />;
-    } else {
-      return <Minus className="h-3 w-3 text-gray-400" />;
-    }
-  };
-
-  const formatCurrency = (amount: number) => {
-    return amount.toLocaleString();
-  };
-
-  const formatTimeLeft = (endDate: string) => {
-    const end = new Date(endDate);
-    const now = new Date();
-    const diff = end.getTime() - now.getTime();
-    
-    if (diff <= 0) return "Contest ended";
-    
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    
-    if (days > 0) return `${days} days left`;
-    return `${hours} hours left`;
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  const handleShare = async () => {
-    const shareUrl = window.location.href;
-    try {
-      await navigator.share({
-        title: contest?.name || "Contest",
-        text: contest?.description || "Check out this contest!",
-        url: shareUrl,
-      });
-    } catch (error) {
-      navigator.clipboard.writeText(shareUrl);
-      toast.success("Link copied to clipboard!");
-    }
-  };
 
   if (loading) {
     return (
@@ -650,7 +561,7 @@ export function PublicLeaderboard() {
             <div className="hidden sm:block">
               {/* Crown Logo at Top */}
               <div className="mb-6 sm:mb-8">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mx-auto bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center border-2 sm:border-4 border-white/20 shadow-2xl">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mx-auto bg-gradient-to-br from-orange-400 to-yellow-500 rounded-full flex items-center justify-center shadow-2xl">
                   <Crown className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-white" />
                 </div>
               </div>
@@ -671,96 +582,315 @@ export function PublicLeaderboard() {
       )}
       
       {/* Prizes Section - Below Hero */}
-      <div className="bg-black px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+      <div className="bg-black px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 lg:pb-20">
         <div className="max-w-7xl mx-auto">
+
+
           {/* Board/Detail Toggle */}
-          <div className="flex justify-center mb-8">
-            <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
+          <div className="flex justify-center mb-8 sm:mb-10 lg:mb-12">
+            <div className="bg-white/5 backdrop-blur-sm rounded-full p-1.5 sm:p-2 shadow-lg">
               <div className="flex">
                 <button
-                  onClick={() => setBoardDetailView('board')}
-                  className={`px-6 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
+                  onClick={() => {
+                    setBoardDetailView('board');
+                    setLeaderboardView('list'); // Reset to default sub-toggle
+                  }}
+                  className={`px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-full transition-all duration-300 font-medium text-base sm:text-lg lg:text-xl ${
                     boardDetailView === 'board'
-                      ? 'bg-white text-black'
-                      : 'text-white/60 hover:text-white'
+                      ? 'bg-white text-gray-900 shadow-lg'
+                      : 'text-white/60 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  Board
+                  Leaderboard
                 </button>
                 <button
-                  onClick={() => setBoardDetailView('detail')}
-                  className={`px-6 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
+                  onClick={() => {
+                    setBoardDetailView('detail');
+                    setContestDetailsView('prizes'); // Reset to default sub-toggle
+                  }}
+                  className={`px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-full transition-all duration-300 font-medium text-base sm:text-lg lg:text-xl ${
                     boardDetailView === 'detail'
-                      ? 'bg-white text-black'
-                      : 'text-white/60 hover:text-white'
+                      ? 'bg-white text-gray-900 shadow-lg'
+                      : 'text-white/60 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  Detail
+                  Details
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Contest Details Heading */}
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
-              {boardDetailView === 'board' ? 'Leaderboard' : 'Contest Details'}
-            </h2>
-          </div>
-
-          {/* Toggle Buttons */}
+          {/* Secondary Toggle Buttons - Conditional based on Board/Detail */}
           <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
-            <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
-              <div className="flex flex-wrap justify-center gap-1">
+            {boardDetailView === 'board' ? (
+              <div className="bg-white/5 rounded-full p-1 flex">
                 <button
-                  onClick={() => setContestDetailsView('prizes')}
-                  className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                    contestDetailsView === 'prizes'
-                      ? 'bg-white text-black'
+                  onClick={() => handleLeaderboardViewChange('list')}
+                  className={`p-2 rounded-full font-medium transition-all ${
+                    leaderboardView === 'list'
+                      ? 'bg-white text-gray-900'
                       : 'text-white/60 hover:text-white'
                   }`}
                 >
-                  Prizes
+                  <List className="h-4 w-4" />
                 </button>
                 <button
-                  onClick={() => setContestDetailsView('how-to-join')}
-                  className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                    contestDetailsView === 'how-to-join'
-                      ? 'bg-white text-black'
+                  onClick={() => handleLeaderboardViewChange('videos')}
+                  className={`p-2 rounded-full font-medium transition-all ${
+                    leaderboardView === 'videos'
+                      ? 'bg-white text-gray-900'
                       : 'text-white/60 hover:text-white'
                   }`}
                 >
-                  How to Join
-                </button>
-                <button
-                  onClick={() => setContestDetailsView('rules')}
-                  className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                    contestDetailsView === 'rules'
-                      ? 'bg-white text-black'
-                      : 'text-white/60 hover:text-white'
-                  }`}
-                >
-                  Rules
-                </button>
-                <button
-                  onClick={() => setContestDetailsView('about')}
-                  className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                    contestDetailsView === 'about'
-                      ? 'bg-white text-black'
-                      : 'text-white/60 hover:text-white'
-                  }`}
-                >
-                  About
+                  <Video className="h-4 w-4" />
                 </button>
               </div>
-            </div>
+            ) : (
+              <div className="bg-white/5 backdrop-blur-sm rounded-full p-1">
+                <div className="flex flex-wrap justify-center gap-1">
+                  <button
+                    onClick={() => setContestDetailsView('prizes')}
+                    className={`px-4 py-2 rounded-full font-medium text-sm ${
+                      contestDetailsView === 'prizes'
+                        ? 'bg-white text-black'
+                        : 'text-white/60 hover:text-white'
+                    }`}
+                  >
+                    Prizes
+                  </button>
+                  <button
+                    onClick={() => setContestDetailsView('how-to-join')}
+                    className={`px-4 py-2 rounded-full font-medium text-sm ${
+                      contestDetailsView === 'how-to-join'
+                        ? 'bg-white text-black'
+                        : 'text-white/60 hover:text-white'
+                    }`}
+                  >
+                    How To Enter
+                  </button>
+
+
+                </div>
+              </div>
+            )}
           </div>
           
           {/* Content Area */}
-          {contestDetailsView === 'prizes' ? (
+          {boardDetailView === 'board' ? (
+            /* Board View - Show Leaderboard */
+            leaderboardView === 'list' ? (
+              /* Leaderboard View - Exact Design Match */
+              <div className="max-w-sm mx-auto">
+                {/* White Card Container */}
+                <div className="bg-white rounded-2xl overflow-hidden">
+                  {/* GET CROWNED Header */}
+                  <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-6 text-center font-bold text-lg">
+                    GET CROWNED.
+                  </div>
+                  
+                  {/* Participants List */}
+                  <div className="p-4">
+                    {participants.length > 0 ? (
+                      <div className="space-y-2">
+                        {participants.slice(0, 10).map((participant, index) => (
+                          <div
+                            key={participant.user_id}
+                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                          >
+                            {/* Left side - Rank, Avatar, and User Info */}
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-1 w-8">
+                                {participant.rank === 1 && (
+                                  <Crown className="h-4 w-4 text-yellow-500" />
+                                )}
+                                <span className="text-sm font-bold text-black">
+                                  {participant.rank}
+                                </span>
+                              </div>
+                              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                                <span className="text-xs font-bold text-gray-600">
+                                  {participant.tiktok_username?.charAt(0)?.toUpperCase() || 'U'}
+                                </span>
+                              </div>
+                              <div>
+                                <div className="text-sm font-medium text-black">
+                                  @{participant.tiktok_username}
+                                </div>
+                                <div className="text-xs text-gray-500 flex items-center gap-2">
+                                  <span>{formatNumber(participant.views)} views</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Right side - Support Button */}
+                            <button 
+                              onClick={handleSupportClick}
+                              className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+                            >
+                              Support
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                        <h3 className="text-lg font-semibold text-gray-600 mb-2">No Participants Yet</h3>
+                        <p className="text-gray-500 mb-6">Be the first to join this contest!</p>
+                        <button
+                          onClick={handleJoinContest}
+                          className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full font-medium transition-opacity hover:opacity-90"
+                        >
+                          Join Contest
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Video Carousel View - Exact Design Match */
+              featuredVideos.length > 0 ? (
+                <div className="relative w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px]">
+                  <div className="overflow-hidden w-full" ref={emblaRef}>
+                    <div className="flex">
+                      {featuredVideos.map((video, index) => {
+                        const isSelected = index === currentVideoIndex;
+                        const scale = 1;
+                        const opacity = 1;
+
+                        return (
+                          <div 
+                            key={video.id}
+                            className="flex-[0_0_100%] min-w-0 px-4 flex items-center justify-center"
+                          >
+                            <div 
+                              className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
+                              style={{
+                               transform: `scale(${scale})`,
+                                opacity,
+                              }}
+                              onClick={() => handleVideoClick(video, index)}
+                            >
+                              <div 
+                                className="relative bg-black rounded-2xl overflow-hidden transition-all shadow-2xl max-w-[320px] sm:max-w-[360px] lg:max-w-[400px] mx-auto"
+                                style={{ aspectRatio: '9/16' }}
+                              >
+                                {/* Loading Placeholder */}
+                                {!coverLoaded[video.id] && (
+                                  <div className="absolute inset-0 bg-black flex items-center justify-center">
+                                    <Loader2 className="h-6 w-6 animate-spin text-white/60" />
+                                  </div>
+                                )}
+
+                                {/* Thumbnail */}
+                                <img
+                                  src={video.thumbnail}
+                                  alt={video.title}
+                                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                                    isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
+                                 }`}
+                                  loading={isSelected ? 'eager' : 'lazy'}
+                                  onLoad={() => handleCoverLoad(video.id)}
+                                />
+
+                                {/* Video Content */}
+                                {isSelected && (
+                                  <div className="absolute inset-0">
+                                    {video.video_url ? (
+                                      <video
+                                        src={video.video_url}
+                                       className={`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
+                                          videoLoaded[video.id] ? 'opacity-100' : 'opacity-0'
+                                       }`}
+                                        autoPlay
+                                        loop
+                                        muted={isMuted}
+                                        playsInline
+                                        controls={false}
+                                        onLoadedData={() => handleVideoLoad(video.id)}
+                                      />
+                                    ) : null}
+                                  </div>
+                                )}
+
+                                {/* Gradient Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
+
+                                {/* Views Badge */}
+                                <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
+                                  <div className="px-2 py-1 sm:px-3 sm:py-1 bg-blue-500 text-white rounded-full text-xs sm:text-sm font-bold">
+                                    👁 {formatNumber(video.views || 0)}
+                                  </div>
+                                </div>
+
+                                {/* Video Info */}
+                                <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
+                                  <div className="space-y-1 sm:space-y-2">
+                                    <h3 className="text-xs sm:text-sm lg:text-base font-medium text-white line-clamp-1">
+                                      {video.title}
+                                    </h3>
+                                    <div className="flex items-center gap-2 text-xs text-white/60">
+                                      <span>@{video.username}</span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Mute Button */}
+                                {isSelected && (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setIsMuted(!isMuted);
+                                    }}
+                                    className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/60 transition-colors"
+                                  >
+                                    {isMuted ? (
+                                      <VolumeX className="h-3 w-3 sm:h-4 sm:w-4" />
+                                    ) : (
+                                      <Volume2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                                    )}
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={scrollPrev}
+                    className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                  >
+                    <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
+                  </button>
+
+                  <button
+                    onClick={scrollNext}
+                    className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                  >
+                    <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
+                  </button>
+                </div>
+              ) : (
+                <div className="text-center py-12 sm:py-16 lg:py-20 min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center">
+                  <div>
+                    <Music className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 text-white/30 mx-auto mb-6" />
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white/60 mb-4">No Videos Yet</h3>
+                    <p className="text-base sm:text-lg lg:text-xl text-white/40">Contest videos will appear here once submitted!</p>
+                  </div>
+                </div>
+              )
+            )
+          ) : (
+            /* Detail View - Show Contest Details */
+            contestDetailsView === 'prizes' ? (
             /* Prizes View */
-            <div className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px]">
-              <div className="overflow-hidden w-full" ref={prizeEmblaRef}>
+            <div className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px] flex items-center">
+              <div className="overflow-hidden w-full px-20 sm:px-28 lg:px-32" ref={prizeEmblaRef}>
                 <div className="flex">
                   {Array.from({ length: contest?.num_winners || 5 }, (_, index) => {
                     const isSelected = index === currentPrizeIndex;
@@ -773,7 +903,6 @@ export function PublicLeaderboard() {
                     
                     // Use actual database prize structure
                     let prizeText;
-                    let prizeAmount = null;
                     
                     // Check if we have custom prize titles from database
                     if (prizeTitle && prizeTitle.title) {
@@ -781,19 +910,6 @@ export function PublicLeaderboard() {
                     } else {
                       // Generate default place names
                       prizeText = `${rank}${rank === 1 ? 'ST' : rank === 2 ? 'ND' : rank === 3 ? 'RD' : 'TH'} PLACE`;
-                    }
-                    
-                    // Calculate prize amount from database
-                    if (contest?.prize_per_winner && contest.prize_per_winner > 0) {
-                      // Use the actual prize_per_winner from database
-                      prizeAmount = contest.prize_per_winner;
-                      
-                      // If there are multiple winners, calculate distribution
-                      if (contest.num_winners && contest.num_winners > 1) {
-                        // First place gets full amount, others get reduced amounts
-                        const reductionFactor = Math.max(0.2, 1 - (index * 0.2));
-                        prizeAmount = Math.round(contest.prize_per_winner * reductionFactor);
-                      }
                     }
                     
                     return (
@@ -818,19 +934,16 @@ export function PublicLeaderboard() {
                               rank === 4 ? 'bg-gradient-to-br from-green-400 to-green-600' :
                               rank === 5 ? 'bg-gradient-to-br from-purple-400 to-purple-600' :
                               'bg-gradient-to-br from-slate-400 to-slate-600'
-                            } rounded-full flex items-center justify-center border border-white/20 mb-2 sm:mb-3 mx-auto transition-all duration-300`}>
+                            } rounded-full flex items-center justify-center mb-2 sm:mb-3 mx-auto transition-all duration-300`}>
                               {rank === 1 ? (
                                 <Crown className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white transition-all duration-300" />
                               ) : (
                                 <span className="text-white font-bold text-sm sm:text-base lg:text-lg transition-all duration-300">{rank}</span>
                               )}
                             </div>
-                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 min-w-[90px] sm:min-w-[110px] border border-white/20 transition-all duration-300">
+                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 min-w-[90px] sm:min-w-[110px] transition-all duration-300">
                               <div className="text-white font-bold text-xs sm:text-sm lg:text-base transition-all duration-300">
                                 {prizeText}
-                              </div>
-                              <div className="text-white/80 text-xs sm:text-sm leading-tight text-center transition-all duration-300">
-                                {prizeAmount ? `$${formatNumber(prizeAmount)}` : ''}
                               </div>
                             </div>
                           </div>
@@ -844,22 +957,22 @@ export function PublicLeaderboard() {
               {/* Navigation Arrows */}
               <button
                 onClick={scrollPrizePrev}
-                className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 hidden sm:flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
               >
                 <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
               </button>
 
               <button
                 onClick={scrollPrizeNext}
-                className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 hidden sm:flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
               >
                 <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
               </button>
             </div>
-          ) : contestDetailsView === 'how-to-join' ? (
+          ) : (
             /* How to Join View */
-            <div className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px]">
-              <div className="overflow-hidden w-full" ref={howToJoinEmblaRef}>
+            <div className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px] flex items-center">
+              <div className="overflow-hidden w-full px-20 sm:px-28 lg:px-32" ref={howToJoinEmblaRef}>
                 <div className="flex">
                   {[
                     {
@@ -879,6 +992,12 @@ export function PublicLeaderboard() {
                       icon: CheckCircle,
                       title: 'Submit Your Entry',
                       description: 'Come back to the contest page and tap "Join Competition" to officially enter'
+                    },
+                    {
+                      step: 4,
+                      icon: AlertCircle,
+                      title: 'Contest Rules',
+                      description: 'All submissions must be original performances. Videos must be posted on TikTok. Rankings based on views and engagement.'
                     },
                   ].map((step, index) => {
                     const isSelected = index === currentHowToJoinIndex;
@@ -901,15 +1020,18 @@ export function PublicLeaderboard() {
                           }}
                         >
                           <div className="text-center">
-                            <div className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center border border-white/20 mb-2 sm:mb-3 mx-auto transition-all duration-300`}>
-                              <Icon className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white transition-all duration-300" />
-                            </div>
-                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 min-w-[90px] sm:min-w-[110px] border border-white/20 transition-all duration-300">
-                              <div className="text-white font-bold text-xs sm:text-sm lg:text-base transition-all duration-300">
+                            <div className="text-center mb-2 sm:mb-3 mx-auto transition-all duration-300">
+                              <div className="text-white/80 text-xs sm:text-sm leading-tight transition-all duration-300 mb-2">
+                                STEP {step.step}
+                              </div>
+                              <div className="text-white font-bold text-sm sm:text-base lg:text-lg transition-all duration-300">
                                 {step.title}
                               </div>
-                              <div className="text-white/80 text-xs sm:text-sm leading-tight text-center transition-all duration-300">
-                                STEP {step.step}
+                            </div>
+                            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 min-w-[90px] sm:min-w-[110px] transition-all duration-300">
+                              {/* GIF placeholder */}
+                              <div className="w-40 h-24 sm:w-52 sm:h-32 lg:w-64 lg:h-40 bg-white rounded mx-auto flex items-center justify-center">
+                                <span className="text-gray-500 font-medium text-sm sm:text-base">Example GIF</span>
                               </div>
                             </div>
                           </div>
@@ -923,547 +1045,38 @@ export function PublicLeaderboard() {
               {/* Navigation Arrows */}
               <button
                 onClick={scrollHowToJoinPrev}
-                className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 hidden sm:flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
               >
                 <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
               </button>
 
               <button
                 onClick={scrollHowToJoinNext}
-                className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
+                className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 hidden sm:flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
               >
                 <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
               </button>
             </div>
-          ) : contestDetailsView === 'rules' ? (
-            /* Rules View */
-            <div ref={rulesRef} className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px] flex items-center justify-center">
-              <div className="bg-black/60 backdrop-blur-sm rounded-2xl border border-white/20 p-8 max-w-4xl w-full">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <AlertCircle className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-white mb-6">Contest Rules</h3>
-                  {contest?.rules ? (
-                    <div className="text-white/90 text-lg leading-relaxed whitespace-pre-line">
-                      {contest.rules}
-                    </div>
-                  ) : (
-                    <div className="space-y-4 text-white/80 text-left">
-                      <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-white text-sm font-bold">1</span>
-                        </div>
-                        <p>All submissions must be original performances and follow contest guidelines</p>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-white text-sm font-bold">2</span>
-                        </div>
-                        <p>Videos must be posted on TikTok and submitted through the contest platform</p>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-white text-sm font-bold">3</span>
-                        </div>
-                        <p>Rankings are based on video views and engagement metrics</p>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-white text-sm font-bold">4</span>
-                        </div>
-                        <p>Winners will be verified for eligibility before prize distribution</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            /* About View */
-            <div className="relative max-w-7xl mx-auto w-full min-h-[200px] sm:min-h-[250px] lg:min-h-[300px] flex items-center justify-center">
-              <div className="bg-black/60 backdrop-blur-sm rounded-2xl border border-white/20 p-8 max-w-4xl w-full">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Info className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-white mb-6">About This Contest</h3>
-                  <div className="text-white/90 text-lg leading-relaxed mb-6">
-                    {contest?.description}
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
-                    <div className="bg-white/10 rounded-lg p-4">
-                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
-                        <Music className="h-4 w-4 text-blue-400" />
-                        Category
-                      </h4>
-                      <p className="text-white/80">{contest?.music_category || 'Music'}</p>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4">
-                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
-                        <Users className="h-4 w-4 text-green-400" />
-                        Participants
-                      </h4>
-                      <p className="text-white/80">{participants.length} Entered</p>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4">
-                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-yellow-400" />
-                        Duration
-                      </h4>
-                      <p className="text-white/80">{formatTimeRemaining(timeRemaining) || 'Contest Active'}</p>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4">
-                      <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
-                        <Trophy className="h-4 w-4 text-purple-400" />
-                        Winners
-                      </h4>
-                      <p className="text-white/80">{contest?.num_winners || 5} Prize Positions</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          )
           )}
         </div>
-      </div>
-      
-      {/* Main Content Area */}
-      <div ref={leaderboardSectionRef} className="bg-black px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-        <div className="max-w-7xl mx-auto">
-          {/* Leaderboard Heading */}
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">Leaderboard</h2>
-          </div>
-          
-          {/* Leaderboard Toggle Buttons */}
-          <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
-            <div className="bg-white/5 rounded-full p-1 flex">
-              <button
-                onClick={() => handleLeaderboardViewChange('list')}
-               className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
-                  leaderboardView === 'list'
-                    ? 'bg-purple-600 text-white'
-                    : 'text-white/60 hover:text-white'
-               }`}
-              >
-                List
-              </button>
-              <button
-                onClick={() => handleLeaderboardViewChange('videos')}
-               className={`px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full font-medium transition-all text-base sm:text-lg lg:text-xl ${
-                  leaderboardView === 'videos'
-                    ? 'bg-purple-600 text-white'
-                    : 'text-white/60 hover:text-white'
-               }`}
-              >
-                Video View
-              </button>
-            </div>
-          </div>
-
-          {/* Content Area */}
-          {leaderboardView === 'list' ? (
-            /* Leaderboard View - Exact Design Match */
-            <div className="max-w-sm mx-auto">
-              {/* White Card Container */}
-              <div className="bg-white rounded-2xl overflow-hidden">
-                {/* GET CROWNED Header */}
-                <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-6 text-center font-bold text-lg">
-                  GET CROWNED.
-                </div>
-                
-                {/* Participants List */}
-                <div className="p-4">
-                  {participants.length > 0 ? (
-                    <div className="space-y-2">
-                      {participants.slice(0, 10).map((participant, index) => (
-                        <div
-                          key={participant.user_id}
-                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                        >
-                          {/* Left side - Rank, Avatar, and User Info */}
-                          <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-1 w-8">
-                              {participant.rank === 1 && (
-                                <Crown className="h-4 w-4 text-yellow-500" />
-                              )}
-                              <span className="text-sm font-bold text-black">
-                                {participant.rank}
-                              </span>
-                            </div>
-                            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                              <span className="text-xs font-bold text-gray-600">
-                                {participant.tiktok_username?.charAt(0)?.toUpperCase() || 'U'}
-                              </span>
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium text-black">
-                                @{participant.tiktok_username}
-                              </div>
-                              <div className="text-xs text-gray-500 flex items-center gap-2">
-                                <span>{formatNumber(participant.views)} views</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Right side - Support Button */}
-                          <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity">
-                            Support
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-600 mb-2">No Participants Yet</h3>
-                      <p className="text-gray-500 mb-6">Be the first to join this contest!</p>
-                      <button
-                        onClick={handleJoinContest}
-                        className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full font-medium transition-opacity hover:opacity-90"
-                      >
-                        Join Contest
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            /* Video Carousel View */
-                featuredVideos.length > 0 ? (
-                  <div className="relative w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px]">
-                    <div className="overflow-hidden w-full" ref={emblaRef}>
-                      <div className="flex">
-                        {featuredVideos.map((video, index) => {
-                          const isSelected = index === currentVideoIndex;
-                          const scale = 1;
-                          const opacity = 1;
-
-                          return (
-                            <div 
-                              key={video.id}
-                              className="flex-[0_0_100%] min-w-0 px-4 flex items-center justify-center"
-                            >
-                              <div 
-                                className="relative transition-all duration-300 ease-out group will-change-transform cursor-pointer w-full max-w-[280px] mx-auto"
-                                style={{
-                                 transform: `scale(${scale})`,
-                                  opacity,
-                                }}
-                                onClick={() => handleVideoClick(video, index)}
-                              >
-                                <div 
-                                  className="relative bg-black rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all shadow-2xl max-w-[320px] sm:max-w-[360px] lg:max-w-[400px] mx-auto"
-                                  style={{ aspectRatio: '9/16' }}
-                                >
-                                  {/* Loading Placeholder */}
-                                  {!coverLoaded[video.id] && (
-                                    <div className="absolute inset-0 bg-black flex items-center justify-center">
-                                      <Loader2 className="h-6 w-6 animate-spin text-white/60" />
-                                    </div>
-                                  )}
-
-                                  {/* Thumbnail */}
-                                  <img
-                                    src={video.thumbnail}
-                                    alt={video.title}
-                                   className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                                      isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
-                                   }`}
-                                    loading={isSelected ? 'eager' : 'lazy'}
-                                    onLoad={() => handleCoverLoad(video.id)}
-                                  />
-
-                                  {/* Video Content */}
-                                  {isSelected && (
-                                    <div className="absolute inset-0">
-                                      {video.video_url ? (
-                                        <video
-                                          src={video.video_url}
-                                         className={`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
-                                            videoLoaded[video.id] ? 'opacity-100' : 'opacity-0'
-                                         }`}
-                                          autoPlay
-                                          loop
-                                          muted={isMuted}
-                                          playsInline
-                                          controls={false}
-                                          onLoadedData={() => handleVideoLoad(video.id)}
-                                        />
-                                      ) : null}
-                                    </div>
-                                  )}
-
-                                  {/* Gradient Overlay */}
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
-
-                                  {/* Views Badge */}
-                                  <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
-                                    <div className="px-2 py-1 sm:px-3 sm:py-1 bg-blue-500 text-white rounded-full text-xs sm:text-sm font-bold">
-                                      👁 {formatNumber(video.views || 0)}
-                                    </div>
-                                  </div>
-
-                                  {/* Video Info */}
-                                  <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
-                                    <div className="space-y-1 sm:space-y-2">
-                                      <h3 className="text-xs sm:text-sm lg:text-base font-medium text-white line-clamp-1">
-                                        {video.title}
-                                      </h3>
-                                      <div className="flex items-center gap-2 text-xs text-white/60">
-                                        <span>@{video.username}</span>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  {/* Mute Button */}
-                                  {isSelected && (
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        setIsMuted(!isMuted);
-                                      }}
-                                      className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/60 transition-colors"
-                                    >
-                                      {isMuted ? (
-                                        <VolumeX className="h-3 w-3 sm:h-4 sm:w-4" />
-                                      ) : (
-                                        <Volume2 className="h-3 w-3 sm:h-4 sm:w-4" />
-                                      )}
-                                    </button>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                    
-                    {/* Navigation Arrows */}
-                    <button
-                      onClick={scrollPrev}
-                      className="absolute left-4 sm:left-8 lg:left-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                    >
-                      <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
-                    </button>
-
-                    <button
-                      onClick={scrollNext}
-                      className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-30"
-                    >
-                      <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="text-center py-12 sm:py-16 lg:py-20 min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center">
-                    <div>
-                      <Music className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 text-white/30 mx-auto mb-6" />
-                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white/60 mb-4">No Videos Yet</h3>
-                      <p className="text-base sm:text-lg lg:text-xl text-white/40">Contest videos will appear here once submitted!</p>
-                    </div>
-                  </div>
-                )
-          )}
-        </div>
-      </div>
-
-      {/* Board/Detail Toggle */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <div className="flex justify-center">
-          <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
-            <div className="flex">
-              <button
-                onClick={() => setBoardDetailView('board')}
-                className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                  boardDetailView === 'board'
-                    ? 'bg-white text-black'
-                    : 'text-white/60 hover:text-white'
-                }`}
-              >
-                Board
-              </button>
-              <button
-                onClick={() => setBoardDetailView('detail')}
-                className={`px-6 py-2 rounded-full transition-all duration-300 font-medium ${
-                  boardDetailView === 'detail'
-                    ? 'bg-white text-black'
-                    : 'text-white/60 hover:text-white'
-                }`}
-              >
-                Detail
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {boardDetailView === 'board' && (
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="px-6 py-4 text-left text-xs font-medium text-white/40 uppercase tracking-wider">
-                      Rank
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-white/40 uppercase tracking-wider">
-                      Participant
-                    </th>
-                    <th className="px-6 py-4 text-right text-xs font-medium text-white/40 uppercase tracking-wider">
-                      Views
-                    </th>
-                    <th className="px-6 py-4 text-center text-xs font-medium text-white/40 uppercase tracking-wider">
-                      Video
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/10">
-                  {participants.map((participant, index) => (
-                    <tr key={index} className="hover:bg-white/5 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center justify-center">
-                            {getRankIcon(participant.rank)}
-                          </div>
-                          <span className={`text-lg font-bold ${getRankColor(participant.rank)}`}>
-                            #{participant.rank}
-                          </span>
-                          <div className="flex items-center">
-                            {getRankChangeIcon(participant.rank, participant.previousRank)}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          {participant.avatar_url ? (
-                            <img
-                              src={participant.avatar_url}
-                              alt={`${participant.username} profile`}
-                              className="w-10 h-10 rounded-full object-cover border border-white/10"
-                            />
-                          ) : (
-                            <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center border border-white/10">
-                              <span className="text-white text-sm font-medium">
-                                {participant.tiktok_display_name?.charAt(0) || participant.username?.charAt(0) || 'U'}
-                              </span>
-                            </div>
-                          )}
-                          <div>
-                            <div className="font-medium text-white">
-                              {participant.tiktok_display_name || participant.full_name || participant.username}
-                            </div>
-                            <div className="text-sm text-white/60">
-                              @{participant.username}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <span className="text-lg font-bold text-white">
-                          {formatNumber(participant.views)}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        {participant.video_url ? (
-                          <button
-                            onClick={() => handleVideoClick({
-                              ...participant,
-                              id: participant.video_id || '',
-                              title: participant.video_title || `Video by ${participant.username}`,
-                              url: participant.video_url || '',
-                              thumbnail: participant.thumbnail || '',
-                              likes: participant.likes || 0,
-                              comments: participant.comments || 0,
-                              shares: participant.shares || 0,
-                              rank: participant.rank
-                            }, index)}
-                            className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors group"
-                          >
-                            <Play className="h-5 w-5 text-white group-hover:scale-110 transition-transform" />
-                          </button>
-                        ) : (
-                          <span className="text-white/40 text-sm">No video</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {boardDetailView === 'detail' && (
-          <>
-            {/* Toggle Buttons */}
-            <div className="flex justify-center mb-8">
-              <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
-                <div className="flex flex-wrap justify-center gap-1">
-                  <button
-                    onClick={() => setDetailsView('prizes')}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                      detailsView === 'prizes'
-                        ? 'bg-white text-black'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    Prizes
-                  </button>
-                  <button
-                    onClick={() => setDetailsView('how-to-enter')}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                      detailsView === 'how-to-enter'
-                        ? 'bg-white text-black'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    How to Enter
-                  </button>
-                  <button
-                    onClick={() => setDetailsView('rules')}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                      detailsView === 'rules'
-                        ? 'bg-white text-black'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    Rules
-                  </button>
-                  <button
-                    onClick={() => setDetailsView('about')}
-                    className={`px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${
-                      detailsView === 'about'
-                        ? 'bg-white text-black'
-                        : 'text-white/60 hover:text-white'
-                    }`}
-                  >
-                    About
-                  </button>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Call to Action Section */}
-      <div className="bg-black text-center py-12 sm:py-16 lg:py-20 px-4">
-        <h2 className="text-2xl sm:text-4xl lg:text-6xl font-black text-white/20 mb-4 sm:mb-6 lg:mb-8 tracking-wider leading-tight">
-          WHAT ARE YOU
-        </h2>
-        <h2 className="text-2xl sm:text-4xl lg:text-6xl font-black text-white/20 mb-6 sm:mb-8 lg:mb-12 tracking-wider leading-tight">
-          WAITING FOR?
-        </h2>
         
-        <button
-          onClick={handleJoinContest}
-          className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-bold text-base sm:text-lg transition-colors"
-        >
-          {session ? 'Join Contest' : 'Sign up to join'}
-        </button>
+        {/* Next Button */}
+        <div className="text-center mt-8 sm:mt-10">
+          <button
+            onClick={boardDetailView === 'board' ? handleJoinContest : (contestDetailsView === 'prizes' ? scrollPrizeNext : scrollHowToJoinNext)}
+            className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium text-base sm:text-lg transition-all duration-300"
+          >
+            {boardDetailView === 'board' 
+              ? (userSubmission ? 'Manage Submission' : (session ? 'Join Contest' : 'Sign Up To Join'))
+              : (contestDetailsView === 'prizes' 
+                  ? (contest?.num_winners === 1 ? (session ? 'Join Contest' : 'Sign Up To Join') : 'Next Prize')
+                  : 'Next Step')
+            }
+          </button>
+        </div>
       </div>
+
 
       {/* Footer */}
       <footer className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-10 border-t border-white/10">
