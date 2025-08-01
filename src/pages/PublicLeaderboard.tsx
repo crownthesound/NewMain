@@ -1064,7 +1064,19 @@ export function PublicLeaderboard() {
         {/* Next Button */}
         <div className="text-center mt-8 sm:mt-10">
           <button
-            onClick={boardDetailView === 'board' ? handleJoinContest : (contestDetailsView === 'prizes' ? scrollPrizeNext : scrollHowToJoinNext)}
+            onClick={() => {
+              if (boardDetailView === 'board') {
+                if (userSubmission) {
+                  // Navigate to manage page when user has a submission
+                  navigate(`/contest-management/${id}`);
+                } else {
+                  handleJoinContest();
+                }
+              } else {
+                // Handle carousel navigation
+                contestDetailsView === 'prizes' ? scrollPrizeNext() : scrollHowToJoinNext();
+              }
+            }}
             className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium text-base sm:text-lg transition-all duration-300"
           >
             {boardDetailView === 'board' 
