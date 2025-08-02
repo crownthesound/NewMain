@@ -671,9 +671,20 @@ export function PublicLeaderboard() {
               
               {/* Contest Title and Description */}
               <div className="mb-3 sm:mb-4">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-4 tracking-tight">
-                  {contest.name.toUpperCase()}
-                </h1>
+                <div className="relative">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-4 relative z-10">
+                    {contest.name}
+                  </h1>
+                  <SparklesCore
+                    background="transparent"
+                    minSize={2}
+                    maxSize={6}
+                    particleDensity={200}
+                    speed={2}
+                    particleColor="#FFFFFF"
+                    className="absolute inset-0 w-full h-full"
+                  />
+                </div>
                 
                 <p className="text-sm sm:text-base lg:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8">
                   {contest.description}
