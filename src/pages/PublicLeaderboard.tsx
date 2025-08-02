@@ -681,7 +681,6 @@ export function PublicLeaderboard() {
               </div>
             </div>
           </div>
-        </div>
       )}
       
       {/* Prizes Section - Below Hero */}
