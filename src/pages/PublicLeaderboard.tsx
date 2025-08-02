@@ -5,21 +5,31 @@ import {
   Crown,
   Trophy,
   Home,
-  Users,
-  Calendar,
-  Music,
   Target,
+  Trash2,
+  X,
   ChevronLeft,
   ChevronRight,
   Volume2,
   VolumeX,
-  Loader2,
+  Play,
+  Pause,
+  Users,
   Info,
+  List,
+  Music,
+  BarChart3,
+  User,
+  Shield,
+  Plus,
+  LogOut,
+  Settings,
+  Calendar,
+  Loader2,
   CheckCircle,
   AlertCircle,
   Video,
   Upload,
-  List,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../contexts/AuthContext";
@@ -35,6 +45,8 @@ import {
   getTimeRemaining 
 } from "../lib/contestUtils";
 import useEmblaCarousel from 'embla-carousel-react';
+import { InteractiveMenu, type InteractiveMenuItem } from "../components/ui/modern-mobile-menu";
+
 
 interface Contest {
   id: string;
@@ -76,6 +88,7 @@ interface Participant {
   rank: number;
   user_id: string;
   full_name: string;
+  username?: string;
   tiktok_username: string;
   tiktok_display_name: string;
   tiktok_account_name: string;
@@ -108,6 +121,8 @@ export function PublicLeaderboard() {
   const [selectedVideo, setSelectedVideo] = useState<VideoData | null>(null);
   const [userSubmission, setUserSubmission] = useState<any>(null);
   const [showTikTokSettings, setShowTikTokSettings] = useState(false);
+  const [showManagePopup, setShowManagePopup] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [currentPrizeIndex, setCurrentPrizeIndex] = useState(0);
   const [currentHowToJoinIndex, setCurrentHowToJoinIndex] = useState(0);
@@ -120,9 +135,22 @@ export function PublicLeaderboard() {
   const [contestDetailsView, setContestDetailsView] = useState<'prizes' | 'how-to-join'>('prizes');
   const [leaderboardView, setLeaderboardView] = useState<'list' | 'videos'>('list');
   const [boardDetailView, setBoardDetailView] = useState<'board' | 'detail'>('board');
+  const [expandedUsernames, setExpandedUsernames] = useState<Set<string>>(new Set());
 
   const { isConnected: isTikTokConnected } = useTikTokConnection();
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
+  const toggleUsernameVisibility = (participantId: string) => {
+    setExpandedUsernames(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(participantId)) {
+        newSet.delete(participantId);
+      } else {
+        newSet.add(participantId);
+      }
+      return newSet;
+    });
+  };
 
   // Ref for the leaderboard section to enable smooth scrolling
   const leaderboardSectionRef = useRef<HTMLDivElement>(null);
@@ -237,6 +265,7 @@ export function PublicLeaderboard() {
         if (response.ok) {
           const data = await response.json();
           if (data.data?.leaderboard) {
+            console.log('Leaderboard data:', data.data.leaderboard);
             setParticipants(data.data.leaderboard);
           }
         }
@@ -248,6 +277,7 @@ export function PublicLeaderboard() {
 
   const fetchFeaturedVideos = async (retryCount = 0, showToast = true) => {
     try {
+      console.log('Fetching featured videos for contest:', id);
       const { data, error } = await supabase
         .from("contest_links")
         .select("*")
@@ -256,6 +286,8 @@ export function PublicLeaderboard() {
         .eq("active", true)
         .order("views", { ascending: false })
         .limit(10);
+      
+      console.log('Supabase query result:', { data, error });
 
       // Check if we're online
       if (!navigator.onLine) {
@@ -427,12 +459,15 @@ export function PublicLeaderboard() {
   const handleLeaderboardViewChange = (view: 'list' | 'videos') => {
     setLeaderboardView(view);
     
-    // If switching to video view, scroll to the leaderboard section smoothly
+    // If switching to video view, scroll to center the video player on screen
     if (view === 'videos' && leaderboardSectionRef.current) {
-      leaderboardSectionRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
+      // Small delay to ensure state update is complete
+      setTimeout(() => {
+        leaderboardSectionRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }, 100);
     }
   };
 
@@ -494,7 +529,7 @@ export function PublicLeaderboard() {
   const timeRemaining = getTimeRemaining(contest);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]">
+    <div className={`min-h-screen h-full bg-black ${session ? 'pb-24' : ''}`} style={{minHeight: '100vh', backgroundColor: '#000000'}}>
       {/* Hero Image Section */}
       {contest.cover_image && (
         <div className="relative h-[24rem] sm:h-[28rem] md:h-[32rem] lg:h-[36rem] xl:h-[40rem] overflow-hidden">
@@ -695,30 +730,37 @@ export function PublicLeaderboard() {
                         {participants.slice(0, 10).map((participant, index) => (
                           <div
                             key={participant.user_id}
-                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                            className="flex items-center justify-between p-4 bg-gradient-to-r from-black/10 to-black/20 backdrop-blur-md border border-white/20 rounded-xl shadow-lg hover:shadow-xl hover:from-black/15 hover:to-black/25 transition-all duration-300 hover:border-white/30"
                           >
                             {/* Left side - Rank, Avatar, and User Info */}
-                            <div className="flex items-center gap-3">
-                              <div className="flex items-center gap-1 w-8">
-                                {participant.rank === 1 && (
-                                  <Crown className="h-4 w-4 text-yellow-500" />
-                                )}
+                            <div className="flex items-center gap-4">
+                              <div className="flex items-center justify-between w-8">
+                                <div className="w-4 flex justify-start">
+                                  {participant.rank === 1 && (
+                                    <Crown className="h-4 w-4 text-yellow-500" />
+                                  )}
+                                </div>
                                 <span className="text-sm font-bold text-black">
                                   {participant.rank}
                                 </span>
                               </div>
-                              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                                <span className="text-xs font-bold text-gray-600">
-                                  {participant.tiktok_username?.charAt(0)?.toUpperCase() || 'U'}
+                              <div 
+                                className="w-10 h-10 bg-gradient-to-br from-white/20 to-white/5 rounded-full flex items-center justify-center border-2 border-black shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 cursor-pointer"
+                                onClick={() => toggleUsernameVisibility(participant.user_id)}
+                              >
+                                <span className="text-xs font-bold text-white">
+                                  {(participant.username || participant.tiktok_username)?.charAt(0)?.toUpperCase() || 'U'}
                                 </span>
                               </div>
                               <div>
-                                <div className="text-sm font-medium text-black">
-                                  @{participant.tiktok_username}
+                                <div className="text-sm text-black font-medium">
+                                  <div>{formatNumber(participant.likes)} likes</div>
                                 </div>
-                                <div className="text-xs text-gray-500 flex items-center gap-2">
-                                  <span>{formatNumber(participant.views)} views</span>
-                                </div>
+                                {expandedUsernames.has(participant.user_id) && (
+                                  <div className="text-xs font-medium text-black mt-1">
+                                    @{participant.username || participant.tiktok_username}
+                                  </div>
+                                )}
                               </div>
                             </div>
 
@@ -787,9 +829,9 @@ export function PublicLeaderboard() {
                                 <img
                                   src={video.thumbnail}
                                   alt={video.title}
-                                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
                                     isSelected && videoLoaded[video.id] ? 'opacity-0' : 'opacity-100'
-                                 }`}
+                                  }`}
                                   loading={isSelected ? 'eager' : 'lazy'}
                                   onLoad={() => handleCoverLoad(video.id)}
                                 />
@@ -800,9 +842,7 @@ export function PublicLeaderboard() {
                                     {video.video_url ? (
                                       <video
                                         src={video.video_url}
-                                       className={`w-full h-full object-cover rounded-2xl transition-opacity duration-700 ${
-                                          videoLoaded[video.id] ? 'opacity-100' : 'opacity-0'
-                                       }`}
+                                        className="w-full h-full object-cover rounded-2xl transition-opacity duration-700 opacity-100"
                                         autoPlay
                                         loop
                                         muted={isMuted}
@@ -1061,58 +1101,76 @@ export function PublicLeaderboard() {
           )}
         </div>
         
-        {/* Next Button */}
-        <div className="text-center mt-8 sm:mt-10">
-          <button
-            onClick={() => {
-              if (boardDetailView === 'board') {
-                if (userSubmission) {
-                  // Navigate to manage page when user has a submission
-                  navigate(`/contest-management/${id}`);
+        {/* Next Button - Only show if user hasn't submitted in board view */}
+        {!(boardDetailView === 'board' && userSubmission) && (
+          <div className="text-center mt-8 sm:mt-10">
+            <button
+              onClick={() => {
+                if (boardDetailView === 'board') {
+                  if (userSubmission) {
+                    // Navigate to profile page submissions tab when user has a submission
+                    navigate('/profile?tab=submissions');
+                  } else {
+                    handleJoinContest();
+                  }
                 } else {
-                  handleJoinContest();
+                  // Handle carousel navigation
+                  contestDetailsView === 'prizes' ? scrollPrizeNext() : scrollHowToJoinNext();
                 }
-              } else {
-                // Handle carousel navigation
-                contestDetailsView === 'prizes' ? scrollPrizeNext() : scrollHowToJoinNext();
+              }}
+              className="px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-black/20 to-black/40 backdrop-blur-md border border-white/30 hover:from-black/30 hover:to-black/50 hover:border-white/40 text-white rounded-full font-medium text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
+              {boardDetailView === 'board' 
+                ? (session ? 'Join Contest' : 'Sign Up To Join')
+                : (contestDetailsView === 'prizes' 
+                    ? (contest?.num_winners === 1 ? (session ? 'Join Contest' : 'Sign Up To Join') : 'Next Prize')
+                    : 'Next Step')
               }
-            }}
-            className="px-6 py-3 sm:px-8 sm:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium text-base sm:text-lg transition-all duration-300"
-          >
-            {boardDetailView === 'board' 
-              ? (userSubmission ? 'Manage Submission' : (session ? 'Join Contest' : 'Sign Up To Join'))
-              : (contestDetailsView === 'prizes' 
-                  ? (contest?.num_winners === 1 ? (session ? 'Join Contest' : 'Sign Up To Join') : 'Next Prize')
-                  : 'Next Step')
-            }
-          </button>
-        </div>
+            </button>
+          </div>
+        )}
       </div>
 
 
-      {/* Footer */}
-      <footer className="bg-black px-4 sm:px-6 lg:px-8 py-8 sm:py-10 border-t border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col items-center justify-center gap-4">
-            <div className="flex items-center gap-2">
-              <Crown className="h-5 w-5 sm:h-6 sm:w-6 text-white/40" />
-              <span className="text-white/40 font-light tracking-wider">CROWN</span>
-            </div>
-            <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm">
-              <Link to="/terms" className="text-white/60 hover:text-white transition-colors">
-                Terms of Service
-              </Link>
-              <span className="text-white/20">•</span>
-              <Link to="/privacy" className="text-white/60 hover:text-white transition-colors">
-                Privacy Policy
-              </Link>
-            </div>
-            <p className="text-white/40 text-xs text-center">
-              © {new Date().getFullYear()} Crown. All rights reserved.
-            </p>
+      {/* Bottom Navigation - Only show if user is signed in */}
+      {session && (
+        <div className="fixed bottom-0 left-0 right-0 py-4 pb-6">
+          <div className="flex justify-center">
+            <InteractiveMenu
+              items={(() => {
+                if (session?.user?.user_metadata?.role === 'organizer') {
+                  return [
+                    { label: "Leaderboard", icon: BarChart3, href: `/contests/${id}` },
+                    { label: "Contests", icon: Trophy, href: "/contests-page" },
+                    { label: "Create", icon: Plus, href: "/create" },
+                    { label: "Admin", icon: Shield, href: "/admin" },
+                    { label: "Profile", icon: User, href: "/profile" },
+                    {
+                      label: "Sign Out",
+                      icon: LogOut,
+                      onClick: () => {
+                        localStorage.removeItem('supabase.auth.token');
+                        localStorage.removeItem('sb-crown-auth-token');
+                        navigate('/');
+                      }
+                    }
+                  ] as InteractiveMenuItem[];
+                }
+                
+                return [
+                  { label: "Leaderboard", icon: BarChart3, href: `/contests/${id}` },
+                  ...(userSubmission ? [{ label: "Manage", icon: Settings, onClick: () => setShowManagePopup(true) }] : []),
+                  { label: "Rewards", icon: Trophy, href: "#" },
+                  { label: "Contests", icon: Calendar, href: "/contests-page" },
+                  { label: "Profile", icon: User, href: "/profile" }
+                ] as InteractiveMenuItem[];
+              })()}
+            />
           </div>
         </div>
-      </footer>
+      )}
+
+
 
       {/* Modals */}
       <TikTokSettingsModal
@@ -1131,6 +1189,104 @@ export function PublicLeaderboard() {
         contest={contest}
         onSuccess={handleContestJoined}
       />
+
+      {showManagePopup && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/50 z-50"
+            onClick={() => setShowManagePopup(false)}
+          />
+          {/* Popup */}
+          <div className="fixed bottom-0 left-0 right-0 z-50 transform transition-transform duration-300 ease-out animate-slide-up">
+            <div className="bg-white rounded-t-2xl px-6 py-4 mx-4 mb-4 shadow-2xl">
+              <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">Manage Your Post</h3>
+              
+              <div className="space-y-3">
+                {/* User Stats Display */}
+                <div className="w-full p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-100">
+                  <div className="text-center mb-3">
+                    <h4 className="font-semibold text-gray-800 mb-1">Your Performance</h4>
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div className="bg-white/80 rounded-lg p-2">
+                      <div className="text-lg font-bold text-purple-600">
+                        #{featuredVideos.findIndex((v: VideoData) => v.id === userSubmission?.id) + 1 || '?'}
+                      </div>
+                      <div className="text-xs text-gray-600">Position</div>
+                    </div>
+                    
+                    <div className="bg-white/80 rounded-lg p-2">
+                      <div className="text-lg font-bold text-blue-600">
+                        {userSubmission?.views?.toLocaleString() || '0'}
+                      </div>
+                      <div className="text-xs text-gray-600">Views</div>
+                    </div>
+                    
+                    <div className="bg-white/80 rounded-lg p-2">
+                      <div className="text-lg font-bold text-pink-600">
+                        {userSubmission?.likes?.toLocaleString() || '0'}
+                      </div>
+                      <div className="text-xs text-gray-600">Likes</div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Delete Confirmation Logic */}
+                {!showDeleteConfirmation ? (
+                  <button
+                    onClick={() => setShowDeleteConfirmation(true)}
+                    className="w-full p-3 bg-red-50 hover:bg-red-100 rounded-lg transition-colors text-center"
+                  >
+                    <span className="font-medium text-red-600">Delete Submission</span>
+                  </button>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="p-3 bg-red-100 rounded-lg border border-red-200">
+                      <p className="text-sm font-medium text-red-800 text-center mb-2">
+                        ⚠️ Are you sure you want to delete your submission?
+                      </p>
+                      <p className="text-xs text-red-600 text-center">
+                        This action cannot be undone.
+                      </p>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => {
+                          // Add actual delete submission logic here
+                          console.log('Deleting submission...');
+                          setShowDeleteConfirmation(false);
+                          setShowManagePopup(false);
+                        }}
+                        className="flex-1 p-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors"
+                      >
+                        Yes, Delete
+                      </button>
+                      
+                      <button
+                        onClick={() => setShowDeleteConfirmation(false)}
+                        className="flex-1 p-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+                
+                <button
+                  onClick={() => setShowManagePopup(false)}
+                  className="w-full p-3 bg-red-50 hover:bg-red-100 text-red-600 font-medium rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       <ViewSubmissionModal
         isOpen={showViewModal}

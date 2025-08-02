@@ -54,8 +54,8 @@ export function Profile() {
   const [searchParams] = useSearchParams();
   const { tikTokAccounts, connectWithVideoPermissions, isLoading: tikTokLoading } = useTikTokConnection();
   
-  const initialTab = searchParams.get('tab') as 'overview' | 'manage-submissions' | 'tiktok-accounts' || 'overview';
-  const [activeTab, setActiveTab] = useState<'overview' | 'manage-submissions' | 'tiktok-accounts'>(initialTab);
+  const initialTab = searchParams.get('tab') as 'overview' | 'contests' | 'submissions' | 'tiktok-accounts' || 'overview';
+  const [activeTab, setActiveTab] = useState<'overview' | 'contests' | 'submissions' | 'tiktok-accounts'>(initialTab);
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(profile?.full_name || '');
   const [saving, setSaving] = useState(false);
@@ -65,7 +65,7 @@ export function Profile() {
   const [showTikTokSettings, setShowTikTokSettings] = useState(false);
 
   useEffect(() => {
-    if (session && activeTab === 'manage-submissions') {
+    if (session && (activeTab === 'contests' || activeTab === 'submissions')) {
       fetchUserData();
     }
   }, [session, activeTab]);
@@ -87,28 +87,11 @@ export function Profile() {
       })) || [];
       setJoinedContests(contests);
 
-      // Fetch submissions from contest_links table
-      const { data: submissionData, error: submissionError } = await supabase
-        .from('contest_links')
-        .select(`
-          id,
-          title,
-          url,
-          thumbnail,
-          views,
-          likes,
-          comments,
-          shares,
-          created_at,
-          contest_id,
-          contests(name)
-        `)
-        .eq('created_by', session.user.id)
+      const { data: submissionData } = await supabase
+        .from('submissions')
+        .select('*, contests(name)')
+        .eq('user_id', session.user.id)
         .order('created_at', { ascending: false });
-
-      if (submissionError) {
-        console.error('Error fetching submissions:', submissionError);
-      }
 
       const submissionsWithContestName = submissionData?.map(submission => ({
         ...submission,
@@ -214,61 +197,61 @@ export function Profile() {
       />
 
       {/* Hero Section with Profile Content */}
-      <div className="relative h-[24rem] sm:h-[28rem] md:h-[32rem] lg:h-[36rem] xl:h-[40rem] overflow-hidden">
+      <div className="relative h-[28rem] sm:h-[32rem] md:h-[36rem] lg:h-[40rem] overflow-hidden">
         {/* Background Gradients */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A1A] via-[#2A2A2A] to-[#3A3A3A]"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80"></div>
         
         {/* Crown Logo Background */}
-        <div className="absolute top-8 sm:top-12 left-1/2 transform -translate-x-1/2">
-          <Crown className="h-16 w-16 sm:h-24 sm:w-24 md:h-32 md:w-32 lg:h-40 lg:w-40 text-white/5" />
+        <div className="absolute top-12 left-1/2 transform -translate-x-1/2">
+          <Crown className="h-24 w-24 sm:h-32 sm:w-32 md:h-40 md:w-40 text-white/5" />
         </div>
         
         {/* Profile Content */}
         <div className="relative h-full flex flex-col justify-center items-center text-center px-4">
-          <div className="mb-4 sm:mb-6 mt-8 sm:mt-0">
-            <Crown className="h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 text-white mx-auto mb-3 sm:mb-4" />
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white mb-2 tracking-tight px-2">
+          <div className="mb-6">
+            <Crown className="h-12 w-12 sm:h-16 sm:w-16 text-white mx-auto mb-4" />
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-2 tracking-tight">
               YOUR PROFILE
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-white/80 font-medium max-w-2xl mx-auto px-2">
+            <p className="text-lg sm:text-xl text-white/80 font-medium max-w-2xl mx-auto">
               Manage your account, contests, and submissions
             </p>
           </div>
           
           {/* Profile Card */}
-          <div className="w-full max-w-4xl mx-auto px-3">
-            <div className="bg-black/40 backdrop-blur-xl rounded-xl sm:rounded-2xl lg:rounded-3xl border border-white/10 p-3 sm:p-4 md:p-6 lg:p-8 shadow-2xl">
-              <div className="flex flex-col lg:flex-row lg:items-center gap-3 sm:gap-4 lg:gap-6">
+          <div className="w-full max-w-4xl mx-auto">
+            <div className="bg-black/40 backdrop-blur-xl rounded-3xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+              <div className="flex flex-col lg:flex-row lg:items-center gap-6">
                 {/* Avatar */}
                 <div className="flex justify-center lg:justify-start">
                   <div className="relative">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center border-3 sm:border-4 border-white/20 shadow-xl">
-                      <span className="text-base sm:text-lg md:text-2xl lg:text-3xl font-bold text-white">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center border-4 border-white/20 shadow-xl">
+                      <span className="text-2xl sm:text-3xl font-bold text-white">
                         {profile?.full_name?.charAt(0) || session.user.email?.charAt(0) || 'U'}
                       </span>
                     </div>
-                    <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 bg-green-400 rounded-full border-2 border-black"></div>
+                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-2 border-black"></div>
                   </div>
                 </div>
                 
                 {/* Profile Info */}
                 <div className="flex-1 text-center lg:text-left">
-                  <div className="mb-3 sm:mb-4">
+                  <div className="mb-4">
                     {isEditing ? (
-                      <div className="flex flex-col gap-3">
+                      <div className="flex flex-col sm:flex-row gap-2">
                         <input
                           type="text"
                           value={editedName}
                           onChange={(e) => setEditedName(e.target.value)}
-                          className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 text-sm sm:text-base"
+                          className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50"
                           placeholder="Enter your name"
                         />
-                        <div className="flex gap-2 w-full">
+                        <div className="flex gap-2 justify-center">
                           <button
                             onClick={handleSaveProfile}
                             disabled={saving}
-                            className="flex-1 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 text-sm sm:text-base"
+                            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
                           >
                             {saving ? 'Saving...' : 'Save'}
                           </button>
@@ -277,46 +260,44 @@ export function Profile() {
                               setIsEditing(false);
                               setEditedName(profile?.full_name || '');
                             }}
-                            className="flex-1 px-4 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors text-sm sm:text-base"
+                            className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
                           >
                             Cancel
                           </button>
                         </div>
                       </div>
                     ) : (
-                      <div className="flex flex-col items-center lg:items-start gap-2">
-                        <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-white break-words text-center lg:text-left">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-white">
                           {profile?.full_name || 'Anonymous User'}
                         </h2>
                         <button
                           onClick={() => setIsEditing(true)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-white/70 hover:text-white transition-colors text-xs"
+                          className="inline-flex items-center gap-1 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-white/70 hover:text-white transition-colors text-sm"
                         >
                           <Edit3 className="h-3 w-3" />
-                          <span className="hidden sm:inline">Edit</span>
+                          Edit
                         </button>
                       </div>
                     )}
-                    <p className="text-white/60 text-xs sm:text-sm lg:text-base break-all text-center lg:text-left mt-1">{session.user.email}</p>
+                    <p className="text-white/60 text-sm sm:text-base">{session.user.email}</p>
                   </div>
                   
                   {/* Activity Stats */}
-                  <div className="grid grid-cols-3 gap-1.5 sm:gap-2 md:gap-4 mt-3 sm:mt-4">
-                    <div className="p-1.5 sm:p-2 md:p-3 bg-gradient-to-br from-yellow-500/20 to-yellow-500/5 rounded-md sm:rounded-lg md:rounded-xl border border-yellow-500/20 text-center">
-                      <Trophy className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-yellow-400 mx-auto mb-0.5 sm:mb-1" />
-                      <p className="text-xs sm:text-sm md:text-lg font-bold text-white">{joinedContests.length}</p>
-                      <p className="text-xs text-white/70 hidden sm:block">Contests</p>
-                      <p className="text-xs text-white/70 block sm:hidden">Contests</p>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="p-3 bg-gradient-to-br from-yellow-500/20 to-yellow-500/5 rounded-xl border border-yellow-500/20 text-center">
+                      <Trophy className="h-5 w-5 text-yellow-400 mx-auto mb-1" />
+                      <p className="text-lg font-bold text-white">{joinedContests.length}</p>
+                      <p className="text-xs text-white/70">Contests</p>
                     </div>
-                    <div className="p-1.5 sm:p-2 md:p-3 bg-gradient-to-br from-blue-500/20 to-blue-500/5 rounded-md sm:rounded-lg md:rounded-xl border border-blue-500/20 text-center">
-                      <Upload className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-blue-400 mx-auto mb-0.5 sm:mb-1" />
-                      <p className="text-xs sm:text-sm md:text-lg font-bold text-white">{submissions.length}</p>
-                      <p className="text-xs text-white/70 hidden sm:block">Submissions</p>
-                      <p className="text-xs text-white/70 block sm:hidden">Subs</p>
+                    <div className="p-3 bg-gradient-to-br from-blue-500/20 to-blue-500/5 rounded-xl border border-blue-500/20 text-center">
+                      <Upload className="h-5 w-5 text-blue-400 mx-auto mb-1" />
+                      <p className="text-lg font-bold text-white">{submissions.length}</p>
+                      <p className="text-xs text-white/70">Submissions</p>
                     </div>
-                    <div className="p-1.5 sm:p-2 md:p-3 bg-gradient-to-br from-purple-500/20 to-purple-500/5 rounded-md sm:rounded-lg md:rounded-xl border border-purple-500/20 text-center">
-                      <Eye className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-purple-400 mx-auto mb-0.5 sm:mb-1" />
-                      <p className="text-xs sm:text-sm md:text-lg font-bold text-white">
+                    <div className="p-3 bg-gradient-to-br from-purple-500/20 to-purple-500/5 rounded-xl border border-purple-500/20 text-center">
+                      <Eye className="h-5 w-5 text-purple-400 mx-auto mb-1" />
+                      <p className="text-lg font-bold text-white">
                         {formatNumber(submissions.reduce((total, sub) => total + (sub.views || 0), 0))}
                       </p>
                       <p className="text-xs text-white/70">Views</p>
@@ -325,13 +306,13 @@ export function Profile() {
                 </div>
                 
                 {/* Sign Out Button */}
-                <div className="flex justify-center lg:justify-end mt-2 lg:mt-0 pb-6 sm:pb-0">
+                <div className="flex justify-center lg:justify-end">
                   <button
                     onClick={handleSignOut}
-                    className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg transition-colors text-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg transition-colors"
                   >
-                    <LogOut className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span>Sign Out</span>
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
                   </button>
                 </div>
               </div>
@@ -341,14 +322,15 @@ export function Profile() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Navigation Tabs */}
-        <div className="flex justify-center mb-6 sm:mb-8">
-          <div className="bg-white/5 backdrop-blur-sm rounded-full p-1 sm:p-1.5 md:p-2 shadow-lg border border-white/10">
-            <nav className="flex justify-center gap-1 sm:gap-2">
+        <div className="flex justify-center mb-8">
+          <div className="bg-white/5 backdrop-blur-sm rounded-full p-1.5 sm:p-2 shadow-lg border border-white/10">
+            <nav className="flex overflow-x-auto scrollbar-hide">
               {[
                 { id: 'overview', label: 'Overview', icon: Settings },
-                { id: 'manage-submissions', label: 'Manage Submissions', icon: Trophy },
+                { id: 'contests', label: 'My Contests', icon: Trophy },
+                { id: 'submissions', label: 'My Submissions', icon: Upload },
                 { id: 'tiktok-accounts', label: 'TikTok Accounts', icon: Video }
               ].map((tab) => {
                 const Icon = tab.icon;
@@ -356,14 +338,14 @@ export function Profile() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 md:px-4 lg:px-5 py-2 sm:py-2.5 md:py-3 rounded-full font-medium transition-all duration-300 whitespace-nowrap flex-shrink-0 text-xs sm:text-sm md:text-base ${
+                    className={`flex items-center gap-1.5 px-3 sm:px-4 lg:px-5 py-2 sm:py-3 rounded-full font-medium transition-all duration-300 whitespace-nowrap flex-shrink-0 text-sm sm:text-base ${
                       activeTab === tab.id
                         ? 'bg-white text-gray-900 shadow-lg'
                         : 'text-white/60 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span className="hidden xs:inline sm:inline">{tab.label}</span>
+                    <Icon className="h-4 w-4" />
+                    <span>{tab.label}</span>
                   </button>
                 );
               })}
@@ -374,7 +356,7 @@ export function Profile() {
         {/* Tab Content */}
         <div className="space-y-8">
           {activeTab === 'overview' && (
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/10 p-4 sm:p-6">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <User className="h-5 w-5 text-blue-400" />
                 Account Information
@@ -404,117 +386,88 @@ export function Profile() {
             </div>
           )}
 
-          {activeTab === 'manage-submissions' && (
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/10 p-4 sm:p-6">
-              <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+          {activeTab === 'contests' && (
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <Trophy className="h-5 w-5 text-yellow-400" />
-                Manage Submissions
+                My Contests
               </h3>
               
               {loading ? (
                 <div className="text-center py-12">
                   <div className="animate-spin w-8 h-8 border-2 border-white/20 border-t-white rounded-full mx-auto mb-4"></div>
-                  <p className="text-white/60">Loading your data...</p>
+                  <p className="text-white/60">Loading contests...</p>
+                </div>
+              ) : joinedContests.length === 0 ? (
+                <div className="text-center py-12">
+                  <Trophy className="h-16 w-16 text-white/20 mx-auto mb-4" />
+                  <h4 className="text-lg font-medium text-white mb-2">No contests joined yet</h4>
+                  <p className="text-white/60 mb-6">Join your first contest to start competing!</p>
+                  <Link
+                    to="/"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors"
+                  >
+                    <Trophy className="h-4 w-4" />
+                    Browse Contests
+                  </Link>
                 </div>
               ) : (
-                <div className="space-y-8">
-                  {/* Active Contests Section */}
-                  <div>
-                    <h4 className="text-base font-semibold text-white mb-4 flex items-center gap-2">
-                      <Trophy className="h-4 w-4 text-yellow-400" />
-                      Active Contests ({joinedContests.length})
-                    </h4>
-                    {joinedContests.length === 0 ? (
-                      <div className="text-center py-8 bg-white/5 rounded-lg border border-white/10">
-                        <Trophy className="h-12 w-12 text-white/20 mx-auto mb-3" />
-                        <p className="text-white/60 text-sm mb-4">No contests joined yet</p>
-                        <Link
-                          to="/"
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors text-sm"
-                        >
-                          <Trophy className="h-3 w-3" />
-                          Browse Contests
-                        </Link>
-                      </div>
-                    ) : (
-                      <div className="grid gap-3">
-                        {joinedContests.map((contest) => (
-                          <div key={contest.id} className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
-                            <h5 className="text-white font-semibold text-sm">{contest.name}</h5>
-                            <p className="text-white/60 text-xs mt-1">{contest.description}</p>
-                            {contest.joined_at && (
-                              <p className="text-white/40 text-xs mt-2">
-                                Joined {formatDate(contest.joined_at)}
-                              </p>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                <div className="space-y-4">
+                  {joinedContests.map((contest) => (
+                    <div key={contest.id} className="p-4 bg-white/5 rounded-xl border border-white/10">
+                      <h4 className="text-white font-semibold">{contest.name}</h4>
+                      <p className="text-white/60 text-sm">{contest.description}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
-                  {/* My Submissions Section */}
-                  <div>
-                    <h4 className="text-base font-semibold text-white mb-4 flex items-center gap-2">
-                      <Upload className="h-4 w-4 text-blue-400" />
-                      My Submissions ({submissions.length})
-                    </h4>
-                    {submissions.length === 0 ? (
-                      <div className="text-center py-8 bg-white/5 rounded-lg border border-white/10">
-                        <Upload className="h-12 w-12 text-white/20 mx-auto mb-3" />
-                        <p className="text-white/60 text-sm mb-4">No submissions yet</p>
-                        <Link
-                          to="/"
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors text-sm"
-                        >
-                          <Upload className="h-3 w-3" />
-                          Join a Contest
-                        </Link>
+          {activeTab === 'submissions' && (
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <Upload className="h-5 w-5 text-blue-400" />
+                My Submissions
+              </h3>
+              
+              {loading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin w-8 h-8 border-2 border-white/20 border-t-white rounded-full mx-auto mb-4"></div>
+                  <p className="text-white/60">Loading submissions...</p>
+                </div>
+              ) : submissions.length === 0 ? (
+                <div className="text-center py-12">
+                  <Upload className="h-16 w-16 text-white/20 mx-auto mb-4" />
+                  <h4 className="text-lg font-medium text-white mb-2">No submissions yet</h4>
+                  <p className="text-white/60 mb-6">Create your first submission to participate!</p>
+                  <Link
+                    to="/"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors"
+                  >
+                    <Upload className="h-4 w-4" />
+                    Join a Contest
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {submissions.map((submission) => (
+                    <div key={submission.id} className="p-4 bg-white/5 rounded-xl border border-white/10">
+                      <h4 className="text-white font-semibold">{submission.title}</h4>
+                      <p className="text-white/60 text-sm">{submission.contest_name}</p>
+                      <div className="flex gap-4 mt-2 text-sm text-white/60">
+                        <span>{formatNumber(submission.views || 0)} views</span>
+                        <span>{formatNumber(submission.likes || 0)} likes</span>
                       </div>
-                    ) : (
-                      <div className="grid gap-3">
-                        {submissions.map((submission) => (
-                          <div key={submission.id} className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
-                            <div className="flex items-start justify-between gap-4">
-                              <div className="flex-1 min-w-0">
-                                <h5 className="text-white font-semibold text-sm truncate">{submission.title}</h5>
-                                <p className="text-white/60 text-xs mt-1">{submission.contest_name}</p>
-                                <div className="flex gap-4 mt-2 text-xs text-white/50">
-                                  <span className="flex items-center gap-1">
-                                    <Eye className="h-3 w-3" />
-                                    {formatNumber(submission.views || 0)}
-                                  </span>
-                                  <span className="flex items-center gap-1">
-                                    <Heart className="h-3 w-3" />
-                                    {formatNumber(submission.likes || 0)}
-                                  </span>
-                                </div>
-                              </div>
-                              {submission.thumbnail && (
-                                <div className="w-16 h-16 bg-white/5 rounded-lg border border-white/10 flex-shrink-0">
-                                  <img 
-                                    src={submission.thumbnail} 
-                                    alt={submission.title}
-                                    className="w-full h-full object-cover rounded-lg"
-                                    onError={(e) => {
-                                      e.currentTarget.style.display = 'none';
-                                    }}
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
           )}
 
           {activeTab === 'tiktok-accounts' && (
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/10 p-4 sm:p-6">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <Video className="h-5 w-5 text-pink-400" />
                 TikTok Accounts

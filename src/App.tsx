@@ -15,7 +15,7 @@ import { PublicLeaderboard } from "./pages/PublicLeaderboard";
 import { PastContests } from "./pages/PastContests";
 import { ContestsPage } from "./pages/ContestsPage";
 import { SharePage } from "./pages/SharePage";
-import { ContestManagement } from "./pages/ContestManagement";
+
 import { Start } from "./pages/Start";
 import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
@@ -48,11 +48,14 @@ import {
   User,
   Gift,
   UserPlus,
+  Shield,
+  Calendar,
 } from "lucide-react";
 import { useAuth } from "./contexts/AuthContext";
 import { useScrollToTop } from "./hooks/useScrollToTop";
 import { useSessionExpiry } from "./hooks/useSessionExpiry";
-import { TikTokSettingsModal } from "./components/TikTokSettingsModal";
+import { TikTokSettingsModal } from './components/TikTokSettingsModal';
+import { InteractiveMenu, InteractiveMenuItem } from './components/ui/modern-mobile-menu';
 import { useAuthRedirect } from "./hooks/useAuthRedirect";
 import { calculateContestStatus } from "./lib/contestUtils";
 import toast from "react-hot-toast";
@@ -455,14 +458,7 @@ function App() {
           <Route path="/start" element={<Start />} />
           <Route path="/contests-page" element={<ContestsPage />} />
           <Route path="/share/:id" element={<SharePage />} />
-          <Route
-            path="/contest-management/:id"
-            element={
-              <ProtectedRoute>
-                <ContestManagement />
-              </ProtectedRoute>
-            }
-          />
+
           <Route
             path="/profile"
             element={
@@ -517,139 +513,32 @@ function App() {
       </main>
 
       {showFooter && (
-        <footer className="fixed bottom-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-lg border-t border-white/10 safe-area-bottom pb-[env(safe-area-inset-bottom)]">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="flex justify-center">
-              {isOrganizer ? (
-                // Organizer/Admin Footer
-                <nav className="grid grid-cols-5 w-[600px] gap-1">
-                  {/* Manage Contests */}
-                  <button
-                    onClick={() => {
-                      navigate("/contests");
+        <div className="fixed bottom-0 left-0 right-0 z-[9999] flex justify-center py-4">
+          <InteractiveMenu 
+            items={
+              isOrganizer 
+                ? [
+                    { label: "Contests", icon: Trophy, href: "/contests" },
+                    { label: "Create", icon: Plus, href: "/build" },
+                    { label: "Admin", icon: Shield, href: "/admin" },
+                    { label: "Profile", icon: User, href: "/profile" },
+                    { label: "Sign Out", icon: LogOut, onClick: () => {
+                      localStorage.removeItem('authToken');
+                      localStorage.removeItem('userType');
+                      localStorage.removeItem('organizerId');
+                      localStorage.removeItem('userId');
+                      window.location.href = '/';
                     }}
-                    className={`flex flex-col items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 group ${
-                      currentPage === "contests"
-                        ? "text-white"
-                        : "text-white/60 hover:text-white"
-                    }`}
-                  >
-                    <ListTodo className="h-6 w-6 mb-1 transition-transform duration-300 group-hover:scale-110" />
-                    <span className="text-xs font-medium">Contests</span>
-                  </button>
-
-                  {/* Create Contest */}
-                  <button
-                    onClick={() => {
-                      navigate("/build");
-                    }}
-                    className={`flex flex-col items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 group ${
-                      currentPage === "build"
-                        ? "text-white"
-                        : "text-white/60 hover:text-white"
-                    }`}
-                  >
-                    <Plus className="h-6 w-6 mb-1 transition-transform duration-300 group-hover:scale-110" />
-                    <span className="text-xs font-medium">Create</span>
-                  </button>
-
-                  {/* Admin Panel */}
-                  <button
-                    onClick={() => {
-                      navigate("/admin");
-                    }}
-                    className={`flex flex-col items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 group ${
-                      currentPage === "admin"
-                        ? "text-white"
-                        : "text-white/60 hover:text-white"
-                    }`}
-                  >
-                    <Settings2 className="h-6 w-6 mb-1 transition-transform duration-300 group-hover:scale-110" />
-                    <span className="text-xs font-medium">Admin</span>
-                  </button>
-
-                  {/* Profile with Role */}
-                  <button
-                    onClick={() => {
-                      navigate("/profile");
-                    }}
-                    className={`flex flex-col items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 group ${
-                      currentPage === "profile"
-                        ? "text-white"
-                        : "text-white/60 hover:text-white"
-                    }`}
-                  >
-                    <div className="relative">
-                      <User className="h-6 w-6 mb-1 transition-transform duration-300 group-hover:scale-110 text-yellow-400" />
-                      {/* {profile?.role && (
-                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"></div>
-                      )} */}
-                    </div>
-                    {profile?.role && (
-                      <span
-                        className={`text-xs font-bold ${getRoleColor(
-                          profile.role
-                        )}`}
-                      >
-                        {profile.role.toUpperCase()}
-                      </span>
-                    )}
-                  </button>
-
-                  {/* Sign Out */}
-                  <button
-                    onClick={handleSignOut}
-                    className="flex flex-col items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 group text-white/60 hover:text-white"
-                  >
-                    <LogOut className="h-6 w-6 mb-1 transition-transform duration-300 group-hover:scale-110" />
-                    <span className="text-xs font-medium">Sign Out</span>
-                  </button>
-                </nav>
-              ) : (
-                // Regular User Footer
-                <nav className="grid grid-cols-3 w-[400px] gap-1">
-                  {/* Rewards Button - Far Left */}
-                  <button
-                    onClick={() => {
-                      // TODO: Navigate to rewards page or show rewards modal
-                      toast.success("Rewards coming soon!");
-                    }}
-                    className="flex flex-col items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 group text-white/60 hover:text-white"
-                  >
-                    <Gift className="h-6 w-6 mb-1 transition-transform duration-300 group-hover:scale-110" />
-                    <span className="text-xs font-medium">Rewards</span>
-                  </button>
-
-                  {/* Join Contest Button - Middle */}
-                  <button
-                    onClick={() => {
-                      navigate("/contests-page");
-                    }}
-                    className="flex flex-col items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 group text-white/60 hover:text-white"
-                  >
-                    <UserPlus className="h-6 w-6 mb-1 transition-transform duration-300 group-hover:scale-110" />
-                    <span className="text-xs font-medium">Join Contest</span>
-                  </button>
-
-                  {/* Profile Button - Far Right */}
-                  <button
-                    onClick={() => {
-                      navigate("/profile");
-                    }}
-                    className={`flex flex-col items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 group ${
-                      currentPage === "profile"
-                        ? "text-white"
-                        : "text-white/60 hover:text-white"
-                    }`}
-                  >
-                    <User className="h-6 w-6 mb-1 transition-transform duration-300 group-hover:scale-110" />
-                    <span className="text-xs font-medium">Profile</span>
-                  </button>
-                </nav>
-              )}
-            </div>
-          </div>
-        </footer>
+                  ] as InteractiveMenuItem[]
+                : [
+                    { label: "Rewards", icon: Trophy, href: "#" },
+                    { label: "Contests", icon: Calendar, href: "/contests-page" },
+                    { label: "Profile", icon: User, href: "/profile" }
+                  ] as InteractiveMenuItem[]
+            }
+            accentColor="white"
+          />
+        </div>
       )}
 
       <Toaster position="bottom-center" />
