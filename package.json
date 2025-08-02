@@ -16,6 +16,7 @@
     "@tsparticles/engine": "^3.9.0",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.9.0",
+    "clsx": "^2.1.0",
     "embla-carousel-react": "^8.0.0",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.358.0",
@@ -27,6 +28,7 @@
     "react-map-gl": "^7.1.7",
     "react-phone-number-input": "^3.4.12",
     "react-router-dom": "^6.22.3",
+    "tailwind-merge": "^2.2.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
