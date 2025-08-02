@@ -51,7 +51,6 @@ import { TikTokSettingsModal } from "../components/TikTokSettingsModal";
 import { ViewSubmissionModal } from "../components/ViewSubmissionModal";
 import { MobileVideoModal } from "../components/MobileVideoModal";
 import { useTikTokConnection } from "../hooks/useTikTokConnection";
-import { SparklesCore } from "../components/ui/sparkles";
 import { useAuthRedirect } from "../hooks/useAuthRedirect";
 import { 
   calculateContestStatus, 
@@ -636,22 +635,9 @@ export function PublicLeaderboard() {
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-4 tracking-tight leading-tight">
                   {contest.name.toUpperCase()}
                 </h1>
-                  <div className="relative">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-4 tracking-tight relative z-10">
-                      {contest.name}
-                    </h1>
-                    <div className="absolute inset-0 -z-10">
-                      <SparklesCore
-                        background="transparent"
-                        minSize={0.4}
-                        maxSize={1.2}
-                        particleDensity={120}
-                        className="w-full h-full"
-                        particleColor="#FFFFFF"
-                        speed={1.5}
-                      />
-                    </div>
-                  </div>
+                
+                {/* Description - Now visible on mobile */}
+                <div className="px-1 max-w-sm mx-auto">
                   <p className="text-sm text-white/90 text-center leading-relaxed mb-4">
                     {contest.description}
                   </p>
@@ -671,20 +657,9 @@ export function PublicLeaderboard() {
               
               {/* Contest Title and Description */}
               <div className="mb-3 sm:mb-4">
-                <div className="relative">
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-4 relative z-10">
-                    {contest.name}
-                  </h1>
-                  <SparklesCore
-                    background="transparent"
-                    minSize={2}
-                    maxSize={6}
-                    particleDensity={200}
-                    speed={2}
-                    particleColor="#FFFFFF"
-                    className="absolute inset-0 w-full h-full"
-                  />
-                </div>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-4 tracking-tight">
+                  {contest.name.toUpperCase()}
+                </h1>
                 
                 <p className="text-sm sm:text-base lg:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8">
                   {contest.description}
@@ -692,6 +667,7 @@ export function PublicLeaderboard() {
               </div>
             </div>
           </div>
+        </div>
       )}
       
       {/* Prizes Section - Below Hero */}
