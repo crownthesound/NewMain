@@ -251,7 +251,7 @@ function App() {
   useEffect(() => {
     const fetchActiveContests = async (retryCount = 0, showToast = true) => {
       try {
-        // Add a small delay for retries
+        // Add a small delay for retries to avoid overwhelming the server
         if (retryCount > 0) {
           await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
         }
@@ -261,12 +261,21 @@ function App() {
           throw new Error('No internet connection');
         }
 
+        // Add timeout to prevent hanging requests
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+        // Clear timeout if request completes successfully
+        const clearTimeoutOnSuccess = () => clearTimeout(timeoutId);
+
         const { data, error } = await supabase
           .from("contests")
           .select("*")
           .eq("status", "active");
 
         if (error) throw error;
+
+        clearTimeoutOnSuccess();
 
         const contestsWithParticipants = (data || []).map((contest) => ({
           ...contest,
@@ -287,6 +296,7 @@ function App() {
 
         setActiveContests(activeContests);
       } catch (error) {
+        clearTimeout(timeoutId);
         console.error("Error fetching active contests:", error);
         
         // Retry up to 3 times for network errors, but don't show toast on retries
@@ -297,11 +307,16 @@ function App() {
         
         // Show user-friendly error message only after all retries fail and on initial load
         if (showToast) {
-          const errorMessage = !navigator.onLine
-            ? "No internet connection. Please check your network."
-            : error instanceof TypeError || error.message?.includes('Failed to fetch')
-            ? "Unable to connect to server. Please check your internet connection and try again."
-            : error.message || "Failed to load contests";
+          let errorMessage = "Failed to load contests";
+          
+          if (!navigator.onLine) {
+            errorMessage = "No internet connection. Please check your network.";
+          } else if (error.name === 'AbortError') {
+            errorMessage = "Request timed out. Please check your connection and try again.";
+          } else if (error instanceof TypeError || error.message?.includes('Failed to fetch')) {
+            errorMessage = "Unable to connect to server. Please check your internet connection and try again.";
+          }
+          
           toast.error(errorMessage);
         }
       } finally {
