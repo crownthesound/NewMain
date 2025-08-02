@@ -51,6 +51,7 @@ import { TikTokSettingsModal } from "../components/TikTokSettingsModal";
 import { ViewSubmissionModal } from "../components/ViewSubmissionModal";
 import { MobileVideoModal } from "../components/MobileVideoModal";
 import { useTikTokConnection } from "../hooks/useTikTokConnection";
+import { SparklesCore } from "../components/ui/sparkles";
 import { useAuthRedirect } from "../hooks/useAuthRedirect";
 import { 
   calculateContestStatus, 
@@ -635,9 +636,22 @@ export function PublicLeaderboard() {
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-4 tracking-tight leading-tight">
                   {contest.name.toUpperCase()}
                 </h1>
-                
-                {/* Description - Now visible on mobile */}
-                <div className="px-1 max-w-sm mx-auto">
+                  <div className="relative">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-4 tracking-tight relative z-10">
+                      {contest.name}
+                    </h1>
+                    <div className="absolute inset-0 -z-10">
+                      <SparklesCore
+                        background="transparent"
+                        minSize={0.4}
+                        maxSize={1.2}
+                        particleDensity={80}
+                        className="w-full h-full"
+                        particleColor="#FFFFFF"
+                        speed={0.8}
+                      />
+                    </div>
+                  </div>
                   <p className="text-sm text-white/90 text-center leading-relaxed mb-4">
                     {contest.description}
                   </p>
