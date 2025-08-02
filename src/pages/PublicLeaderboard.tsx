@@ -645,10 +645,10 @@ export function PublicLeaderboard() {
                         background="transparent"
                         minSize={0.4}
                         maxSize={1.2}
-                        particleDensity={80}
+                        particleDensity={120}
                         className="w-full h-full"
                         particleColor="#FFFFFF"
-                        speed={0.8}
+                        speed={1.5}
                       />
                     </div>
                   </div>
